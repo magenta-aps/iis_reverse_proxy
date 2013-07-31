@@ -1,6 +1,7 @@
 package controllers;
 
 import models.User;
+import play.Play;
 import play.data.Form;
 import play.libs.Scala;
 import play.mvc.Controller;
@@ -13,6 +14,9 @@ public class Data extends Controller {
 	static Form<User> userForm = Form.form(User.class);
 
 	public static Result test() {
+		
+		
+		
 		return ok(data.render(Scala.Option((User) null)));
 	}
 	
@@ -20,7 +24,11 @@ public class Data extends Controller {
 		
 		User user = userForm.bindFromRequest().get();
 		
-		Ldap ldap = new Ldap();
+		String hostname = Play.application().configuration().getString("ldap.hostname");
+		int port = Play.application().configuration().getInt("ldap.port");
+		String basedn = Play.application().configuration().getString("ldap.basedn");
+		
+		Ldap ldap = new Ldap(hostname, port, basedn);
 		boolean isValid = ldap.auth(user);
 		
 		if(isValid) {
