@@ -4,8 +4,9 @@
 
 # Home page
 GET     /                           controllers.Application.index()
-GET     /data                       controllers.Data.test()
-GET     /data/post                  controllers.Data.post()
+
+# Enable webjar based resources to be returned
+GET 	/webjars/*file  			controllers.WebJarAssets.at(file)
 
 # Login
 GET		/login						controllers.Application.login()

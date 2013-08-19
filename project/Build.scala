@@ -12,7 +12,9 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.unboundid" % "unboundid-ldapsdk" % "2.3.4"
+    "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
+    "org.webjars" %% "webjars-play" % "2.1.0-3",
+    "org.webjars" % "bootstrap" % "3.0.0-rc.2"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
