@@ -1,7 +1,5 @@
 package util;
 
-import models.User;
-
 import com.unboundid.ldap.sdk.BindRequest;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.LDAPConnection;
@@ -14,20 +12,15 @@ public class Ldap {
 
 	private final String hostname;
 	private final int port;
-	private final String basedn;	//TODO: Implement usage of this
+	private final String basedn;
 	
 	public Ldap(final String hostname, final int port, final String basedn) {
 		this.hostname = hostname;
 		this.port = port;
 		this.basedn = basedn;
 	}
-	
-    //final String hostname = "localhost";
-    //final int port = 389;
-    //final String dn = "cn=admin,dc=nodomain";
-    //final String password = "nosoup4u";
-    	
-	public boolean auth(final User user) {
+	    	
+	public boolean auth(final String dn, final String password) {
 
         LDAPConnection ldapConnection;     
 
@@ -41,7 +34,7 @@ public class Ldap {
         }
 
         try {
-            final BindRequest bindRequest = new SimpleBindRequest(user.dn, user.password);
+            final BindRequest bindRequest = new SimpleBindRequest(dn+","+basedn, password);
             BindResult bindResult = ldapConnection.bind(bindRequest);
             
             if(bindResult.getResultCode() == ResultCode.SUCCESS) {
