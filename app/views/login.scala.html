@@ -1,0 +1,32 @@
+@(form: Form[Application.Login])
+<html>
+    <head>
+        <title>CPR Lookup</title>
+    </head>
+    <body>
+        <header>
+            <a href="@routes.Application.index" id="logo"><span>Zen</span>tasks</a>
+        </header>
+    
+    	@helper.form(routes.Application.authenticate) {
+    		<h1>Sign in</h1>
+    		
+    		@if(flash.contains("success")) {
+    			<p class="success">
+    				@flash.get("success")
+    			</p>
+    		}
+    		
+    		<p>
+    			<input type="text" name="username" placeholder="Username" value="@form("username").value">
+    		</p>
+    		<p>
+    			<input type="password" name="password" placeholder="Password">
+    		</p>
+    		<p>
+    			<button type="submit">Login</button>
+    		</p>
+    	}
+    
+    </body>
+</html>

@@ -14,9 +14,7 @@ public class Data extends Controller {
 	static Form<User> userForm = Form.form(User.class);
 
 	public static Result test() {
-		
-		
-		
+	
 		return ok(data.render(Scala.Option((User) null)));
 	}
 	
