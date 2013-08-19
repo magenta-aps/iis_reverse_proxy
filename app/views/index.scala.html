@@ -3,14 +3,60 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bootstrap 101 Template</title>
+    <title>CPR Look-up</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))' media='screen'>
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">   
   </head>
   <body>
-    <h1>Hello, @message!</h1>
+    
+        <div class="container">
+
+      <!-- Static navbar -->
+      <div class="navbar navbar-default">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CPR Look Up</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="@routes.Application.logout()">Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Welcome, @message!</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl dui, faucibus sed pellentesque at, pharetra quis magna. Integer ornare augue nec nisi sollicitudin, vitae mollis eros tristique. Duis blandit, massa et elementum laoreet, sem nulla porttitor leo, et vehicula velit ligula tristique nisl. Quisque ante enim, elementum sit amet luctus id, commodo ac magna. Sed suscipit massa sit amet ante ultricies, ac aliquet enim interdum. Nunc ut ipsum vulputate nisi tempor cursus quis quis metus. Proin scelerisque eget lorem non congue. Morbi consectetur feugiat velit, sed congue justo eleifend sed. Curabitur ac mauris ac mauris ullamcorper malesuada. Sed at purus vel tortor pulvinar facilisis nec et mi. Nullam quis felis egestas lectus suscipit convallis eget nec odio. Suspendisse ut congue lacus. </p>       
+      </div>
+
+    </div> <!-- /container -->
+    
+    
+    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
