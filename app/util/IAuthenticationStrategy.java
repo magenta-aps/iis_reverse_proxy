@@ -12,5 +12,7 @@ public interface IAuthenticationStrategy {
 	 * @param password password part of credientals to be validated
 	 * @return true if user is valid
 	 */
-	public boolean auth(final String username, final String password);
+	public boolean authentication(final String username, final String password);
+	
+	//TODO: Add Authorization maybe in its own file?
 }

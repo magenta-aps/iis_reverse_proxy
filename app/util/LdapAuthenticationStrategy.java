@@ -1,5 +1,7 @@
 package util;
 
+import play.Play;
+
 import com.unboundid.ldap.sdk.BindRequest;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.LDAPConnection;
@@ -7,20 +9,29 @@ import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.ResultCode;
 import com.unboundid.ldap.sdk.SimpleBindRequest;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class LdapAuthenticationStrategy implements IAuthenticationStrategy {
 
-	private final String hostname;
-	private final int port;
-	private final String basedn;
+	private static String hostname;
+	private static int port;
+	private static String basedn;
 	
-	public LdapAuthenticationStrategy(final String hostname, final int port, final String basedn) {
-		this.hostname = hostname;
-		this.port = port;
-		this.basedn = basedn;
+	public LdapAuthenticationStrategy() {
+		//TODO: Remove this Logger
+		play.Logger.info("constructor!");
+		
+		hostname = Play.application().configuration().getString("ldap.hostname");
+		port = Play.application().configuration().getInt("ldap.port");
+		basedn  = Play.application().configuration().getString("ldap.basedn");
 	}
 	    	
-	public boolean auth(final String dn, final String password) {
+	public boolean authentication(final String dn, final String password) {
+
+		//TODO: Remove this Logger
+		play.Logger.info("Authentication method");
 
         LDAPConnection ldapConnection;     
 

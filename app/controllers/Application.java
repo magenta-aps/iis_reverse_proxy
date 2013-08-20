@@ -10,16 +10,23 @@ import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import util.LdapAuthenticationStrategy;
+import util.IAuthenticationStrategy;
 import util.Secured;
 import views.html.index;
 import views.html.login;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+@Singleton
 public class Application extends Controller {
-  
-	final static String hostname = Play.application().configuration().getString("ldap.hostname");
-	final static int port = Play.application().configuration().getInt("ldap.port");
-	final static String basedn = Play.application().configuration().getString("ldap.basedn");
+  	
+	@Inject
+	public Application(IAuthenticationStrategy authenticationStrategy) {
+		Application.authenticationStrategy = authenticationStrategy;
+	}
+	
+	private static IAuthenticationStrategy authenticationStrategy;
 	
 	@Security.Authenticated(Secured.class)
     public static Result index() {
@@ -39,7 +46,9 @@ public class Application extends Controller {
     	);
     }
     
-    public static Result authenticate() {
+    
+    public static Result authenticate() { 	
+   	   	
     	Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
     	
     	// Check if there is errors (empty strings)
@@ -48,9 +57,9 @@ public class Application extends Controller {
     	}
     	
     	//TODO Remove this hard dependency by dependency injection - Google Guice?
-		LdapAuthenticationStrategy ldap = new LdapAuthenticationStrategy(hostname, port, basedn);
+		//LdapAuthenticationStrategy ldap = new LdapAuthenticationStrategy(hostname, port, basedn);
 		
-		boolean isValid = ldap.auth(loginForm.get().username, loginForm.get().password);
+		boolean isValid = authenticationStrategy.authentication(loginForm.get().username, loginForm.get().password);
 		
 		if(isValid) {
 
