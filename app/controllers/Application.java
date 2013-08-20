@@ -10,7 +10,7 @@ import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import util.Ldap;
+import util.LdapAuthenticationStrategy;
 import util.Secured;
 import views.html.index;
 import views.html.login;
@@ -48,7 +48,7 @@ public class Application extends Controller {
     	}
     	
     	//TODO Remove this hard dependency by dependency injection - Google Guice?
-		Ldap ldap = new Ldap(hostname, port, basedn);
+		LdapAuthenticationStrategy ldap = new LdapAuthenticationStrategy(hostname, port, basedn);
 		
 		boolean isValid = ldap.auth(loginForm.get().username, loginForm.get().password);
 		

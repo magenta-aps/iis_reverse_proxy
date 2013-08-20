@@ -8,13 +8,13 @@ import com.unboundid.ldap.sdk.ResultCode;
 import com.unboundid.ldap.sdk.SimpleBindRequest;
 
 
-public class Ldap {
+public class LdapAuthenticationStrategy implements IAuthenticationStrategy {
 
 	private final String hostname;
 	private final int port;
 	private final String basedn;
 	
-	public Ldap(final String hostname, final int port, final String basedn) {
+	public LdapAuthenticationStrategy(final String hostname, final int port, final String basedn) {
 		this.hostname = hostname;
 		this.port = port;
 		this.basedn = basedn;
