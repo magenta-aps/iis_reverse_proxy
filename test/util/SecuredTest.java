@@ -1,9 +1,11 @@
-package controllers;
+package util;
 
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 import org.junit.*;
+
+import controllers.routes.ref;
 
 import play.mvc.Result;
 import play.test.WithApplication;
