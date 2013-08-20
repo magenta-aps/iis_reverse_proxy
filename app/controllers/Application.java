@@ -10,7 +10,6 @@ import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import scala.collection.mutable.LinkedList;
 import util.Ldap;
 import views.html.index;
 import views.html.login;
