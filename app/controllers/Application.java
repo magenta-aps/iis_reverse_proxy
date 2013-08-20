@@ -47,6 +47,7 @@ public class Application extends Controller {
     		return badRequest( login.render( loginForm ));
     	}
     	
+    	//TODO Remove this hard dependency by dependency injection - Google Guice?
 		Ldap ldap = new Ldap(hostname, port, basedn);
 		
 		boolean isValid = ldap.auth(loginForm.get().username, loginForm.get().password);

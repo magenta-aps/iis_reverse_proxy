@@ -6,7 +6,7 @@
     <title>CPR Look-up</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link rel='stylesheet' href='/webjars/bootstrap.min.css' media='screen'>
+<link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))' media='screen'>
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
     
     <!-- Custom styles for this template -->
@@ -62,9 +62,9 @@
     
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script type='text/javascript' src='jquery.min.js'></script>
+    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script type='text/javascript' src='bootstrap.min.js'></script>
+    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
 
   </body>
 </html>
