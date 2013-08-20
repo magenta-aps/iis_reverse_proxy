@@ -11,6 +11,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.Ldap;
+import util.Secured;
 import views.html.index;
 import views.html.login;
 

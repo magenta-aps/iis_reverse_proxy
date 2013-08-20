@@ -1,5 +1,6 @@
-package controllers;
+package util;
 
+import controllers.routes;
 import play.mvc.Result;
 import play.mvc.Security;
 import play.mvc.Http.Context;
