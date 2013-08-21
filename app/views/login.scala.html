@@ -1,62 +1,57 @@
 @(form: Form[Application.Login])
 
 <html>
-	<head>
-	  <title>CPR Look-up - Login</title>
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <!-- Bootstrap -->
-	  <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))' media='screen'>
-	  <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-	  
-	  <!-- Custom styles for this template -->
-      <link href="@routes.Assets.at("stylesheets/signin.css")" rel="stylesheet">   
-	</head>
+    <head>
+        <title>CPR Look-up - Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))' media='screen'>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+
+        <!-- Custom styles for this template -->
+        <link href="@routes.Assets.at("stylesheets/signin.css")" rel="stylesheet">
+    </head>
     <body>
-       
+
         <div class="container">
-        
-		        @if(form.hasErrors) {
-			 		
-			        	@if(form.errors.size() > 0) {
-				    		@for((key, value) <- form.errors) {
-				                    @for(err <- value) {
-				                    	<div class="alert alert-error alert-dismissable">
-				                        	@err.message().toString()
-				                        </div>
-				                    }
-				            }
-				        }
-        		}
-		        
-	    		@if(flash.contains("success")) {
-	    			<div class="alert alert-success alert-dismissable">
-	    				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	    				@flash.get("success")
-	    			</div>
-	    		}
-        
-     	    	@helper.form(routes.Application.authenticate, 'class -> "form-signin") {
-	
-	
-	    		<h2 class="form-signin-heading">Please sign in</h2>
-	
-	   	  
-	        	<input type="text" name="username" class="form-control" placeholder="Username" 
-	        	@if(form.field("username").value()) {
-	        		value="@form.field("username").value()"
-	        	}
-	        	 autofocus>
-	    		<input type="password" name="password" class="form-control" placeholder="Password">
-		        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-	    		 		
-	    	}
-    	</div> <!-- /container -->
-    
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
-    
+
+            @if(form.hasErrors) {
+                @if(form.errors.size > 0) {
+                    @for((key, value) <- form.errors) {
+                        @for(err <- value) {
+                            <div class="alert alert-error alert-dismissable">
+                                @err.message().toString()
+                            </div>
+                        }
+                    }
+                }
+           }
+
+            @if(flash.contains("success")) {
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        @flash.get("success")
+                </div>
+            }
+
+            @helper.form(routes.Application.authenticate, 'class -> "form-signin") {
+
+                <h2 class="form-signin-heading">Please sign in</h2>
+
+                <input type="text" name="username" class="form-control" placeholder="Username"
+                    @if(form.field("username").value()) {
+                        value="@form.field("username").value()"
+                    }
+                autofocus>
+                <input type="password" name="password" class="form-control" placeholder="Password">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+            }
+        </div> <!-- /container -->
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
     </body>
 </html>
