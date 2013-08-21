@@ -3,7 +3,6 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import play.Play;
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
@@ -11,23 +10,13 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.IAuthenticationStrategy;
+import util.LdapAuthenticationStrategy;
 import util.Secured;
 import views.html.index;
 import views.html.login;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-@Singleton
 public class Application extends Controller {
   	
-	@Inject
-	public Application(IAuthenticationStrategy authenticationStrategy) {
-		Application.authenticationStrategy = authenticationStrategy;
-	}
-	
-	private static IAuthenticationStrategy authenticationStrategy;
-	
 	@Security.Authenticated(Secured.class)
     public static Result index() {
         return ok(index.render(request().username() ));
@@ -56,9 +45,7 @@ public class Application extends Controller {
     		return badRequest( login.render( loginForm ));
     	}
     	
-    	//TODO Remove this hard dependency by dependency injection - Google Guice?
-		//LdapAuthenticationStrategy ldap = new LdapAuthenticationStrategy(hostname, port, basedn);
-		
+		IAuthenticationStrategy authenticationStrategy = new LdapAuthenticationStrategy();
 		boolean isValid = authenticationStrategy.authentication(loginForm.get().username, loginForm.get().password);
 		
 		if(isValid) {
