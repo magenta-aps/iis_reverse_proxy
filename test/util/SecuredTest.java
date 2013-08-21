@@ -24,9 +24,9 @@ public class SecuredTest extends WithApplication {
 	 */
 	static final int HTTP_OK = 200;
 	/**
-	 * Http Redirect Moved Permanently code.
+	 * Http Redirect See Other code.
 	 */
-	static final int HTTP_REDIRECT = 301;
+	static final int HTTP_REDIRECT = 303;
 
 	@Before
 	public void setUp() {
@@ -37,7 +37,7 @@ public class SecuredTest extends WithApplication {
 	public void authenticated() {
 		Result result = callAction(
 			controllers.routes.ref.Application.index(),
-			fakeRequest().withSession("username", "authed@test.com")
+			fakeRequest().withSession("username", "auth@test.com")
 		);
 		assertEquals(HTTP_OK, status(result));
 	}
