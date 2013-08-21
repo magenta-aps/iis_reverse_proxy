@@ -3,6 +3,10 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
@@ -10,12 +14,18 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.IAuthenticationStrategy;
-import util.LdapAuthenticationStrategy;
 import util.Secured;
 import views.html.index;
 import views.html.login;
 
+@Singleton
 public class Application extends Controller {
+	
+	private static IAuthenticationStrategy authenticationStrategy;
+	@Inject
+	public Application(IAuthenticationStrategy newAuthenticationStrategy) {
+		authenticationStrategy = newAuthenticationStrategy;
+	}
 
 	@Security.Authenticated(Secured.class)
     public static Result index() {
@@ -48,7 +58,7 @@ public class Application extends Controller {
     	);
     }
 
-    public static Result authenticate() {
+    public Result authenticate() {
 
     	Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 
@@ -58,11 +68,10 @@ public class Application extends Controller {
     	}
 
     	// Hard coded dependency - ought to remove that
-    	IAuthenticationStrategy authenticationStrategy =
-    			new LdapAuthenticationStrategy();
+    	//IAuthenticationStrategy authenticationStrategy =
+    	//		new LdapAuthenticationStrategy();
 
-    	boolean isValid =
-				authenticationStrategy.authentication(
+    	boolean isValid = authenticationStrategy.authentication(
 						loginForm.get().username,
 						loginForm.get().password);
 

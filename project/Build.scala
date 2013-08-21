@@ -18,7 +18,8 @@ object ApplicationBuild extends Build {
     javaEbean,
     "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
     "org.webjars" %% "webjars-play" % "2.1.0-3",
-    "org.webjars" % "bootstrap" % "3.0.0-rc.2"
+    "org.webjars" % "bootstrap" % "3.0.0-rc.2",
+    "com.google.inject" % "guice" % "3.0"
     
   )
   

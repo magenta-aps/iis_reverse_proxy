@@ -1,8 +1,6 @@
 package util;
 
-import net.sf.ehcache.config.generator.ConfigurationSource;
 import play.Play;
-import play.api.Configuration;
 
 import com.unboundid.ldap.sdk.BindRequest;
 import com.unboundid.ldap.sdk.BindResult;
