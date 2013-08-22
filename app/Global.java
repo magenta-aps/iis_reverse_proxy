@@ -1,5 +1,5 @@
 import play.GlobalSettings;
-import util.IAuthenticationStrategy;
+import util.IAuthStrategy;
 import util.LdapAuthenticationStrategy;
 
 import com.google.inject.AbstractModule;
@@ -29,7 +29,7 @@ public class Global extends GlobalSettings {
 	        @Override
 	        protected void configure() {
 	            play.Logger.info("Global constructor ran");
-	            bind(IAuthenticationStrategy.class)
+	            bind(IAuthStrategy.class)
 	            	.to(LdapAuthenticationStrategy.class);
 	        }
         });

@@ -13,7 +13,9 @@ import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import util.IAuthenticationStrategy;
+import util.AuthResponseType;
+import util.IAuthResponse;
+import util.IAuthStrategy;
 import util.Secured;
 import views.html.index;
 import views.html.login;
@@ -21,9 +23,9 @@ import views.html.login;
 @Singleton
 public class Application extends Controller {
 	
-	private static IAuthenticationStrategy authenticationStrategy;
+	private static IAuthStrategy authenticationStrategy;
 	@Inject
-	public Application(IAuthenticationStrategy newAuthenticationStrategy) {
+	public Application(IAuthStrategy newAuthenticationStrategy) {
 		authenticationStrategy = newAuthenticationStrategy;
 	}
 
@@ -71,11 +73,11 @@ public class Application extends Controller {
     	//IAuthenticationStrategy authenticationStrategy =
     	//		new LdapAuthenticationStrategy();
 
-    	boolean isValid = authenticationStrategy.authentication(
+    	IAuthResponse isValid = authenticationStrategy.authentication(
 						loginForm.get().username,
 						loginForm.get().password);
 
-		if (isValid) {
+		if (isValid.type().equals(AuthResponseType.SUCCESS)) {
 			session().clear();
 	    	session("username", loginForm.get().username);
 	    	return redirect(
@@ -85,9 +87,9 @@ public class Application extends Controller {
 			List<ValidationError> errors =
 					new ArrayList<ValidationError>();
 			ValidationError error =
-					new ValidationError("credentials", "Wrong credentials");
+					new ValidationError(isValid.type().toString(), isValid.message());
 			errors.add(error);
-			loginForm.errors().put("credentials", errors);
+			loginForm.errors().put("error", errors);
 			return badRequest(login.render(loginForm));
 		}
     }

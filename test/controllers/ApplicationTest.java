@@ -13,6 +13,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import play.Play;
 import play.data.Form;
 import play.mvc.Result;
 import play.test.WithApplication;
@@ -39,11 +40,11 @@ public class ApplicationTest extends WithApplication  {
 		start(fakeApplication());
 	}
 	
-	@Test
-	public void testApplicationIsInstantiable() {
-		Application app = new Application();
-		assertNotNull(app);
-	}
+//	@Test
+//	public void testApplicationIsInstantiable() {
+//		Application app = new Application();
+//		assertNotNull(app);
+//	}
 
 	@Test
 	public void testStaticLoginClass() {
