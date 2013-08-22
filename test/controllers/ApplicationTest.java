@@ -93,7 +93,7 @@ public class ApplicationTest extends WithApplication  {
 		//TODO Test returned errors
 	}
 
-	
+
 	@Test
 	public void callAuthenticateWithBadCredientials() {
 

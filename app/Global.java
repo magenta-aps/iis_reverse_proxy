@@ -1,4 +1,3 @@
-import play.Application;
 import play.GlobalSettings;
 import util.IAuthenticationStrategy;
 import util.LdapAuthenticationStrategy;
@@ -8,27 +7,35 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 /**
- * Empty GlobalSettings added because Jacoco wouldn't run otherwise,
- * which is kind of weird.
- * @author srnkrkgrd
+ * Global is the place to hook into the application lifecycle, which makes it
+ * the place to manage dependency injection. Here Google Guice's injector is
+ * placed in the constructor. It is kept 'in the club', due to the nature of
+ * the getControllerInstance method, which is called for all managed routes.
+ * 
+ * Routes can be tagged as managed by placing a @ infront of the controller,
+ * which they should manage. A such method can not be static, so remember to
+ * make it non-static.
+ * 
+ * @author Søren Kirkegård
  *
  */
 public class Global extends GlobalSettings {
-	private Injector injector;
+	private final Injector injector;
 	
-	@Override
-	public void onStart(Application app) {
+	public Global() {
+		super();
+
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
 	        protected void configure() {
-	            play.Logger.info("On start configure ran");
+	            play.Logger.info("Global constructor ran");
 	            bind(IAuthenticationStrategy.class)
 	            	.to(LdapAuthenticationStrategy.class);
 	        }
         });
 	}
-	
-	 @Override
+		
+	@Override
     public <A> A getControllerInstance(Class<A> controllerClass) throws Exception {
 		play.Logger.info("getControllerInstance ran - called by " + controllerClass.getName());
         return injector.getInstance(controllerClass);
