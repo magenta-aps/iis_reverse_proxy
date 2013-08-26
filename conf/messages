@@ -12,5 +12,5 @@ login.invalid_credientials = Forkert brugernavn eller adgangskode
 
 username = Brugernavn
 password = Adgangskode
-error.required = {0} er krævet
+error.required = Feltet {0} skal udfyldes
 
