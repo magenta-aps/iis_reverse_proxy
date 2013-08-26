@@ -61,17 +61,13 @@ public class Application extends Controller {
     }
 
     public Result authenticate() {
-
+    	
     	Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 
     	// Check if there is errors (empty strings)
     	if (loginForm.hasErrors()) {
     		return badRequest(login.render(loginForm));
     	}
-
-    	// Hard coded dependency - ought to remove that
-    	//IAuthenticationStrategy authenticationStrategy =
-    	//		new LdapAuthenticationStrategy();
 
     	IAuthResponse isValid = authenticationStrategy.authentication(
 						loginForm.get().username,
