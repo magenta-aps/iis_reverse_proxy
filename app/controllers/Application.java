@@ -6,7 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
@@ -35,7 +34,8 @@ public class Application extends Controller {
     }
 
     public static class Login {
-    	@Required(message = "Username is required")
+   	
+    	@Required
     	public String username;
 
     	public String getUsername() {
@@ -50,7 +50,7 @@ public class Application extends Controller {
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		@Required(message = "Password is required")
+		@Required
     	public String password;
     }
 
@@ -69,11 +69,11 @@ public class Application extends Controller {
     		return badRequest(login.render(loginForm));
     	}
 
-    	IAuthResponse isValid = authenticationStrategy.authentication(
+    	IAuthResponse authResponse = authenticationStrategy.authentication(
 						loginForm.get().username,
 						loginForm.get().password);
 
-		if (isValid.type().equals(AuthResponseType.SUCCESS)) {
+		if (authResponse.type().equals(AuthResponseType.SUCCESS)) {
 			session().clear();
 	    	session("username", loginForm.get().username);
 	    	return redirect(
@@ -83,7 +83,8 @@ public class Application extends Controller {
 			List<ValidationError> errors =
 					new ArrayList<ValidationError>();
 			ValidationError error =
-					new ValidationError(isValid.type().toString(), isValid.message());
+					new ValidationError(authResponse.type().toString(),
+							play.i18n.Messages.get(authResponse.message()));
 			errors.add(error);
 			loginForm.errors().put("error", errors);
 			return badRequest(login.render(loginForm));
@@ -92,7 +93,7 @@ public class Application extends Controller {
 
     public static Result logout() {
     	session().clear();
-    	flash("success", "You've been logged out");
+    	flash("success", play.i18n.Messages.get("logout.succesful"));
     	return redirect(
     			routes.Application.login()
     	);

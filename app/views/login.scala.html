@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>CPR Look-up - Login</title>
+        <title>@Messages("login.pagetitle")</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))' media='screen'>
@@ -20,7 +20,11 @@
                     @for((key, value) <- form.errors) {
                         @for(err <- value) {
                             <div class="alert alert-error alert-dismissable">
-                                @err.message().toString()
+                                @{
+                                    val msg = err.message()
+                                    val key = Messages(err.key());
+                                    Messages(msg, key)                                    
+                                }
                             </div>
                         }
                     }
@@ -36,15 +40,15 @@
 
             @helper.form(routes.Application.authenticate, 'class -> "form-signin") {
 
-                <h2 class="form-signin-heading">Please sign in</h2>
+                <h2 class="form-signin-heading">@Messages("login.title")</h2>
 
-                <input type="text" name="username" class="form-control" placeholder="Username"
+                <input type="text" name="username" class="form-control" placeholder="@Messages("username")"
                     @if(form.field("username").value()) {
                         value="@form.field("username").value()"
                     }
                 autofocus>
-                <input type="password" name="password" class="form-control" placeholder="Password">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <input type="password" name="password" class="form-control" placeholder="@Messages("password")">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">@Messages("login.submit")</button>
 
             }
         </div> <!-- /container -->

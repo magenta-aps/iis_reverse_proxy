@@ -80,24 +80,24 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
                 
                 if(sr.getEntryCount() == 1) {
                 	// found one entry, so must be okay
-                	return new LdapAuthResponse(AuthResponseType.SUCCESS, "Successful authentication and authorization");
+                	return new LdapAuthResponse(AuthResponseType.SUCCESS, "login.succesful");
                 } else if (sr.getEntryCount() == 0) {
                 	// didn't return any, so user isn't authorized
-                	return new LdapAuthResponse(AuthResponseType.INFO, "Not authorized");
+                	return new LdapAuthResponse(AuthResponseType.INFO, "login.not_authorized");
                 } else {
                 	// something went wrong!
                 	play.Logger.error(this.getClass().getName() + ": return unexpected multiply result - should be 0 or 1");
-                	return new LdapAuthResponse(AuthResponseType.ERROR, "Something went wrong");
+                	return new LdapAuthResponse(AuthResponseType.ERROR, "login.unexpected_error");
                 }
             } else {
             	// ResultCode != success
-                return new LdapAuthResponse(AuthResponseType.INFO, "Invalid credientials");
+                return new LdapAuthResponse(AuthResponseType.INFO, "login.invalid_credientials");
             }
         } catch (final LDAPException lex) {
             System.err.println("bind failed");
             System.err.println(lex.getMessage());
 
-            return new LdapAuthResponse(AuthResponseType.INFO, "Invalid credientials");
+            return new LdapAuthResponse(AuthResponseType.INFO, "login.invalid_credientials");
 
         } finally {
         	// always close the connection afterwards

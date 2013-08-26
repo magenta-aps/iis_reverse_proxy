@@ -1,0 +1,16 @@
+# route /login
+login.pagetitle = CPR Look Up - Log på
+login.title = Indtast venligst dine oplysninger
+login.submit = Log på
+
+# /login feedback messages
+# implement the different error messages here
+logout.succesful = Du er nu logget ud
+login.not_authorized = Du har ikke tilladelse til at benytte applikationen
+login.unexpected_error = Applikationen havde en uventet fejl
+login.invalid_credientials = Forkert brugernavn eller adgangskode
+
+username = Brugernavn
+password = Adgangskode
+error.required = {0} er krævet
+
