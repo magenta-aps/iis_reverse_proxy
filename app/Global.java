@@ -1,10 +1,15 @@
+import java.util.HashMap;
+import java.util.Map;
+
 import play.GlobalSettings;
+import play.Play;
 import util.IAuthStrategy;
 import util.LdapAuthenticationStrategy;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 
 /**
  * Global is the place to hook into the application lifecycle, which makes it
@@ -29,8 +34,24 @@ public class Global extends GlobalSettings {
 	        @Override
 	        protected void configure() {
 	            play.Logger.info("Global constructor ran");
+
 	            bind(IAuthStrategy.class)
-	            	.to(LdapAuthenticationStrategy.class);
+            	.toProvider(new Provider<IAuthStrategy>() {
+
+					@Override
+					public IAuthStrategy get() {
+			            Map<String, String> ldapConfiguration = new HashMap<String, String>();
+			            
+			        	play.Configuration conf = Play.application().configuration();
+			    		String hostname = conf.getString("ldap.hostname");
+			    		int port = conf.getInt("ldap.port");
+			    		String basedn  = conf.getString("ldap.basedn");
+			    		String groupdn = conf.getString("ldap.groupdn");
+			    		String groupfield = conf.getString("ldap.groupfield");
+			            
+	            		return new LdapAuthenticationStrategy(hostname, port, basedn, groupdn, groupfield);
+					}	
+            	});	            
 	        }
         });
 	}

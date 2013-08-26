@@ -1,7 +1,6 @@
 package util;
 
-import play.Play;
-
+import com.google.inject.Inject;
 import com.unboundid.ldap.sdk.BindRequest;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.Filter;
@@ -15,24 +14,39 @@ import com.unboundid.ldap.sdk.SimpleBindRequest;
 
 public class LdapAuthenticationStrategy implements IAuthStrategy {
 
-    private static String hostname;
-    private static int port;
-    private static String basedn;
-    private static String groupdn;
-    private static String groupfield;
+    private final String hostname;
+    private final int port;
+    private final String basedn;
+    private final String groupdn;
+    private final String groupfield;
     
-
-    public LdapAuthenticationStrategy() {
-
-        //TODO Remove this logger
-    	play.Logger.info("LdapAuthenticationStrategy constructor!");
-    	play.Configuration conf = Play.application().configuration();
-		hostname = conf.getString("ldap.hostname");
-		port = conf.getInt("ldap.port");
-		basedn  = conf.getString("ldap.basedn");
-		groupdn = conf.getString("ldap.groupdn");
-		groupfield = conf.getString("ldap.groupfield");
+    @Inject
+    public LdapAuthenticationStrategy(final String newHostname,
+    									final int newPort,
+    									final String newBasedn,
+    									final String newGroupdn,
+    									final String newGroupfield) {
+   	
+		hostname = newHostname;
+		port = newPort;
+		basedn  = newBasedn;
+		groupdn = newGroupdn;
+		groupfield = newGroupfield;
 	}
+    
+    private final LDAPConnection getConnection() {
+    	LDAPConnection ldapConnection = null;
+        try {
+            ldapConnection = new LDAPConnection(hostname, port);
+        } catch (final LDAPException lex) {
+            play.Logger.error("failed to connect to "
+                   + hostname + " "
+                   + lex.getMessage());
+
+        } finally {
+        	return ldapConnection;
+        }
+    }
 
     //TODO make some sort of better report than a boolean report type
     @Override
@@ -45,20 +59,11 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 		//TODO Remove this Logger
 		play.Logger.info("Authentication method");
 
-		LDAPConnection ldapConnection;
-		
 		// Try to get a connection
-        try {
-            ldapConnection = new LDAPConnection(hostname, port);
-        } catch (final LDAPException lex) {
-            play.Logger.error("failed to connect to "
-                   + hostname + " "
-                   + lex.getMessage());
-            //TODO Makde this message customizable
+		LDAPConnection ldapConnection = getConnection();
+		if(ldapConnection == null) {
             return new LdapAuthResponse(AuthResponseType.ERROR, "Connection error");
-        }
-        
-
+		}
 
         try {
             final BindRequest bindRequest =

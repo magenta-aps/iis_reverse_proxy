@@ -23,7 +23,6 @@ import play.test.WithApplication;
 import util.AuthResponseType;
 import util.IAuthResponse;
 import util.IAuthStrategy;
-import util.LdapAuthResponse;
 
 public class ApplicationTest extends WithApplication {
 
@@ -112,7 +111,6 @@ public class ApplicationTest extends WithApplication {
 		assertEquals(HTTP_REDIRECT, status(result));
 	}
 
-	// TODO Really need to decouple that damned Authentication
 	@Test
 	public void callAuthenticateWithValidCredientials() {
 
