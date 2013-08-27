@@ -3,8 +3,10 @@ import java.util.Map;
 
 import play.GlobalSettings;
 import play.Play;
-import util.IAuthStrategy;
-import util.LdapAuthenticationStrategy;
+import util.auth.IAuthStrategy;
+import util.auth.ldap.LdapAuthenticationStrategy;
+import util.cprbroker.ICprBrokerRequest;
+import util.cprbroker.jaxws.JaxWsCprBroker;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -39,9 +41,7 @@ public class Global extends GlobalSettings {
             	.toProvider(new Provider<IAuthStrategy>() {
 
 					@Override
-					public IAuthStrategy get() {
-			            Map<String, String> ldapConfiguration = new HashMap<String, String>();
-			            
+					public IAuthStrategy get() {			            
 			        	play.Configuration conf = Play.application().configuration();
 			    		String hostname = conf.getString("ldap.hostname");
 			    		int port = conf.getInt("ldap.port");
@@ -51,7 +51,23 @@ public class Global extends GlobalSettings {
 			            
 	            		return new LdapAuthenticationStrategy(hostname, port, basedn, groupdn, groupfield);
 					}	
+            	});
+	            
+	            
+	            bind(ICprBrokerRequest.class)
+            	.toProvider(new Provider<ICprBrokerRequest>() {
+
+					@Override
+					public ICprBrokerRequest get() {		            
+			        	play.Configuration conf = Play.application().configuration();
+			    		String endpoint = conf.getString("cprbroker.endpoint");
+			    		String appToken  = conf.getString("cprbroker.applicationtoken");
+			    		String userToken = conf.getString("cprbroker.usertoken");
+			            
+	            		return new JaxWsCprBroker(endpoint, appToken, userToken);
+					}	
             	});	            
+	            
 	        }
         });
 	}

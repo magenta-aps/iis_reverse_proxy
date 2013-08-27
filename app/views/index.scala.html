@@ -24,7 +24,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">CPR Look-up</a>
+          <a class="navbar-brand" href="#">@Messages("nav.title")</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -46,12 +46,12 @@
           </ul>
           @helper.form(routes.Search.search, 'class -> "navbar-form navbar-left", 'role -> "search") {
             <div class="form-group">
-                <input type="text" class="form-control" name="query" placeholder="@Messages("index.quicksearch_placeholder")">
+                <input type="text" class="form-control" name="query" placeholder="@Messages("nav.quicksearch_placeholder")">
             </div>
-            <button type="submit" class="btn btn-default">@Messages("index.quicksearch_submit")</button>
+            <button type="submit" class="btn btn-default">@Messages("nav.quicksearch_submit")</button>
           }
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="@routes.Application.logout()">@Messages("index.logout_button")</a></li>
+            <li><a href="@routes.Application.logout()">@Messages("nav.logout_button")</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

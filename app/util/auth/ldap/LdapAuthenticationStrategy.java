@@ -1,4 +1,9 @@
-package util;
+package util.auth.ldap;
+
+
+import util.auth.AuthResponseType;
+import util.auth.IAuthResponse;
+import util.auth.IAuthStrategy;
 
 import com.google.inject.Inject;
 import com.unboundid.ldap.sdk.BindRequest;

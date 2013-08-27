@@ -14,8 +14,9 @@ username = Brugernavn
 password = Adgangskode
 error.required = Feltet {0} skal udfyldes
 
-# route / (index)
-index.quicksearch_placeholder = CPR eller navn
-index.quicksearch_submit = Søg
+# navbar
+nav.title = CPR Look-up
+nav.quicksearch_placeholder = CPR eller navn
+nav.quicksearch_submit = Søg
 
-index.logout_button = Log ud
+nav.logout_button = Log ud

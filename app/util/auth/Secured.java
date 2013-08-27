@@ -1,4 +1,4 @@
-package util;
+package util.auth;
 
 import controllers.routes;
 import play.mvc.Result;

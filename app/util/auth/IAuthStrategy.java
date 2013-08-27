@@ -1,4 +1,4 @@
-package util;
+package util.auth;
 /**
  * Interface that decouples the implementation of a Authentication Strategy for
  * the application.

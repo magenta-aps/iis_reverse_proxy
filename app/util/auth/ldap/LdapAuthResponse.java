@@ -1,4 +1,8 @@
-package util;
+package util.auth.ldap;
+
+import util.auth.AuthResponseType;
+import util.auth.IAuthResponse;
+
 
 public class LdapAuthResponse implements IAuthResponse {
 	

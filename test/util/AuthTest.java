@@ -6,6 +6,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import util.auth.AuthResponseType;
+import util.auth.IAuthResponse;
+import util.auth.IAuthStrategy;
+import util.auth.ldap.LdapAuthResponse;
+import util.auth.ldap.LdapAuthenticationStrategy;
+
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.sdk.LDAPException;

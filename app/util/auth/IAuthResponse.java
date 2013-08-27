@@ -1,4 +1,4 @@
-package util;
+package util.auth;
 /**
  * A response object containing the result of the Authentication/Authorization 
  * @author srnkrkgrd

@@ -1,4 +1,4 @@
-package util;
+package util.auth;
 
 public enum AuthResponseType {
 	SUCCESS,

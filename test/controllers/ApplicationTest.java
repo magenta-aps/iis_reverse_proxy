@@ -20,9 +20,9 @@ import play.GlobalSettings;
 import play.data.Form;
 import play.mvc.Result;
 import play.test.WithApplication;
-import util.AuthResponseType;
-import util.IAuthResponse;
-import util.IAuthStrategy;
+import util.auth.AuthResponseType;
+import util.auth.IAuthResponse;
+import util.auth.IAuthStrategy;
 
 public class ApplicationTest extends WithApplication {
 

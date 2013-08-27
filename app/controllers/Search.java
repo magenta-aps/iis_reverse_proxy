@@ -1,17 +1,33 @@
 package controllers;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import itst.dk.PartSoap12;
+import oio.sagdok.person._1_0.GetUuidOutputType;
+import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import util.Secured;
+import util.auth.Secured;
+import util.cprbroker.ICprBrokerRequest;
+import util.cprbroker.IUuidReturnType;
 import views.html.search;
 
+@Singleton
 public class Search extends Controller {
 
+	private static ICprBrokerRequest cprBroker;
+	
+	@Inject
+	public Search(ICprBrokerRequest newCprBroker) {
+		cprBroker = newCprBroker;
+	}
+	
 	@Security.Authenticated(Secured.class)
-	public static Result search() {
+	public Result search() {
 
 		Form<SearchInput> searchForm = Form.form(SearchInput.class).bindFromRequest();
 
@@ -19,9 +35,12 @@ public class Search extends Controller {
 		if (searchForm.hasErrors()) {
 			return badRequest(search.render(Form.form(SearchInput.class), "Form has errors"));
 		}
-
 		
-		return ok(search.render(Form.form(SearchInput.class), searchForm.toString() ));
+		//Input type == cprnumber
+		IUuidReturnType uuid = cprBroker.getUuid(searchForm.get().query);
+		
+		
+		return ok(search.render(Form.form(SearchInput.class), uuid.uuid() ));
 	}
 
 	public static class SearchInput {

@@ -14,10 +14,10 @@ import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import util.AuthResponseType;
-import util.IAuthResponse;
-import util.IAuthStrategy;
-import util.Secured;
+import util.auth.AuthResponseType;
+import util.auth.IAuthResponse;
+import util.auth.IAuthStrategy;
+import util.auth.Secured;
 import views.html.index;
 import views.html.login;
 
