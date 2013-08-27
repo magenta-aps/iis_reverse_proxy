@@ -1,11 +1,13 @@
 package util.auth.ldap;
 
 
+import javax.inject.Inject;
+
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
 
-import com.google.inject.Inject;
+
 import com.unboundid.ldap.sdk.BindRequest;
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.Filter;
@@ -59,7 +61,14 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 			final String dn, final String password) {
 
     	// combine dn + basedn to get userdn
-        final String userdn = dn + "," + basedn;
+    	final String userdn;
+    	
+    	if(basedn.length() > 0) {
+            userdn = dn + "," + basedn;    		
+    	} else {
+    		userdn = dn;
+    	}
+
         
 		//TODO Remove this Logger
 		play.Logger.info("Authentication method");
@@ -99,8 +108,9 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
                 return new LdapAuthResponse(AuthResponseType.INFO, "login.invalid_credientials");
             }
         } catch (final LDAPException lex) {
-            System.err.println("bind failed");
-            System.err.println(lex.getMessage());
+            
+            play.Logger.warn(lex.toString());
+            play.Logger.info("host: " + hostname + ", basedn: " + basedn + ", user: " + dn + ", userdn: " +  userdn + ", pass: " + password);
 
             return new LdapAuthResponse(AuthResponseType.INFO, "login.invalid_credientials");
 

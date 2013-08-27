@@ -41,6 +41,10 @@ public class Application extends Controller {
     	@Required
     	public String username;
 
+    	@Required
+    	public String password;
+
+
     	public String getUsername() {
 			return username;
 		}
@@ -53,8 +57,6 @@ public class Application extends Controller {
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		@Required
-    	public String password;
     }
 
     public static Result login() {

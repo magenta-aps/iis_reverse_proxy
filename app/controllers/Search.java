@@ -14,6 +14,7 @@ import play.mvc.Security;
 import util.auth.Secured;
 import util.cprbroker.ICprBrokerRequest;
 import util.cprbroker.IUuidReturnType;
+import util.cprbroker.jaxws.Uuid;
 import views.html.search;
 
 @Singleton
@@ -33,14 +34,14 @@ public class Search extends Controller {
 
 		// Check if there is errors (empty strings)
 		if (searchForm.hasErrors()) {
-			return badRequest(search.render(Form.form(SearchInput.class), "Form has errors"));
+			return badRequest(search.render(Form.form(SearchInput.class), new Uuid("", 0, "")));
 		}
 		
 		//Input type == cprnumber
 		IUuidReturnType uuid = cprBroker.getUuid(searchForm.get().query);
 		
 		
-		return ok(search.render(Form.form(SearchInput.class), uuid.uuid() ));
+		return ok(search.render(Form.form(SearchInput.class), uuid));
 	}
 
 	public static class SearchInput {
