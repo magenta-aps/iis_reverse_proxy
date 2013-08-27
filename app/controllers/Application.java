@@ -6,6 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import controllers.Search.SearchInput;
+
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
@@ -23,14 +25,15 @@ import views.html.login;
 public class Application extends Controller {
 	
 	private static IAuthStrategy authenticationStrategy;
+	
 	@Inject
 	public Application(IAuthStrategy newAuthenticationStrategy) {
 		authenticationStrategy = newAuthenticationStrategy;
 	}
-
+		
 	@Security.Authenticated(Secured.class)
     public static Result index() {
-        return ok(index.render(request().username()));
+        return ok(index.render(Form.form(SearchInput.class), request().username()));
     }
 
     public static class Login {
