@@ -22,7 +22,7 @@ public class JaxWsCprBroker implements ICprBrokerRequest {
 		try {
 			port = factory.getInstance();
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			play.Logger.error(e.getMessage());
 		}
 
 	}
