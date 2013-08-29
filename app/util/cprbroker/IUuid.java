@@ -6,7 +6,11 @@ package util.cprbroker;
  * @author srnkrkgrd
  *
  */
-public interface IUuidReturnType extends IStandardResponse {
+public interface IUuid extends IStandardResponse {
 
+	/**
+	 * 
+	 * @return uuid for the person
+	 */
 	String uuid();
 }

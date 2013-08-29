@@ -50,9 +50,8 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 			play.Logger.error("failed to connect to " + hostname + " "
 					+ lex.getMessage());
 
-		} finally {
+		} 
 			return ldapConnection;
-		}
 	}
 
 	// TODO make some sort of better report than a boolean report type

@@ -30,8 +30,7 @@ public class AuthTest {
 
 			config = new InMemoryDirectoryServerConfig("dc=nodomain");
 			// Create the directory server instance, populate it with data from
-			// the
-			// "test-data.ldif" file, and start listening for client
+			// the "test-data.ldif" file, and start listening for client
 			// connections.
 			ds = new InMemoryDirectoryServer(config);
 

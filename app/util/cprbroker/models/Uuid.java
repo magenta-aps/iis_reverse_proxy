@@ -1,8 +1,8 @@
-package util.cprbroker.jaxws;
+package util.cprbroker.models;
 
-import util.cprbroker.IUuidReturnType;
+import util.cprbroker.IUuid;
 
-public class Uuid implements IUuidReturnType {
+public class Uuid implements IUuid {
 	
 	private final String uuid;
 	private final String message;

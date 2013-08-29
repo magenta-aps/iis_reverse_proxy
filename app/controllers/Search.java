@@ -3,27 +3,25 @@ package controllers;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import itst.dk.PartSoap12;
-import oio.sagdok.person._1_0.GetUuidOutputType;
-import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.auth.Secured;
-import util.cprbroker.ICprBrokerRequest;
-import util.cprbroker.IUuidReturnType;
-import util.cprbroker.jaxws.Uuid;
-import views.html.search;
+import util.cprbroker.ICprBrokerAccessor;
+import util.cprbroker.IPerson;
+import util.cprbroker.IUuid;
+import controllers.Search.SearchInput;
+import views.html.*;
 
 @Singleton
 public class Search extends Controller {
 
-	private static ICprBrokerRequest cprBroker;
+	private static ICprBrokerAccessor cprBroker;
 	
 	@Inject
-	public Search(ICprBrokerRequest newCprBroker) {
+	public Search(ICprBrokerAccessor newCprBroker) {
 		cprBroker = newCprBroker;
 	}
 	
@@ -34,14 +32,19 @@ public class Search extends Controller {
 
 		// Check if there is errors (empty strings)
 		if (searchForm.hasErrors()) {
-			return badRequest(search.render(Form.form(SearchInput.class), new Uuid("", 0, "")));
+			return badRequest(search.render(Form.form(SearchInput.class), null));
 		}
 		
 		//Input type == cprnumber
-		IUuidReturnType uuid = cprBroker.getUuid(searchForm.get().query);
+		IUuid uuid = cprBroker.getUuid(searchForm.get().query);
 		
-		
-		return ok(search.render(Form.form(SearchInput.class), uuid));
+		if (uuid.code() == 200) {
+			IPerson person = cprBroker.read(uuid.uuid());
+			
+			return ok(search.render(Form.form(SearchInput.class), person));
+		} else {
+			return ok(search.render(Form.form(SearchInput.class), null));	
+		}	
 	}
 
 	public static class SearchInput {

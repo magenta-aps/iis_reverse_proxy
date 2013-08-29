@@ -5,7 +5,7 @@ import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthStrategy;
 import util.auth.ldap.LdapAuthenticationStrategy;
-import util.cprbroker.ICprBrokerRequest;
+import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
 
 import com.google.inject.AbstractModule;
@@ -54,11 +54,11 @@ public class Global extends GlobalSettings {
             	});
 	            
 	            
-	            bind(ICprBrokerRequest.class)
-            	.toProvider(new Provider<ICprBrokerRequest>() {
+	            bind(ICprBrokerAccessor.class)
+            	.toProvider(new Provider<ICprBrokerAccessor>() {
 
 					@Override
-					public ICprBrokerRequest get() {		            
+					public ICprBrokerAccessor get() {		            
 			        	play.Configuration conf = Play.application().configuration();
 			    		String endpoint = conf.getString("cprbroker.endpoint");
 			    		String appToken  = conf.getString("cprbroker.applicationtoken");
