@@ -94,26 +94,31 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			// Get the first from the list
 			EgenskabType attributes = personAttributes.get(0);
 			
-			// Get the givenname
-			String firstname = attributes.getNavnStruktur().getPersonNameStructure().getPersonGivenName();
-			if(firstname != null) { builder.firstname(firstname); }
-			
-			// Get the middlename
-			String middelName = attributes.getNavnStruktur().getPersonNameStructure().getPersonMiddleName();
-			if(middelName != null) { builder.middelname(middelName); }
+			// Make certain the person has a name (unborn doesn't!)
+			if(attributes != null &&
+					attributes.getNavnStruktur() != null) {	
 
-			// Get the surname
-			String lastname = attributes.getNavnStruktur().getPersonNameStructure().getPersonSurnameName();
-			if(lastname != null) { builder.lastname(lastname); }
-			
-			// Get the callname
-			String callname = attributes.getNavnStruktur().getKaldenavnTekst();
-			if(callname != null) { builder.lastname(callname); }
+				// Get the givenname
+				String firstname = attributes.getNavnStruktur().getPersonNameStructure().getPersonGivenName();
+				if(firstname != null) { builder.firstname(firstname); }
+				
+				// Get the middlename
+				String middelName = attributes.getNavnStruktur().getPersonNameStructure().getPersonMiddleName();
+				if(middelName != null) { builder.middelname(middelName); }
 
-			// Get a name for addressing
-			String addressingName = attributes.getNavnStruktur().getPersonNameForAddressingName();
-			if(addressingName != null) { builder.nameForAdressing(addressingName); }
-			
+				// Get the surname
+				String lastname = attributes.getNavnStruktur().getPersonNameStructure().getPersonSurnameName();
+				if(lastname != null) { builder.lastname(lastname); }
+				
+				// Get the callname
+				String callname = attributes.getNavnStruktur().getKaldenavnTekst();
+				if(callname != null) { builder.lastname(callname); }
+
+				// Get a name for addressing
+				String addressingName = attributes.getNavnStruktur().getPersonNameForAddressingName();
+				if(addressingName != null) { builder.nameForAdressing(addressingName); }
+
+			}			
 			// Get the gender
 			// TODO Convert to enum?
 			String gender = attributes.getPersonGenderCode().name();
@@ -134,9 +139,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			// Get the address
 			// TODO Figure out wtf this is..
-			DanskAdresseType danskAdresse = attributes.getAndreAdresser().getDanskAdresse();
-			GroenlandAdresseType groenlandskAdresse = attributes.getAndreAdresser().getGroenlandAdresse();
-			VerdenAdresseType verdensAdresse = attributes.getAndreAdresser().getVerdenAdresse();
+			//DanskAdresseType danskAdresse = attributes.getAndreAdresser().getDanskAdresse();
+			//GroenlandAdresseType groenlandskAdresse = attributes.getAndreAdresser().getGroenlandAdresse();
+			//VerdenAdresseType verdensAdresse = attributes.getAndreAdresser().getVerdenAdresse();
 		
 			// TODO implement these
 			attributes.getKontaktKanal();
