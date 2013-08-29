@@ -1,13 +1,13 @@
 package util.cprbroker;
 
-public interface IRegisterInformation {
+/**
+ * Type interface
+ * @author Søren Kirkegård
+ *
+ */
+public interface IRegisterInformation {	
+	ICprCitizenRegisterInformation cprCitizen();
 	
-	boolean socialSecutiryNumber()
-	
-	boolean isPersonInformationProtection();
-	
-	boolean isUnderResearcherProtection();
-	
-	
-
+	//TODO implement isCprCitizen, isUnknownCitizen, isForeignCitizen
+	//	   implement unknownCitizen, foreignCitizen
 }

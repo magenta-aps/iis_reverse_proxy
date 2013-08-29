@@ -1,5 +1,6 @@
 package util.cprbroker.jaxws;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import itst.dk.PartSoap12;
 import oio.sagdok._2_0.LaesInputType;
 import oio.sagdok._2_0.StandardReturType;
 import oio.sagdok._2_0.VirkningType;
+import oio.sagdok.person._1_0.AdresseType;
 import oio.sagdok.person._1_0.CprBorgerType;
 import oio.sagdok.person._1_0.DanskAdresseType;
 import oio.sagdok.person._1_0.EgenskabType;
@@ -20,9 +22,13 @@ import oio.sagdok.person._1_0.VerdenAdresseType;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IPerson;
 import util.cprbroker.IUuid;
+import util.cprbroker.models.CprCitizenData;
+import util.cprbroker.models.DanishAddress;
 import util.cprbroker.models.Person;
 import util.cprbroker.models.Uuid;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
+import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
+import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
 public class JaxWsCprBroker implements ICprBrokerAccessor {
 
@@ -137,13 +143,98 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			attributes.getNaermestePaaroerende();
 			attributes.getVirkning();
 		
+			
+			////////////////////////
 			// Get the registration information
 			List<RegisterOplysningType> registerList = 
 					laesOutput.getLaesResultat().getRegistrering().getAttributListe().getRegisterOplysning();
+
+			// TODO make a guard check if the list has values
 			RegisterOplysningType register = registerList.get(0);
+			// TODO make a guard check if the register has a cprCitizen
 			CprBorgerType citizenData = register.getCprBorger();
-			citizenData.getFolkeregisterAdresse().getDanskAdresse().getAddressComplete();
+			// Make a builder
+			CprCitizenData.Builder regInfoBuilder = new CprCitizenData.Builder();
+
+			// Get social security information
+			String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
+			if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
 			
+			// Get nationality code
+			CountryIdentificationCodeType nationalityCode = citizenData.getPersonNationalityCode();
+			if(nationalityCode != null) { regInfoBuilder.personNationalityCode(nationalityCode.getValue()); }
+
+			// Is member of the church?
+			Boolean isChurchMember = citizenData.isFolkekirkeMedlemIndikator();
+			if (isChurchMember != null) { regInfoBuilder.isMemberOfTheChurch(isChurchMember); }
+
+			// Has researcher protection?
+			Boolean isResearcherProtected = citizenData.isForskerBeskyttelseIndikator();
+			if (isResearcherProtected != null) { regInfoBuilder.isResearcherProtected(isResearcherProtected); }
+
+			// Valid social security number?
+			Boolean isCprValid = citizenData.isPersonNummerGyldighedStatusIndikator();
+			if (isCprValid != null) { regInfoBuilder.isSocialSecurityNumberValid(isCprValid); }
+		
+			// Name/Address protection?
+			Boolean isNameAddressProtected = citizenData.isNavneAdresseBeskyttelseIndikator();
+			if (isNameAddressProtected != null) { regInfoBuilder.isNameAdressProtected(isNameAddressProtected); }
+
+			// Name/Address protection?
+			Boolean isPhoneNumberProtected = citizenData.isTelefonNummerBeskyttelseIndikator();
+			if (isPhoneNumberProtected != null) { regInfoBuilder.isPhoneNumberProtected(isPhoneNumberProtected); }		
+			
+			AdresseType address = citizenData.getFolkeregisterAdresse();
+			if(address != null) {
+				DanskAdresseType danishAddress = address.getDanskAdresse();
+				GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
+				VerdenAdresseType worldAddress = address.getVerdenAdresse();
+				
+				// Is there a danish address?
+				if(danishAddress != null) {
+					
+					// null guard
+					if(danishAddress.getAddressComplete() != null &&
+							danishAddress.getAddressComplete().getAddressPostal() != null) {
+
+						// Let build a bear.. err danish address!
+						DanishAddress.Builder addressBuilder = new DanishAddress.Builder();
+
+						// reference pointer for less spam
+						AddressPostalType addressPostal = danishAddress.getAddressComplete().getAddressPostal();
+
+						// Get country id code
+						CountryIdentificationCodeType idCode = addressPostal.getCountryIdentificationCode();
+						if(idCode != null) {addressBuilder.countryIdentificationCode(idCode.getValue()); }
+
+						// Get postofficebox
+						BigInteger postOfficeBox = addressPostal.getPostOfficeBoxIdentifier();
+						if(postOfficeBox != null) {addressBuilder.postOfficeBox(addressPostal.getPostOfficeBoxIdentifier().toString()); }
+						
+						// Just build the rest
+						addressBuilder.districtName(addressPostal.getDistrictName())
+									.districtSubdivision(addressPostal.getDistrictSubdivisionIdentifier())
+									.floor(addressPostal.getFloorIdentifier())
+									.mailSubLocaltion(addressPostal.getMailDeliverySublocationIdentifier())
+									.postCode(addressPostal.getPostCodeIdentifier())
+									.streetBuilding(addressPostal.getStreetBuildingIdentifier())
+									.streetName(addressPostal.getStreetName())
+									.streetNameForAdressing(addressPostal.getStreetNameForAddressingName())
+									.suite(addressPostal.getSuiteIdentifier());
+
+						// add the address to the person
+						builder.address(addressBuilder.build());
+					}
+					
+				}
+				
+			}
+			// Add the register information data to the person
+			builder.registerInformation(regInfoBuilder.build());
+						
+			//TODO Get rid of this mess
+			citizenData.getAdresseNoteTekst();
+						
 		}
 
 		return builder.build();

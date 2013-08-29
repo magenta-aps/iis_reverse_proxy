@@ -80,6 +80,38 @@
 		            @if(person.birthplace) {<li>Birthplace: @person.birthplace</li>}
 		            @if(person.birthRegisteringAuthority) {<li>BirthRegisteringAuthority: @person.birthRegisteringAuthority</li>}
 	            </ul>
+	            
+	            @if(person.registerInformation != null) {
+	               <ul>
+	                   @if(person.registerInformation.cprCitizen.socialSecurityNumber){<li>CPR nummer: @person.registerInformation.cprCitizen.socialSecurityNumber</li>}
+	                   <li>Cpr number valid: @person.registerInformation.cprCitizen.isSocialSecurityNumberValid</li>
+	                   @if(person.registerInformation.cprCitizen.personNationalityCode){<li>Country code: @person.registerInformation.cprCitizen.personNationalityCode</li>}
+	                   
+	                   <li>Folkekirken: @person.registerInformation.cprCitizen.isMemberOfTheChurch</li>
+                       <li>Forskerbeskyttelse: @person.registerInformation.cprCitizen.isResearcherProtected</li>
+                       <li>Navn/Adresse beskyttelse: @person.registerInformation.cprCitizen.isNameAddressProtected</li>
+                       <li>Hemmeligt nummer: @person.registerInformation.cprCitizen.isPhoneNumberProtected</li>
+	                   
+	               </ul>
+	            }
+	            
+	            @if(person.address != null){
+	                @if(person.address.isDanishAddress != null) {
+	                   <ul>
+	                       @if(person.address.danishAddress.countryIdentificationCode) {<li>countryIdCode: @person.address.danishAddress.countryIdentificationCode</li>} 
+	                       @if(person.address.danishAddress.districtName) {<li>districtName: @person.address.danishAddress.districtName</li>}
+	                       @if(person.address.danishAddress.districtSubdivision) {<li>districtSubdivision: @person.address.danishAddress.districtSubdivision</li>}
+	                       @if(person.address.danishAddress.floor) {<li>Floor: @person.address.danishAddress.floor</li>}
+	                       @if(person.address.danishAddress.mailSubLocaltion) {<li>mail sublocation: @person.address.danishAddress.mailSubLocaltion</li>}
+	                       @if(person.address.danishAddress.postCode) {<li>postcode: @person.address.danishAddress.postCode</li>}
+	                       @if(person.address.danishAddress.postOfficeBox) {<li>postOfficeBox: @person.address.danishAddress.postOfficeBox</li>}
+	                       @if(person.address.danishAddress.streetBuilding) {<li>streetbuilding: @person.address.danishAddress.streetBuilding</li>}
+	                       @if(person.address.danishAddress.streetName) {<li>streetName: @person.address.danishAddress.streetName</li>}
+	                       @if(person.address.danishAddress.streetNameForAddressing) {<li>streetNameForAddressing:@person.address.danishAddress.streetNameForAddressing</li>}
+	                       @if(person.address.danishAddress.suite) {<li>Suite: @person.address.danishAddress.suite</li>}
+	                   </ul>
+	                }	                    
+	            } 
             }
         </div>
     </div>

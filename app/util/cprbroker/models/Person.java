@@ -2,7 +2,9 @@ package util.cprbroker.models;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import util.cprbroker.IAddress;
 import util.cprbroker.IPerson;
+import util.cprbroker.IRegisterInformation;
 
 public class Person implements IPerson{
 
@@ -21,6 +23,12 @@ public class Person implements IPerson{
 	private final XMLGregorianCalendar birthdate;
 	private final String birthplace;
 	private final String birthRegisteringAuthority;
+	
+	// register information
+	private final IRegisterInformation registerInformation;
+	
+	// address
+	private final IAddress address;
 	
 	/**
 	 * Builder for a Person
@@ -45,6 +53,10 @@ public class Person implements IPerson{
 		private String birthplace = null;
 		private String birthRegisteringAuthority = null;
 		
+		private IRegisterInformation registerInformation = null;
+		
+		private IAddress address = null;
+		
 		// Builder constructor
 		public Builder(final int newCode, final String newMessage, final String newUuid) {
 			code = newCode;
@@ -53,7 +65,7 @@ public class Person implements IPerson{
 		}
 		
 		// build method
-		public Person build() { return new Person(this); }
+		public IPerson build() { return new Person(this); }
 		
 		// builder methods
 		public Builder firstname(final String newName) { firstname = newName; return this; }
@@ -65,7 +77,8 @@ public class Person implements IPerson{
 		public Builder birthdate(final XMLGregorianCalendar newBirthdate) {birthdate = newBirthdate; return this;}
 		public Builder birthplace(final String newBirthplace) {birthplace = newBirthplace; return this;}
 		public Builder birthRegisteringAuthority(final String newBirthRegisteringAuthority) {birthRegisteringAuthority = newBirthRegisteringAuthority; return this;}
-		
+		public Builder registerInformation(final IRegisterInformation newRegInfo) { registerInformation = newRegInfo; return this; }
+		public Builder address(final IAddress newAddress) {address = newAddress; return this;}
 	}
 
 	/**
@@ -87,7 +100,10 @@ public class Person implements IPerson{
 		birthdate = builder.birthdate;
 		birthplace = builder.birthplace;
 		birthRegisteringAuthority = builder.birthRegisteringAuthority;
+		
+		registerInformation = builder.registerInformation;
 
+		address = builder.address;
 	}
 	
 	
@@ -128,6 +144,12 @@ public class Person implements IPerson{
 	
 	@Override
 	public String birthRegisteringAuthority() { return birthRegisteringAuthority; }
+
+	@Override
+	public IRegisterInformation registerInformation() {	return registerInformation; }
+
+	@Override
+	public IAddress address() {	return address;}
 
 
 

@@ -1,7 +1,5 @@
 package util.cprbroker;
 
-import java.util.Date;
-
 public interface IPerson extends IStandardResponse, IPersonAttributes {
 	
 	/**
@@ -9,4 +7,8 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	 * @return uuid for the person
 	 */
 	String uuid();	
+	
+	IRegisterInformation registerInformation();
+	
+	IAddress address();
 }
