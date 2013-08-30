@@ -1,0 +1,13 @@
+@(effect: util.cprbroker.IEffect)
+
+@if(effect != null) {
+    <ul>
+       @if(effect.actorUrn) {<li>actorUrn: @effect.actorUrn</li>}
+       @if(effect.actorUuid) {<li>actorUuid: @effect.actorUuid</li>}
+       @if(effect.comment) {<li>comment: @effect.comment</li>}
+       @if(effect.effectiveFromDate != null) {<li>effectiveFromDate: @effect.effectiveFromDate</li>}
+       @if(effect.isEffectiveFromLimit != null) {<li>isEffectiveFromLimit: @effect.isEffectiveFromLimit</li>}
+       @if(effect.effectiveToDate != null) {<li>effectiveToDate: @effect.effectiveToDate</li>}
+       @if(effect.isEffectiveToLimit != null) {<li>isEffectiveToLimit: @effect.isEffectiveToLimit</li>}
+    </ul>
+}

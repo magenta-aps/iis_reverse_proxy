@@ -3,7 +3,10 @@ package util.cprbroker.models;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import util.cprbroker.IAddress;
+import util.cprbroker.IContact;
+import util.cprbroker.IEffect;
 import util.cprbroker.IPerson;
+import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRegisterInformation;
 
 public class Person implements IPerson{
@@ -13,7 +16,6 @@ public class Person implements IPerson{
 	private final String message;
 	private final String uuid;
 
-	// newest person attributes
 	private final String firstname;
 	private final String middelname;
 	private final String lastname;
@@ -30,9 +32,19 @@ public class Person implements IPerson{
 	// address
 	private final IAddress address;
 	
+	// contact
+	private final IContact contact;
+	private final IContact nextOfKinContact;
+	
+	// effect
+	private final IEffect effect;
+	
+	// relationships
+	private final IPersonRelationships relations;
+	
 	/**
 	 * Builder for a Person
-	 * @author srnkrkgrd
+	 * @author Søren Kirkegård
 	 *
 	 */
 	public static class Builder {
@@ -57,6 +69,13 @@ public class Person implements IPerson{
 		
 		private IAddress address = null;
 		
+		private IContact contact = null;
+		private IContact nextOfKinContact = null;
+	
+		private IEffect effect = null;
+		
+		private IPersonRelationships relations = null;
+		
 		// Builder constructor
 		public Builder(final int newCode, final String newMessage, final String newUuid) {
 			code = newCode;
@@ -79,6 +98,11 @@ public class Person implements IPerson{
 		public Builder birthRegisteringAuthority(final String newBirthRegisteringAuthority) {birthRegisteringAuthority = newBirthRegisteringAuthority; return this;}
 		public Builder registerInformation(final IRegisterInformation newRegInfo) { registerInformation = newRegInfo; return this; }
 		public Builder address(final IAddress newAddress) {address = newAddress; return this;}
+		public Builder contact(final IContact newContact) {contact = newContact; return this;}
+		public Builder nextOfKinContact(final IContact newContact) {nextOfKinContact = newContact; return this;}
+		public Builder effect(final IEffect newEffect) {effect = newEffect; return this; }
+		public Builder relations(final IPersonRelationships newRelations) {relations = newRelations; return this; }
+		
 	}
 
 	/**
@@ -102,8 +126,13 @@ public class Person implements IPerson{
 		birthRegisteringAuthority = builder.birthRegisteringAuthority;
 		
 		registerInformation = builder.registerInformation;
-
+		
 		address = builder.address;
+		
+		contact = builder.contact;
+		nextOfKinContact = builder.nextOfKinContact;
+		effect = builder.effect;
+		relations = builder.relations;
 	}
 	
 	
@@ -150,6 +179,18 @@ public class Person implements IPerson{
 
 	@Override
 	public IAddress address() {	return address;}
+	
+	@Override
+	public IContact contact() { return contact; }
+
+	@Override
+	public IContact nextOfKinContact() { return nextOfKinContact; }
+
+	@Override
+	public IEffect effect() { return effect; }
+
+	@Override
+	public IPersonRelationships relations() { return relations; }
 
 
 

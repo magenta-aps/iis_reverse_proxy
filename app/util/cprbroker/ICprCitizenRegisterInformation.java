@@ -5,8 +5,6 @@ public interface ICprCitizenRegisterInformation extends IRegisterInformation{
  * Make it from this
 	citizenData.getAdresseNoteTekst();
 	citizenData.getFolkeregisterAdresse();
-	citizenData.getPersonCivilRegistrationIdentifier();
-	citizenData.getPersonNationalityCode();
 */
 
 	String personNationalityCode();

@@ -79,6 +79,9 @@
 		            @if(person.birthdate != null) {<li>Birthdate: @person.birthdate</li>}
 		            @if(person.birthplace) {<li>Birthplace: @person.birthplace</li>}
 		            @if(person.birthRegisteringAuthority) {<li>BirthRegisteringAuthority: @person.birthRegisteringAuthority</li>}
+		            
+		            @*Add the effect for the person*@
+		            @effect(person.effect)
 	            </ul>
 	            
 	            @if(person.registerInformation != null) {
@@ -93,6 +96,18 @@
                        <li>Hemmeligt nummer: @person.registerInformation.cprCitizen.isPhoneNumberProtected</li>
 	                   
 	               </ul>
+	            }
+	            
+	            @if(person.relations != null) {
+	                <ul>
+		                @if(person.relations.aegtefaelle != null) {<li>aegtefaelle: @relations(person.relations.aegtefaelle)<li> }
+		                @if(person.relations.erstatingAf != null) {<li>erstatingAf: @relations(person.relations.erstatingAf)<li> }
+		                @if(person.relations.fader != null) {<li>fader: @relations(person.relations.fader)<li> }
+		                @if(person.relations.foraeldremyndighedsindehaver != null) {<li>foraeldremyndighedsindehaver: @relations(person.relations.foraeldremyndighedsindehaver)<li> }
+		                @if(person.relations.moder != null) {<li>moder: @relations(person.relations.moder)<li> }
+		                @if(person.relations.registreretPartner != null) {<li>registreretPartner: @relations(person.relations.registreretPartner)<li> }
+		                @if(person.relations.retligHandleevneVaergeForPersonen != null) {<li>retligHandleevneVaergeForPersonen: @relations(person.relations.retligHandleevneVaergeForPersonen)<li> }
+	                </ul>
 	            }
 	            
 	            @if(person.address != null){
@@ -111,7 +126,33 @@
 	                       @if(person.address.danishAddress.suite) {<li>Suite: @person.address.danishAddress.suite</li>}
 	                   </ul>
 	                }	                    
-	            } 
+	            }
+	            @* EXTRACT TO TEMPLATE - DRY!!! *@
+	            @if(person.contact != null) {
+	               <ul>
+	                   @if(person.contact.isPhoneAbleToRecieveSms) {<li>isPhoneAbleToRecieveSms: @person.contact.isPhoneAbleToRecieveSms</li>}
+	                   @if(person.contact.limitedUsageText) {<li>limitedUsageText: @person.contact.limitedUsageText</li>}
+	                   @if(person.contact.email) {<li>email: @person.contact.email</li>}
+	                   @if(person.contact.noteText) {<li>noteText: @person.contact.noteText</li>}
+	                   @if(person.contact.phone) {<li>phone: @person.contact.phone</li>}
+	                   @if(person.contact.otherContactText) {<li>otherContactText: @person.contact.otherContactText</li>}
+	                   @if(person.contact.otherContactNoteText) {<li>otherContactNoteText: @person.contact.otherContactNoteText</li>}
+	               </u>    
+	            }
+	            @* EXTRACT TO TEMPLATE - DRY!!! *@
+	            @if(person.nextOfKinContact != null) {
+                   <ul>
+                       @if(person.nextOfKinContact.isPhoneAbleToRecieveSms) {<li>isPhoneAbleToRecieveSms: @person.nextOfKinContact.isPhoneAbleToRecieveSms</li>}
+                       @if(person.nextOfKinContact.limitedUsageText) {<li>limitedUsageText: @person.nextOfKinContact.limitedUsageText</li>}
+                       @if(person.nextOfKinContact.email) {<li>email: @person.nextOfKinContact.email</li>}
+                       @if(person.nextOfKinContact.noteText) {<li>noteText: @person.nextOfKinContact.noteText</li>}
+                       @if(person.nextOfKinContact.phone) {<li>phone: @person.nextOfKinContact.phone</li>}
+                       @if(person.nextOfKinContact.otherContactText) {<li>otherContactText: @person.nextOfKinContact.otherContactText</li>}
+                       @if(person.nextOfKinContact.otherContactNoteText) {<li>otherContactNoteText: @person.nextOfKinContact.otherContactNoteText</li>}
+                   </u>    
+                }
+                
+	            
             }
         </div>
     </div>
