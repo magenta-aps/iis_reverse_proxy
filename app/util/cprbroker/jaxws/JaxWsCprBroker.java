@@ -142,78 +142,55 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			// yet another null check
 			if(personRelations != null) {
-				// Get builder - NOTICE PLURAL!
+				// Get builder
 				PersonRelationships.Builder relationsBuilder = new PersonRelationships.Builder();
-				
+
+				// tmpList for reuse
 				List<IRelationship> tmpRelationship;
 				
-				tmpRelationship = getRelationships(personRelations.getAegtefaelle());
+				// Add PersonRelation
+				tmpRelationship = getPersonRelation(personRelations.getAegtefaelle());
 				relationsBuilder.aegtefaelle(tmpRelationship);
 				
-				tmpRelationship = getRelationships(personRelations.getErstatningAf());
+				tmpRelationship = getPersonRelation(personRelations.getErstatningAf());
 				relationsBuilder.erstatingAf(tmpRelationship);
 				
-				tmpRelationship = getRelationships(personRelations.getFader());
+				tmpRelationship = getPersonRelation(personRelations.getFader());
 				relationsBuilder.fader(tmpRelationship);
 				
-				tmpRelationship = getRelationships(personRelations.getForaeldremyndighedsindehaver());
+				tmpRelationship = getPersonRelation(personRelations.getForaeldremyndighedsindehaver());
 				relationsBuilder.foraeldremyndighedsindehaver(tmpRelationship);
 				
-				tmpRelationship = getRelationships(personRelations.getModer());
+				tmpRelationship = getPersonRelation(personRelations.getModer());
 				relationsBuilder.moder(tmpRelationship);
 				
-				tmpRelationship = getRelationships(personRelations.getRegistreretPartner());
+				tmpRelationship = getPersonRelation(personRelations.getRegistreretPartner());
 				relationsBuilder.registreretPartner(tmpRelationship);
 				
-				tmpRelationship = getRelationships(personRelations.getRetligHandleevneVaergeForPersonen());
+				tmpRelationship = getPersonRelation(personRelations.getRetligHandleevneVaergeForPersonen());
 				relationsBuilder.retligHandleevneVaergeForPersonen(tmpRelationship);
 				
-				// Make method for fler relations type
-				//addRelationship(personRelations.getBoern(), relationsBuilder);
-				//addRelationship(personRelations.getBopaelssamling(), relationsBuilder);
-				//addRelationship(personRelations.getErstatningFor(), relationsBuilder);
-				//addRelationship(personRelations.getForaeldremyndighedsboern(), relationsBuilder);
-				//addRelationship(personRelations.getRetligHandleevneVaergemaalsindehaver(), relationsBuilder);
-
+				// Add PersonFlerRelation
+				tmpRelationship = getPersonFlerRelation(personRelations.getBoern());
+				relationsBuilder.boern(tmpRelationship);
 				
+				tmpRelationship = getPersonFlerRelation(personRelations.getBopaelssamling());
+				relationsBuilder.bopaelssamling(tmpRelationship);
+
+				tmpRelationship = getPersonFlerRelation(personRelations.getErstatningFor());
+				relationsBuilder.erstatingFor(tmpRelationship);
+
+				tmpRelationship = getPersonFlerRelation(personRelations.getForaeldremyndighedsboern());
+				relationsBuilder.foraeldremydighedsboern(tmpRelationship);
+
+				tmpRelationship = getPersonFlerRelation(personRelations.getRetligHandleevneVaergemaalsindehaver());
+				relationsBuilder.retligHandleevneVaergemaalsindehaver(tmpRelationship);
+			
 				// add the relations to the person
 				builder.relations(relationsBuilder.build());
 				
 			}
 			
-			///////////////////////////////////////
-			
-			
-			/* Relations
-			List<PersonRelationType> p1 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getAegtefaelle();
-			List<PersonFlerRelationType> p2 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getBoern();
-			List<PersonFlerRelationType> p3 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getBopaelssamling();
-			List<PersonRelationType> p4 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getErstatningAf();
-			List<PersonFlerRelationType> p5 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getErstatningFor();
-			List<PersonRelationType> p6 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getFader();
-			List<PersonFlerRelationType> p7 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getForaeldremyndighedsboern();
-			List<PersonRelationType> p8 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getForaeldremyndighedsindehaver();
-			LokalUdvidelseType p9 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getLokalUdvidelse();
-			List<PersonRelationType> p10 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getModer();
-			List<PersonRelationType> p11 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getRegistreretPartner();
-			List<PersonRelationType> p12 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getRetligHandleevneVaergeForPersonen();
-			List<PersonFlerRelationType> p13 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getRetligHandleevneVaergemaalsindehaver();
-			
-			// PersonRelationType
-			p1.get(0).getCommentText();
-			p1.get(0).getReferenceID().getURNIdentifikator();
-			p1.get(0).getReferenceID().getUUID();
-			p1.get(0).getVirkning();
-			
-			// PersonFlerRelationType
-			p2.get(0).getCommentText();
-			p2.get(0).getReferenceID().getURNIdentifikator();
-			p2.get(0).getReferenceID().getUUID();
-			p2.get(0).getVirkning();
-			*/
-
-			
-			////////////////////////////////////////
 			
 			// Assigning person attributes
 			List<EgenskabType> personAttributes =
@@ -329,6 +306,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			AdresseType address = citizenData.getFolkeregisterAdresse();
 			if(address != null) {
 				DanskAdresseType danishAddress = address.getDanskAdresse();
+				// TODO Add world, greenlandic address
 				GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
 				VerdenAdresseType worldAddress = address.getVerdenAdresse();
 				
@@ -381,8 +359,43 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 		return builder.build();
 	}
+	
+	private List<IRelationship> getPersonFlerRelation(List<PersonFlerRelationType> relations) {
+		
+		if(!relations.isEmpty()) {
+			
+			// Make a new list
+			List<IRelationship> list = new LinkedList<IRelationship>();
+			
+			// iterate the relations
+			for(PersonFlerRelationType relation : relations) {
+				// get builder - NOTICE SINGULAR!
+				Relationship.Builder relationBuilder = new Relationship.Builder();
+			
+				relationBuilder.comment(relation.getCommentText());
+				
+				if(relation.getReferenceID() != null) {
+					relationBuilder.referenceUrn(relation.getReferenceID().getURNIdentifikator())
+									.referenceUuid(relation.getReferenceID().getUUID());
+				}
+				// Add effect to the person
+				IEffect newEffect = addEffect(relation.getVirkning());
+				relationBuilder.effect(newEffect);								
+				
+				// add the new relation to the list
+				list.add(relationBuilder.build());
+				
+			}
+			
+			// return the results
+			return list;
+		}
+		
+		return null;
+	}
 
-	private List<IRelationship> getRelationships(List<PersonRelationType> relations) {
+
+	private List<IRelationship> getPersonRelation(List<PersonRelationType> relations) {
 		
 		if(!relations.isEmpty()) {
 			
@@ -449,7 +462,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	/**
-	 * 
+	 * Not actually a part of the CPR standard, so a lot of nothings
 	 * @param builder Instance of Person.Builder
 	 * @param contact 
 	 * @param isNextOfKin is it a next of kin contact or not?

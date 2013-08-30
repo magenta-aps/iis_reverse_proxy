@@ -7,7 +7,7 @@
            @if(relation.comment){<li>comment: @relation.comment</li>}
            @if(relation.referenceUrn){<li>referenceUrn: @relation.referenceUrn</li>}
            @if(relation.referenceUuid){<li>referenceUuid: @relation.referenceUuid</li>}
-           @effect(relation.effect)
+           @if(relation.effect != null) {@effect(relation.effect)}
        }
    }
 </ul>
