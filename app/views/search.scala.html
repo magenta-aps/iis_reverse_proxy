@@ -84,6 +84,16 @@
 		            @effect(person.effect)
 	            </ul>
 	            
+	            @if(person.tilstand != null) {
+	               <ul>
+		               @if(person.tilstand.civilStatusKode) {<li>civilStatusKode: @person.tilstand.civilStatusKode</li>}
+		               @if(person.tilstand.civilTilstandsVirkning != null) {@effect(person.tilstand.civilTilstandsVirkning)}
+		               @if(person.tilstand.livStatusKode) {<li>livStatusKode: @person.tilstand.livStatusKode</li>}
+		               @if(person.tilstand.livTilstandsVirkning != null) {@effect(person.tilstand.livTilstandsVirkning)}
+	               </ul>    
+	            }
+	            
+	            
 	            @if(person.registerInformation != null) {
 	               <ul>
 	                   @if(person.registerInformation.cprCitizen.socialSecurityNumber){<li>CPR nummer: @person.registerInformation.cprCitizen.socialSecurityNumber</li>}

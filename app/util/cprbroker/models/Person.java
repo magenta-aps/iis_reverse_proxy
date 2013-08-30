@@ -8,6 +8,7 @@ import util.cprbroker.IEffect;
 import util.cprbroker.IPerson;
 import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRegisterInformation;
+import util.cprbroker.ITilstand;
 
 public class Person implements IPerson{
 
@@ -41,6 +42,9 @@ public class Person implements IPerson{
 	
 	// relationships
 	private final IPersonRelationships relations;
+	
+	// tilstand
+	private final ITilstand tilstand;
 	
 	/**
 	 * Builder for a Person
@@ -76,6 +80,8 @@ public class Person implements IPerson{
 		
 		private IPersonRelationships relations = null;
 		
+		private ITilstand tilstand = null;
+		
 		// Builder constructor
 		public Builder(final int newCode, final String newMessage, final String newUuid) {
 			code = newCode;
@@ -102,6 +108,7 @@ public class Person implements IPerson{
 		public Builder nextOfKinContact(final IContact newContact) {nextOfKinContact = newContact; return this;}
 		public Builder effect(final IEffect newEffect) {effect = newEffect; return this; }
 		public Builder relations(final IPersonRelationships newRelations) {relations = newRelations; return this; }
+		public Builder tilstand(final ITilstand newTilstand) {tilstand = newTilstand; return this; }
 		
 	}
 
@@ -133,6 +140,7 @@ public class Person implements IPerson{
 		nextOfKinContact = builder.nextOfKinContact;
 		effect = builder.effect;
 		relations = builder.relations;
+		tilstand = builder.tilstand;
 	}
 	
 	
@@ -191,6 +199,10 @@ public class Person implements IPerson{
 
 	@Override
 	public IPersonRelationships relations() { return relations; }
+
+
+	@Override
+	public ITilstand tilstand() { return tilstand; }
 
 
 

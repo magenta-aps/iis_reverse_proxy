@@ -12,10 +12,12 @@ import oio.sagdok._2_0.LaesInputType;
 import oio.sagdok._2_0.LokalUdvidelseType;
 import oio.sagdok._2_0.PersonFlerRelationType;
 import oio.sagdok._2_0.StandardReturType;
+import oio.sagdok._2_0.TilstandVirkningType;
 import oio.sagdok._2_0.UnikIdType;
 import oio.sagdok._2_0.VirkningType;
 import oio.sagdok.person._1_0.AdresseType;
 import oio.sagdok.person._1_0.AndenKontaktKanalType;
+import oio.sagdok.person._1_0.CivilStatusType;
 import oio.sagdok.person._1_0.CprBorgerType;
 import oio.sagdok.person._1_0.DanskAdresseType;
 import oio.sagdok.person._1_0.EgenskabType;
@@ -23,9 +25,11 @@ import oio.sagdok.person._1_0.GetUuidOutputType;
 import oio.sagdok.person._1_0.GroenlandAdresseType;
 import oio.sagdok.person._1_0.KontaktKanalType;
 import oio.sagdok.person._1_0.LaesOutputType;
+import oio.sagdok.person._1_0.LivStatusType;
 import oio.sagdok.person._1_0.PersonRelationType;
 import oio.sagdok.person._1_0.RegisterOplysningType;
 import oio.sagdok.person._1_0.RelationListeType;
+import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IEffect;
@@ -38,6 +42,7 @@ import util.cprbroker.models.DanishAddress;
 import util.cprbroker.models.Person;
 import util.cprbroker.models.PersonRelationships;
 import util.cprbroker.models.Relationship;
+import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
 import util.cprbroker.models.Effect;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
@@ -105,23 +110,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		List<VirkningType> effect = laesOutput.getLaesResultat().getRegistrering().getVirkning();
 		*/
 		
-		/* condition/status?
-		 * Civil
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getCivilStatusKode().name();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getAktoerRef();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getCommentText();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getFraTidspunkt().getTidsstempelDatoTid();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getFraTidspunkt().isGraenseIndikator();
-		* Life
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getLivStatusKode().name();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getAktoerRef();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getCommentText();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getFraTidspunkt().getTidsstempelDatoTid();
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getFraTidspunkt().isGraenseIndikator();
-		
-		//TODO what is LokalUdvidelse?!?
-		laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLokalUdvidelse();
-		*/
 		// Building a person from the result
 		//// Getting the standardReturType 
 		StandardReturType standardReturType = laesOutput.getStandardRetur();
@@ -135,6 +123,42 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		//// Did the read return anything? 
 		//TODO Magic number removal (What status codes can it return?)
 		if(standardReturType.getStatusKode().intValue() == 200) {
+
+			// Assigning PersonTilstand
+			TilstandListeType personTilstandsListe =
+					laesOutput.getLaesResultat().getRegistrering().getTilstandListe();
+			
+			// null check
+			if(personTilstandsListe != null) {
+				
+				// make a builder
+				Tilstand.Builder tilstandBuilder = new Tilstand.Builder();
+				
+				CivilStatusType civilStatus = personTilstandsListe.getCivilStatus();
+				if(civilStatus != null) {
+					if(civilStatus.getCivilStatusKode() != null) {
+						tilstandBuilder.civilStatusKode(civilStatus.getCivilStatusKode().name());
+					}
+					if(civilStatus.getTilstandVirkning() != null) {
+						IEffect virkning = getTilstandVirkning(civilStatus.getTilstandVirkning());
+						tilstandBuilder.civilTilstandsVirkning(virkning);
+					}
+				}
+				
+				LivStatusType livStatus = personTilstandsListe.getLivStatus();
+				if(livStatus != null) {
+					if(livStatus.getLivStatusKode() != null) {
+						tilstandBuilder.livStatusKode(livStatus.getLivStatusKode().name());
+					}
+					
+					if(livStatus.getTilstandVirkning() != null) {
+						IEffect virkning = getTilstandVirkning(livStatus.getTilstandVirkning());
+						tilstandBuilder.livTilstandsVirkning(virkning);
+					}
+				}
+				//Add tilstand to person
+				builder.tilstand(tilstandBuilder.build());
+			}
 			
 			// Assigning person relations
 			RelationListeType personRelations =
@@ -255,7 +279,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			addContact(builder, attributes.getNaermestePaaroerende(), true);
 
 			// Add effect to the person
-			IEffect newEffect = addEffect(attributes.getVirkning());
+			IEffect newEffect = getEffect(attributes.getVirkning());
 			builder.effect(newEffect);
 			
 			
@@ -379,7 +403,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 									.referenceUuid(relation.getReferenceID().getUUID());
 				}
 				// Add effect to the person
-				IEffect newEffect = addEffect(relation.getVirkning());
+				IEffect newEffect = getEffect(relation.getVirkning());
 				relationBuilder.effect(newEffect);								
 				
 				// add the new relation to the list
@@ -414,7 +438,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 									.referenceUuid(relation.getReferenceID().getUUID());
 				}
 				// Add effect to the person
-				IEffect newEffect = addEffect(relation.getVirkning());
+				IEffect newEffect = getEffect(relation.getVirkning());
 				relationBuilder.effect(newEffect);								
 				
 				// add the new relation to the list
@@ -429,7 +453,36 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return null;
 	}
 
-	private IEffect addEffect(VirkningType virkningType) {
+	
+	
+	private IEffect getTilstandVirkning(TilstandVirkningType virkningType) {
+
+		if(virkningType != null) {
+			// Lets build
+			Effect.Builder effectBuilder = new Effect.Builder();
+			
+			UnikIdType actor = virkningType.getAktoerRef();
+			
+			if(actor != null) {
+				effectBuilder.actorUrn(actor.getURNIdentifikator())
+							 .actorUuid(actor.getUUID());
+			}
+			
+			if(virkningType.getFraTidspunkt() != null) {
+				effectBuilder.effectiveFromDate(virkningType.getFraTidspunkt().getTidsstempelDatoTid())
+							 .isEffectiveFromLimit(virkningType.getFraTidspunkt().isGraenseIndikator());
+			}
+			
+			effectBuilder.comment(virkningType.getCommentText());
+			
+			//Return IEffect
+			return effectBuilder.build();
+		}
+		
+		return null;
+	}
+	
+	private IEffect getEffect(VirkningType virkningType) {
 
 		if(virkningType != null) {
 			// Lets build
@@ -454,7 +507,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			effectBuilder.comment(virkningType.getCommentText());
 			
-			//Add information to person
+			//Return IEffect
 			return effectBuilder.build();
 		}
 		

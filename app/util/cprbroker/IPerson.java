@@ -19,4 +19,6 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	IEffect effect();
 	
 	IPersonRelationships relations();
+	
+	ITilstand tilstand();
 }
