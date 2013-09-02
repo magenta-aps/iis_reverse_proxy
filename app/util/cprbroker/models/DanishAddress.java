@@ -17,6 +17,7 @@ public class DanishAddress implements IDanishAddress {
 	private final String streetName;
 	private final String streetNameForAdressing;
 	private final String suite;
+	private final String note;
 	
 	public static class Builder {
 
@@ -31,6 +32,7 @@ public class DanishAddress implements IDanishAddress {
 		private String streetName;
 		private String streetNameForAdressing;
 		private String suite;
+		private String note;
 
 		// build method
 		public IDanishAddress build() { return new DanishAddress(this); }
@@ -47,6 +49,7 @@ public class DanishAddress implements IDanishAddress {
 		public Builder streetName(String newStreetName) { streetName = newStreetName; return this;}
 		public Builder streetNameForAdressing(String newStreetNameForAdressing) { streetNameForAdressing = newStreetNameForAdressing; return this;}
 		public Builder suite(String newSuite) { suite = newSuite; return this;}
+		public Builder note(String newNote) { suite = newNote; return this;}
 		
 	}
 	
@@ -61,7 +64,8 @@ public class DanishAddress implements IDanishAddress {
 		streetBuilding = builder.streetBuilding;
 		streetName = builder.streetName;
 		streetNameForAdressing = builder.streetNameForAdressing;
-		suite = builder.suite;	
+		suite = builder.suite;
+		note = builder.note;
 	}
 	
 	// no-brainers - this is a danish address
@@ -104,5 +108,8 @@ public class DanishAddress implements IDanishAddress {
 
 	@Override
 	public String suite() {	return suite;}
+
+	@Override
+	public String note() { return note; }
 
 }

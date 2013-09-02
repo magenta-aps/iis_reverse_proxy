@@ -96,26 +96,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		// Access CPR broker	
 		LaesOutputType laesOutput =  port.read(laesInput);
-		
-		/*		
-		laesOutput.getLaesResultat().getRegistrering().getAktoerRef().getURNIdentifikator();
-		laesOutput.getLaesResultat().getRegistrering().getAktoerRef().getUUID();
-		laesOutput.getLaesResultat().getRegistrering().getCommentText();
-		laesOutput.getLaesResultat().getRegistrering().getLivscyklusKode()
-		laesOutput.getLaesResultat().getRegistrering().getTidspunkt().getTidsstempelDatoTid();
-		laesOutput.getLaesResultat().getRegistrering().getTidspunkt().isGraenseIndikator();
-		
-		List<VirkningType> effect = laesOutput.getLaesResultat().getRegistrering().getVirkning();
-		
-		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getEgenskab();
-		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getLokalUdvidelse();
-		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getRegisterOplysning();
-		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getSundhedOplysning();
-
-		
-		*/
-		
-		
+				
 		// Building a person from the result
 		//// Getting the standardReturType 
 		StandardReturType standardReturType = laesOutput.getStandardRetur();
@@ -303,18 +284,18 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 			// TODO make a guard check if the list has values
 			RegisterOplysningType register = registerList.get(0);
-			
-			// TODO make a guard check if the register has a cprCitizen
-			CprBorgerType citizenData = register.getCprBorger();
-			// Make a builder
+
+			//// Make a builder
 			CprCitizenData.Builder regInfoBuilder = new CprCitizenData.Builder();
 
+			
 			// Adding virkning to IRegisterInformation
 			IVirkning regVirkning = getEffect(register.getVirkning());
 			regInfoBuilder.virkning(regVirkning);
-
 			
-			
+			// TODO make a guard check if the register has a cprCitizen
+			CprBorgerType citizenData = register.getCprBorger();
+		
 			// Get social security information
 			String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
 			if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
@@ -360,6 +341,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 						// Let build a bear.. err danish address!
 						DanishAddress.Builder addressBuilder = new DanishAddress.Builder();
 
+						// Add any adress notes
+						addressBuilder.note(citizenData.getAdresseNoteTekst());
+						
 						// reference pointer for less spam
 						AddressPostalType addressPostal = danishAddress.getAddressComplete().getAddressPostal();
 
@@ -385,9 +369,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 						// add the address to the person
 						builder.address(addressBuilder.build());
 					}
-					
 				}
-				
 			}
 			// Add the register information data to the person
 			builder.registerInformation(regInfoBuilder.build());

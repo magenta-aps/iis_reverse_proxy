@@ -8,4 +8,6 @@ public interface IAddress {
 	IDanishAddress danishAddress();
 	IGreenlandicAddress greenlandicAddress();
 	IWorldAddress worldAddress();
+	
+	String note();
 }
