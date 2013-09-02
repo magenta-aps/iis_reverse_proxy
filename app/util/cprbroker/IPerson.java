@@ -16,7 +16,7 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	
 	IContact nextOfKinContact();
 	
-	IEffect effect();
+	IVirkning effect();
 	
 	IPersonRelationships relations();
 	

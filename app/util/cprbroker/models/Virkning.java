@@ -2,9 +2,9 @@ package util.cprbroker.models;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import util.cprbroker.IEffect;
+import util.cprbroker.IVirkning;
 
-public class Effect implements IEffect {
+public class Virkning implements IVirkning {
 	
 	private final String actorUrn;
 	private final String actorUuid;
@@ -26,7 +26,7 @@ public class Effect implements IEffect {
 		private XMLGregorianCalendar effectiveToDate;
 		private Boolean isEffectiveToLimit;
 		
-		public IEffect build() { return new Effect(this); }
+		public IVirkning build() { return new Virkning(this); }
 		
 		public Builder actorUrn(String newUrn) { actorUrn = newUrn; return this; }
 		public Builder actorUuid(String newUuid) { actorUuid = newUuid; return this; }
@@ -39,7 +39,7 @@ public class Effect implements IEffect {
 	}
 	
 	
-	private Effect(Builder builder) {
+	private Virkning(Builder builder) {
 		actorUrn = builder.actorUrn;
 		actorUuid = builder.actorUuid;
 		comment = builder.comment;
@@ -50,24 +50,24 @@ public class Effect implements IEffect {
 	}
 
 	@Override
-	public String actorUrn() { return actorUrn; }
+	public String aktoerRefUrn() { return actorUrn; }
 
 	@Override
-	public String actorUuid() {	return actorUuid; }
+	public String aktoerRefUuid() {	return actorUuid; }
 
 	@Override
-	public String comment() { return comment; }
+	public String kommentar() { return comment; }
 
 	@Override
-	public XMLGregorianCalendar effectiveFromDate() { return effectiveFromDate;	}
+	public XMLGregorianCalendar fraTidspunkt() { return effectiveFromDate;	}
 
 	@Override
-	public Boolean isEffectiveFromLimit() {	return isEffectiveFromLimit; }
+	public Boolean isFraTidspunktGraenseIndikator() {	return isEffectiveFromLimit; }
 
 	@Override
-	public XMLGregorianCalendar effectiveToDate() {	return effectiveToDate; }
+	public XMLGregorianCalendar tilTidspunkt() {	return effectiveToDate; }
 
 	@Override
-	public Boolean isEffectiveToLimit() { return isEffectiveToLimit; }
+	public Boolean isTilTidspunktGraenseIndikator() { return isEffectiveToLimit; }
 
 }

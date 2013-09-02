@@ -1,0 +1,13 @@
+@(virkning: util.cprbroker.IVirkning)
+
+@if(virkning != null) {
+    <ul>
+       @if(virkning.aktoerRefUrn) {<li>aktoerRefUrn: @virkning.aktoerRefUrn</li>}
+       @if(virkning.aktoerRefUuid) {<li>aktoerRefUuid: @virkning.aktoerRefUuid</li>}
+       @if(virkning.kommentar) {<li>kommentar: @virkning.kommentar</li>}
+       @if(virkning.fraTidspunkt != null) {<li>fraTidspunkt: @virkning.fraTidspunkt</li>}
+       @if(virkning.isFraTidspunktGraenseIndikator != null) {<li>isFraTidspunktGraenseIndikator: @virkning.isFraTidspunktGraenseIndikator</li>}
+       @if(virkning.tilTidspunkt != null) {<li>tilTidspunkt: @virkning.tilTidspunkt</li>}
+       @if(virkning.isTilTidspunktGraenseIndikator != null) {<li>isTilTidspunktGraenseIndikator: @virkning.isTilTidspunktGraenseIndikator</li>}
+    </ul>
+}

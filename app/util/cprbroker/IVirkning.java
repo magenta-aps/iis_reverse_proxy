@@ -2,7 +2,7 @@ package util.cprbroker;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-public interface IEffect {
+public interface IVirkning {
 	/**************************************************************************************
 	// TODO implement these
 	attributes.getVirkning().getAktoerRef().getURNIdentifikator();
@@ -15,11 +15,11 @@ public interface IEffect {
 
  	******************************************************************************************/
 
-	String actorUrn();
-	String actorUuid();
-	String comment();
-	XMLGregorianCalendar effectiveFromDate();
-	Boolean isEffectiveFromLimit();
-	XMLGregorianCalendar effectiveToDate();
-	Boolean isEffectiveToLimit();
+	String aktoerRefUrn();
+	String aktoerRefUuid();
+	String kommentar();
+	XMLGregorianCalendar fraTidspunkt();
+	Boolean isFraTidspunktGraenseIndikator();
+	XMLGregorianCalendar tilTidspunkt();
+	Boolean isTilTidspunktGraenseIndikator();
 }

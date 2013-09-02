@@ -32,7 +32,7 @@ import oio.sagdok.person._1_0.RelationListeType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
 import util.cprbroker.ICprBrokerAccessor;
-import util.cprbroker.IEffect;
+import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IRelationship;
 import util.cprbroker.IUuid;
@@ -44,7 +44,7 @@ import util.cprbroker.models.PersonRelationships;
 import util.cprbroker.models.Relationship;
 import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
-import util.cprbroker.models.Effect;
+import util.cprbroker.models.Virkning;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
@@ -92,7 +92,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		// Access CPR broker	
 		LaesOutputType laesOutput =  port.read(laesInput);
-
 		
 		/*		
 		laesOutput.getLaesResultat().getRegistrering().getAktoerRef().getURNIdentifikator();
@@ -140,7 +139,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 						tilstandBuilder.civilStatusKode(civilStatus.getCivilStatusKode().name());
 					}
 					if(civilStatus.getTilstandVirkning() != null) {
-						IEffect virkning = getTilstandVirkning(civilStatus.getTilstandVirkning());
+						IVirkning virkning = getTilstandVirkning(civilStatus.getTilstandVirkning());
 						tilstandBuilder.civilTilstandsVirkning(virkning);
 					}
 				}
@@ -152,7 +151,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 					}
 					
 					if(livStatus.getTilstandVirkning() != null) {
-						IEffect virkning = getTilstandVirkning(livStatus.getTilstandVirkning());
+						IVirkning virkning = getTilstandVirkning(livStatus.getTilstandVirkning());
 						tilstandBuilder.livTilstandsVirkning(virkning);
 					}
 				}
@@ -279,7 +278,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			addContact(builder, attributes.getNaermestePaaroerende(), true);
 
 			// Add effect to the person
-			IEffect newEffect = getEffect(attributes.getVirkning());
+			IVirkning newEffect = getEffect(attributes.getVirkning());
 			builder.effect(newEffect);
 			
 			
@@ -403,7 +402,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 									.referenceUuid(relation.getReferenceID().getUUID());
 				}
 				// Add effect to the person
-				IEffect newEffect = getEffect(relation.getVirkning());
+				IVirkning newEffect = getEffect(relation.getVirkning());
 				relationBuilder.effect(newEffect);								
 				
 				// add the new relation to the list
@@ -438,7 +437,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 									.referenceUuid(relation.getReferenceID().getUUID());
 				}
 				// Add effect to the person
-				IEffect newEffect = getEffect(relation.getVirkning());
+				IVirkning newEffect = getEffect(relation.getVirkning());
 				relationBuilder.effect(newEffect);								
 				
 				// add the new relation to the list
@@ -455,11 +454,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 	
 	
-	private IEffect getTilstandVirkning(TilstandVirkningType virkningType) {
+	private IVirkning getTilstandVirkning(TilstandVirkningType virkningType) {
 
 		if(virkningType != null) {
 			// Lets build
-			Effect.Builder effectBuilder = new Effect.Builder();
+			Virkning.Builder effectBuilder = new Virkning.Builder();
 			
 			UnikIdType actor = virkningType.getAktoerRef();
 			
@@ -482,11 +481,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return null;
 	}
 	
-	private IEffect getEffect(VirkningType virkningType) {
+	private IVirkning getEffect(VirkningType virkningType) {
 
 		if(virkningType != null) {
 			// Lets build
-			Effect.Builder effectBuilder = new Effect.Builder();
+			Virkning.Builder effectBuilder = new Virkning.Builder();
 			
 			UnikIdType actor = virkningType.getAktoerRef();
 			

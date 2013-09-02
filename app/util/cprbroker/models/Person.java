@@ -4,7 +4,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
-import util.cprbroker.IEffect;
+import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRegisterInformation;
@@ -38,7 +38,7 @@ public class Person implements IPerson{
 	private final IContact nextOfKinContact;
 	
 	// effect
-	private final IEffect effect;
+	private final IVirkning effect;
 	
 	// relationships
 	private final IPersonRelationships relations;
@@ -76,7 +76,7 @@ public class Person implements IPerson{
 		private IContact contact = null;
 		private IContact nextOfKinContact = null;
 	
-		private IEffect effect = null;
+		private IVirkning effect = null;
 		
 		private IPersonRelationships relations = null;
 		
@@ -106,7 +106,7 @@ public class Person implements IPerson{
 		public Builder address(final IAddress newAddress) {address = newAddress; return this;}
 		public Builder contact(final IContact newContact) {contact = newContact; return this;}
 		public Builder nextOfKinContact(final IContact newContact) {nextOfKinContact = newContact; return this;}
-		public Builder effect(final IEffect newEffect) {effect = newEffect; return this; }
+		public Builder effect(final IVirkning newEffect) {effect = newEffect; return this; }
 		public Builder relations(final IPersonRelationships newRelations) {relations = newRelations; return this; }
 		public Builder tilstand(final ITilstand newTilstand) {tilstand = newTilstand; return this; }
 		
@@ -195,7 +195,7 @@ public class Person implements IPerson{
 	public IContact nextOfKinContact() { return nextOfKinContact; }
 
 	@Override
-	public IEffect effect() { return effect; }
+	public IVirkning effect() { return effect; }
 
 	@Override
 	public IPersonRelationships relations() { return relations; }

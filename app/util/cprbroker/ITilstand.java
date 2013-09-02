@@ -18,7 +18,7 @@ public interface ITilstand {
 	 */
 	
 	String civilStatusKode();
-	IEffect civilTilstandsVirkning();
+	IVirkning civilTilstandsVirkning();
 	String livStatusKode();
-	IEffect livTilstandsVirkning();
+	IVirkning livTilstandsVirkning();
 }

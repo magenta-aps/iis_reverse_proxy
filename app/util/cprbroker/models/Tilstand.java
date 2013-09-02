@@ -1,27 +1,27 @@
 package util.cprbroker.models;
 
-import util.cprbroker.IEffect;
+import util.cprbroker.IVirkning;
 import util.cprbroker.ITilstand;
 
 public class Tilstand implements ITilstand {
 
 	private final String civilStatusKode;
-	private final IEffect civilTilstandsVirkning;
+	private final IVirkning civilTilstandsVirkning;
 	private final String livStatusKode;
-	private final IEffect livTilstandsVirkning;
+	private final IVirkning livTilstandsVirkning;
 	
 	public static class Builder {
 		private String civilStatusKode;
-		private IEffect civilTilstandsVirkning;
+		private IVirkning civilTilstandsVirkning;
 		private String livStatusKode;
-		private IEffect livTilstandsVirkning;
+		private IVirkning livTilstandsVirkning;
 		
 		public ITilstand build() { return new Tilstand(this); }
 		
 		public Builder civilStatusKode(String newKode) { civilStatusKode = newKode; return this; }
-		public Builder civilTilstandsVirkning(IEffect virkning) {civilTilstandsVirkning = virkning; return this; }
+		public Builder civilTilstandsVirkning(IVirkning virkning) {civilTilstandsVirkning = virkning; return this; }
 		public Builder livStatusKode(String newKode) { livStatusKode = newKode; return this; }
-		public Builder livTilstandsVirkning(IEffect virkning) {livTilstandsVirkning = virkning; return this; }
+		public Builder livTilstandsVirkning(IVirkning virkning) {livTilstandsVirkning = virkning; return this; }
 
 		
 	}
@@ -37,12 +37,12 @@ public class Tilstand implements ITilstand {
 	public String civilStatusKode() { return civilStatusKode;}
 
 	@Override
-	public IEffect civilTilstandsVirkning() { return civilTilstandsVirkning; }
+	public IVirkning civilTilstandsVirkning() { return civilTilstandsVirkning; }
 
 	@Override
 	public String livStatusKode() {	return livStatusKode; }
 
 	@Override
-	public IEffect livTilstandsVirkning() {	return livTilstandsVirkning; }
+	public IVirkning livTilstandsVirkning() {	return livTilstandsVirkning; }
 
 }
