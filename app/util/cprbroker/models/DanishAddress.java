@@ -1,6 +1,7 @@
 package util.cprbroker.models;
 
 import util.cprbroker.EAddressType;
+import util.cprbroker.IBuilder;
 import util.cprbroker.IDanishAddress;
 import util.cprbroker.IGreenlandicAddress;
 import util.cprbroker.IWorldAddress;
@@ -20,7 +21,7 @@ public class DanishAddress implements IDanishAddress {
 	private final String suite;
 	private final String note;
 	
-	public static class Builder {
+	public static class Builder implements IBuilder<IDanishAddress> {
 
 		private String countryIdentificationCode;
 		private String districtName;
@@ -50,7 +51,7 @@ public class DanishAddress implements IDanishAddress {
 		public Builder streetName(String newStreetName) { streetName = newStreetName; return this;}
 		public Builder streetNameForAdressing(String newStreetNameForAdressing) { streetNameForAdressing = newStreetNameForAdressing; return this;}
 		public Builder suite(String newSuite) { suite = newSuite; return this;}
-		public Builder note(String newNote) { suite = newNote; return this;}
+		public Builder note(String newNote) { note = newNote; return this;}
 		
 	}
 	

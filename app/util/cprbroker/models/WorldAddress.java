@@ -1,6 +1,7 @@
 package util.cprbroker.models;
 
 import util.cprbroker.EAddressType;
+import util.cprbroker.IBuilder;
 import util.cprbroker.IDanishAddress;
 import util.cprbroker.IGreenlandicAddress;
 import util.cprbroker.IWorldAddress;
@@ -17,7 +18,7 @@ public class WorldAddress implements IWorldAddress {
 	private final String postalAddressFifthLineText;
 	private final Boolean isUkendtAdresseIndikator;
 
-	public static class Builder {
+	public static class Builder implements IBuilder<IWorldAddress>{
 
 		private String note;
 		private String countryIdentificationCode;

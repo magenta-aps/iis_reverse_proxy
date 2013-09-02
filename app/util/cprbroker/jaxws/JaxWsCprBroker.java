@@ -1,7 +1,6 @@
 package util.cprbroker.jaxws;
 
 import java.math.BigInteger;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import itst.dk.PartSoap12;
 import oio.sagdok._2_0.LaesInputType;
-import oio.sagdok._2_0.LokalUdvidelseType;
 import oio.sagdok._2_0.PersonFlerRelationType;
 import oio.sagdok._2_0.StandardReturType;
 import oio.sagdok._2_0.TidspunktType;
@@ -252,13 +250,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			// Get the birthRegisteringAutherity
 			String birthreg = attributes.getFoedselsregistreringMyndighedNavn();
 			if(birthreg != null) { builder.birthRegisteringAuthority(birthreg); }
-			
-			// Get the address
-			// TODO Figure out wtf this is..
-			//DanskAdresseType danskAdresse = attributes.getAndreAdresser().getDanskAdresse();
-			//GroenlandAdresseType groenlandskAdresse = attributes.getAndreAdresser().getGroenlandAdresse();
-			//VerdenAdresseType verdensAdresse = attributes.getAndreAdresser().getVerdenAdresse();
-			
+					
 			// Add the contact information
 			addContact(builder, attributes.getKontaktKanal(), false);
 			
@@ -280,7 +272,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			builder.tidspunkt(tidspunkt);
 			
 			List<RegisterOplysningType> registerList = 
-					laesOutput.getLaesResultat().getRegistrering().getAttributListe().getRegisterOplysning();
+					registering.getAttributListe().getRegisterOplysning();
 
 			// TODO make a guard check if the list has values
 			RegisterOplysningType register = registerList.get(0);
@@ -533,7 +525,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	/**
-	 * Not actually a part of the CPR standard, so a lot of nothings
 	 * @param builder Instance of Person.Builder
 	 * @param contact 
 	 * @param isNextOfKin is it a next of kin contact or not?
