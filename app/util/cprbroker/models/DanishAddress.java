@@ -1,5 +1,6 @@
 package util.cprbroker.models;
 
+import util.cprbroker.EAddressType;
 import util.cprbroker.IDanishAddress;
 import util.cprbroker.IGreenlandicAddress;
 import util.cprbroker.IWorldAddress;
@@ -69,9 +70,8 @@ public class DanishAddress implements IDanishAddress {
 	}
 	
 	// no-brainers - this is a danish address
-	@Override public boolean isDanishAddress() { return true; }
-	@Override public boolean isGreenlandicAddress() {	return false; }
-	@Override public boolean isWorldAdress() { return false; }
+	@Override
+	public EAddressType addressType() {	return EAddressType.Danish; }
 	@Override public IDanishAddress danishAddress() { return this; }
 	@Override public IGreenlandicAddress greenlandicAddress() { return null; }
 	@Override public IWorldAddress worldAddress() { return null; }

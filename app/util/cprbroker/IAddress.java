@@ -1,9 +1,8 @@
 package util.cprbroker;
 
 public interface IAddress {
-	boolean isDanishAddress();
-	boolean isGreenlandicAddress();
-	boolean isWorldAdress();
+
+	EAddressType addressType();
 	
 	IDanishAddress danishAddress();
 	IGreenlandicAddress greenlandicAddress();

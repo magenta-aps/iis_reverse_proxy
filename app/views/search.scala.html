@@ -1,5 +1,7 @@
 @(form: Form[Search.SearchInput], person: util.cprbroker.IPerson)
 
+@import util.cprbroker.EAddressType;
+
 @main("CPR Look-up") {
       
     <div class="panel panel-default">
@@ -83,7 +85,8 @@
 	            }
 	            
 	            @if(person.address != null){
-	                @if(person.address.isDanishAddress != null) {
+	                
+	                @if(person.address.addressType == EAddressType.Danish) {
 	                   <ul>
 	                       @if(person.address.danishAddress.countryIdentificationCode) {<li>countryIdCode: @person.address.danishAddress.countryIdentificationCode</li>} 
 	                       @if(person.address.danishAddress.districtName) {<li>districtName: @person.address.danishAddress.districtName</li>}

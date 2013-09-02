@@ -288,7 +288,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			//// Make a builder
 			CprCitizenData.Builder regInfoBuilder = new CprCitizenData.Builder();
 
-			
 			// Adding virkning to IRegisterInformation
 			IVirkning regVirkning = getEffect(register.getVirkning());
 			regInfoBuilder.virkning(regVirkning);
@@ -373,10 +372,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			}
 			// Add the register information data to the person
 			builder.registerInformation(regInfoBuilder.build());
-						
-			//TODO Get rid of this mess
-			citizenData.getAdresseNoteTekst();
-						
+												
 		}
 
 		return builder.build();
