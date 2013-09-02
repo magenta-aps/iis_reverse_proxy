@@ -1,6 +1,7 @@
 package util.cprbroker.models;
 
 import util.cprbroker.ICprCitizenRegisterInformation;
+import util.cprbroker.IVirkning;
 
 public class CprCitizenData implements ICprCitizenRegisterInformation {
 
@@ -11,6 +12,7 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 	private final boolean isPhoneNumberProtected;
 	private final String personNationalityCode;
 	private final String socialSecurityNumber;
+	private final IVirkning virkning;
 	
 	public static class Builder {
 
@@ -23,6 +25,7 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 		
 		private String personNationalityCode;
 		private String socialSecurityNumber;
+		private IVirkning virkning;
 		
 		// build method
 		public ICprCitizenRegisterInformation build() { return new CprCitizenData(this); }
@@ -35,6 +38,7 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 		public Builder isPhoneNumberProtected(final boolean newBoolean) { isPhoneNumberProtected = newBoolean; return this; }
 		public Builder personNationalityCode(final String newNationalityCode) { personNationalityCode = newNationalityCode; return this; }
 		public Builder socialSecurityNumber(final String newSocialSecurity) { socialSecurityNumber = newSocialSecurity; return this; }
+		public Builder virkning(final IVirkning newVirkning) { virkning = newVirkning; return this; }
 
 	}
 	
@@ -46,6 +50,7 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 		isPhoneNumberProtected = builder.isPhoneNumberProtected;
 		personNationalityCode = builder.personNationalityCode;
 		socialSecurityNumber = builder.socialSecurityNumber;
+		virkning = builder.virkning;
 	}
 	
 	@Override
@@ -73,5 +78,8 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 	public ICprCitizenRegisterInformation cprCitizen() {
 		return this;
 	}
+
+	@Override
+	public IVirkning virkning() { return virkning; }
 
 }

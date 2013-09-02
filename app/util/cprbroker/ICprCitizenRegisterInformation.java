@@ -14,4 +14,5 @@ public interface ICprCitizenRegisterInformation extends IRegisterInformation{
 	boolean isSocialSecurityNumberValid();
 	boolean isNameAddressProtected();
 	boolean isPhoneNumberProtected();
+
 }

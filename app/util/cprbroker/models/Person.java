@@ -4,6 +4,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
+import util.cprbroker.ITidspunkt;
 import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IPersonRelationships;
@@ -46,6 +47,8 @@ public class Person implements IPerson{
 	// tilstand
 	private final ITilstand tilstand;
 	
+	private final ITidspunkt tidspunkt;
+	
 	/**
 	 * Builder for a Person
 	 * @author Søren Kirkegård
@@ -82,6 +85,8 @@ public class Person implements IPerson{
 		
 		private ITilstand tilstand = null;
 		
+		private ITidspunkt tidspunkt = null;
+		
 		// Builder constructor
 		public Builder(final int newCode, final String newMessage, final String newUuid) {
 			code = newCode;
@@ -109,6 +114,7 @@ public class Person implements IPerson{
 		public Builder effect(final IVirkning newEffect) {effect = newEffect; return this; }
 		public Builder relations(final IPersonRelationships newRelations) {relations = newRelations; return this; }
 		public Builder tilstand(final ITilstand newTilstand) {tilstand = newTilstand; return this; }
+		public Builder tidspunkt(final ITidspunkt newTidspunkt) {tidspunkt = newTidspunkt; return this; }
 		
 	}
 
@@ -141,6 +147,7 @@ public class Person implements IPerson{
 		effect = builder.effect;
 		relations = builder.relations;
 		tilstand = builder.tilstand;
+		tidspunkt = builder.tidspunkt;
 	}
 	
 	
@@ -203,6 +210,9 @@ public class Person implements IPerson{
 
 	@Override
 	public ITilstand tilstand() { return tilstand; }
+
+	@Override
+	public ITidspunkt tidspunkt() {	return tidspunkt; }
 
 
 

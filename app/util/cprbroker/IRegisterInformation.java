@@ -8,6 +8,8 @@ package util.cprbroker;
 public interface IRegisterInformation {	
 	ICprCitizenRegisterInformation cprCitizen();
 	
+	IVirkning virkning();
+	
 	//TODO implement isCprCitizen, isUnknownCitizen, isForeignCitizen
 	//	   implement unknownCitizen, foreignCitizen
 }

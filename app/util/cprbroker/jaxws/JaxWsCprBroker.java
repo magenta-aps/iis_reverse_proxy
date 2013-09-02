@@ -12,6 +12,7 @@ import oio.sagdok._2_0.LaesInputType;
 import oio.sagdok._2_0.LokalUdvidelseType;
 import oio.sagdok._2_0.PersonFlerRelationType;
 import oio.sagdok._2_0.StandardReturType;
+import oio.sagdok._2_0.TidspunktType;
 import oio.sagdok._2_0.TilstandVirkningType;
 import oio.sagdok._2_0.UnikIdType;
 import oio.sagdok._2_0.VirkningType;
@@ -28,10 +29,12 @@ import oio.sagdok.person._1_0.LaesOutputType;
 import oio.sagdok.person._1_0.LivStatusType;
 import oio.sagdok.person._1_0.PersonRelationType;
 import oio.sagdok.person._1_0.RegisterOplysningType;
+import oio.sagdok.person._1_0.RegistreringType;
 import oio.sagdok.person._1_0.RelationListeType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
 import util.cprbroker.ICprBrokerAccessor;
+import util.cprbroker.ITidspunkt;
 import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IRelationship;
@@ -42,6 +45,7 @@ import util.cprbroker.models.DanishAddress;
 import util.cprbroker.models.Person;
 import util.cprbroker.models.PersonRelationships;
 import util.cprbroker.models.Relationship;
+import util.cprbroker.models.Tidspunkt;
 import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
 import util.cprbroker.models.Virkning;
@@ -97,17 +101,20 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		laesOutput.getLaesResultat().getRegistrering().getAktoerRef().getURNIdentifikator();
 		laesOutput.getLaesResultat().getRegistrering().getAktoerRef().getUUID();
 		laesOutput.getLaesResultat().getRegistrering().getCommentText();
+		laesOutput.getLaesResultat().getRegistrering().getLivscyklusKode()
 		laesOutput.getLaesResultat().getRegistrering().getTidspunkt().getTidsstempelDatoTid();
 		laesOutput.getLaesResultat().getRegistrering().getTidspunkt().isGraenseIndikator();
 		
+		List<VirkningType> effect = laesOutput.getLaesResultat().getRegistrering().getVirkning();
 		
 		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getEgenskab();
 		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getLokalUdvidelse();
 		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getRegisterOplysning();
 		laesOutput.getLaesResultat().getRegistrering().getAttributListe().getSundhedOplysning();
 
-		List<VirkningType> effect = laesOutput.getLaesResultat().getRegistrering().getVirkning();
+		
 		*/
+		
 		
 		// Building a person from the result
 		//// Getting the standardReturType 
@@ -284,20 +291,30 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			////////////////////////
 			// Get the registration information
+			
+			RegistreringType registering = laesOutput.getLaesResultat().getRegistrering();
+			
+			ITidspunkt tidspunkt = getRegisteringsTidspunkt(registering);
+			
+			builder.tidspunkt(tidspunkt);
+			
 			List<RegisterOplysningType> registerList = 
 					laesOutput.getLaesResultat().getRegistrering().getAttributListe().getRegisterOplysning();
 
 			// TODO make a guard check if the list has values
 			RegisterOplysningType register = registerList.get(0);
-
-			// TODO add IEffect (virkning) to the IRegisterInformation
-			// register.getVirkning();
 			
 			// TODO make a guard check if the register has a cprCitizen
 			CprBorgerType citizenData = register.getCprBorger();
 			// Make a builder
 			CprCitizenData.Builder regInfoBuilder = new CprCitizenData.Builder();
 
+			// Adding virkning to IRegisterInformation
+			IVirkning regVirkning = getEffect(register.getVirkning());
+			regInfoBuilder.virkning(regVirkning);
+
+			
+			
 			// Get social security information
 			String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
 			if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
@@ -381,6 +398,30 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}
 
 		return builder.build();
+	}
+
+	private ITidspunkt getRegisteringsTidspunkt(RegistreringType registering) {
+		if(registering != null) {
+			
+			Tidspunkt.Builder tidspunktBuilder = new Tidspunkt.Builder();
+			if(registering.getAktoerRef() != null) {
+				
+				tidspunktBuilder.aktoerRefUrn(registering.getAktoerRef().getURNIdentifikator())
+								.aktoerRefUuid(registering.getAktoerRef().getUUID());
+			}
+			if(registering.getTidspunkt() != null) {
+				tidspunktBuilder.tidspunkt(registering.getTidspunkt().getTidsstempelDatoTid())
+				.isTidspunktGraenseIndikator(registering.getTidspunkt().isGraenseIndikator());					
+			}
+			if(registering.getLivscyklusKode() != null) {
+				tidspunktBuilder.livscyklusKode(registering.getLivscyklusKode().name());
+			}
+			tidspunktBuilder.kommentar(registering.getCommentText());
+								
+			return tidspunktBuilder.build();
+		}
+		
+		return null;
 	}
 	
 	private List<IRelationship> getPersonFlerRelation(List<PersonFlerRelationType> relations) {

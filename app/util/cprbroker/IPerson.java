@@ -6,7 +6,9 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	 * 
 	 * @return uuid for the person
 	 */
-	String uuid();	
+	String uuid();
+	
+	ITidspunkt tidspunkt();
 	
 	IRegisterInformation registerInformation();
 	

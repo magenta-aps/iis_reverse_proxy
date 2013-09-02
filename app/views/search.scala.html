@@ -13,6 +13,17 @@
 	            <li>Message: @person.message</li>
 	        </ul>            
             @if(person.code == 200) {
+                
+                <ul>
+                    @if(person.tidspunkt != null) {
+                        @if(person.tidspunkt.aktoerRefUrn) {<li>person.tidspunkt.aktoerRefUrn: @person.tidspunkt.aktoerRefUrn </li>}
+                        @if(person.tidspunkt.aktoerRefUuid) {<li>person.tidspunkt.aktoerRefUuid: @person.tidspunkt.aktoerRefUuid </li>}
+                        @if(person.tidspunkt.kommentar) {<li>person.tidspunkt.kommentar: @person.tidspunkt.kommentar </li>}
+                        @if(person.tidspunkt.livscyklusKode) {<li>person.tidspunkt.livscyklusKode: @person.tidspunkt.livscyklusKode </li>}
+                        @if(person.tidspunkt.tidspunkt != null) {<li>person.tidspunkt.tidspunkt: @person.tidspunkt.tidspunkt </li>}
+                        @if(person.tidspunkt.isTidspunktGraenseIndikator != null) {<li>person.tidspunkt.isTidspunktGraenseIndikator: @person.tidspunkt.isTidspunktGraenseIndikator </li>}
+                    }
+                </ul>
                 <ul>              
 		            @if(person.firstname) {<li>Firstname: @person.firstname</li>}
 		            @if(person.middelname) {<li>Middelname: @person.middelname</li>}
@@ -48,6 +59,7 @@
                        <li>Forskerbeskyttelse: @person.registerInformation.cprCitizen.isResearcherProtected</li>
                        <li>Navn/Adresse beskyttelse: @person.registerInformation.cprCitizen.isNameAddressProtected</li>
                        <li>Hemmeligt nummer: @person.registerInformation.cprCitizen.isPhoneNumberProtected</li>
+                       @if(person.registerInformation.virkning != null) { @virkning(person.registerInformation.virkning) }
 	                   
 	               </ul>
 	            }
