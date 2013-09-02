@@ -5,11 +5,11 @@ import util.cprbroker.IVirkning;
 
 public class CprCitizenData implements ICprCitizenRegisterInformation {
 
-	private final boolean isMemberOfTheChurch;
-	private final boolean isResearcherProtected;
-	private final boolean isSocialSecurityNumberValid;
-	private final boolean isNameAdressProtected;
-	private final boolean isPhoneNumberProtected;
+	private final Boolean isMemberOfTheChurch;
+	private final Boolean isResearcherProtected;
+	private final Boolean isSocialSecurityNumberValid;
+	private final Boolean isNameAdressProtected;
+	private final Boolean isPhoneNumberProtected;
 	private final String personNationalityCode;
 	private final String socialSecurityNumber;
 	private final IVirkning virkning;
@@ -17,11 +17,11 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 	public static class Builder {
 
 		//Optional parameters - initialized to default values
-		private boolean isMemberOfTheChurch = true;
-		private boolean isResearcherProtected = false;
-		private boolean isSocialSecurityNumberValid = true;
-		private boolean isNameAdressProtected = false;
-		private boolean isPhoneNumberProtected = false;
+		private Boolean isMemberOfTheChurch = null;
+		private Boolean isResearcherProtected = null;
+		private Boolean isSocialSecurityNumberValid = null;
+		private Boolean isNameAdressProtected = null;
+		private Boolean isPhoneNumberProtected = null;
 		
 		private String personNationalityCode;
 		private String socialSecurityNumber;
@@ -54,19 +54,19 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 	}
 	
 	@Override
-	public boolean isMemberOfTheChurch() { return isMemberOfTheChurch; }
+	public Boolean isMemberOfTheChurch() { return isMemberOfTheChurch; }
 
 	@Override
-	public boolean isResearcherProtected() { return isResearcherProtected; }
+	public Boolean isResearcherProtected() { return isResearcherProtected; }
 
 	@Override
-	public boolean isSocialSecurityNumberValid() { return isSocialSecurityNumberValid; }
+	public Boolean isSocialSecurityNumberValid() { return isSocialSecurityNumberValid; }
 
 	@Override
-	public boolean isNameAddressProtected() { return isNameAdressProtected; }
+	public Boolean isNameAddressProtected() { return isNameAdressProtected; }
 
 	@Override
-	public boolean isPhoneNumberProtected() { return isPhoneNumberProtected;	}
+	public Boolean isPhoneNumberProtected() { return isPhoneNumberProtected;	}
 
 	@Override
 	public String personNationalityCode() {	return personNationalityCode; }

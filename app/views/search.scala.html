@@ -52,13 +52,13 @@
 	            @if(person.registerInformation != null) {
 	               <ul>
 	                   @if(person.registerInformation.cprCitizen.socialSecurityNumber){<li>CPR nummer: @person.registerInformation.cprCitizen.socialSecurityNumber</li>}
-	                   <li>Cpr number valid: @person.registerInformation.cprCitizen.isSocialSecurityNumberValid</li>
+	                   @if(person.registerInformation.cprCitizen.isSocialSecurityNumberValid != null){<li>Cpr number valid: @person.registerInformation.cprCitizen.isSocialSecurityNumberValid</li>}
 	                   @if(person.registerInformation.cprCitizen.personNationalityCode){<li>Country code: @person.registerInformation.cprCitizen.personNationalityCode</li>}
 	                   
-	                   <li>Folkekirken: @person.registerInformation.cprCitizen.isMemberOfTheChurch</li>
-                       <li>Forskerbeskyttelse: @person.registerInformation.cprCitizen.isResearcherProtected</li>
-                       <li>Navn/Adresse beskyttelse: @person.registerInformation.cprCitizen.isNameAddressProtected</li>
-                       <li>Hemmeligt nummer: @person.registerInformation.cprCitizen.isPhoneNumberProtected</li>
+	                   @if(person.registerInformation.cprCitizen.isMemberOfTheChurch != null){<li>Folkekirken: @person.registerInformation.cprCitizen.isMemberOfTheChurch</li>}
+                       @if(person.registerInformation.cprCitizen.isResearcherProtected != null){<li>Forskerbeskyttelse: @person.registerInformation.cprCitizen.isResearcherProtected</li>}
+                       @if(person.registerInformation.cprCitizen.isNameAddressProtected != null){<li>Navn/Adresse beskyttelse: @person.registerInformation.cprCitizen.isNameAddressProtected</li>}
+                       @if(person.registerInformation.cprCitizen.isPhoneNumberProtected != null){<li>Hemmeligt nummer: @person.registerInformation.cprCitizen.isPhoneNumberProtected</li>}
                        @if(person.registerInformation.virkning != null) { @virkning(person.registerInformation.virkning) }
 	                   
 	               </ul>
