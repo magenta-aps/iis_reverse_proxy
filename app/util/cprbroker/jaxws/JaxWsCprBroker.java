@@ -32,9 +32,13 @@ import oio.sagdok.person._1_0.RelationListeType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
 import util.cprbroker.IAddress;
+import util.cprbroker.IContact;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IDanishAddress;
+import util.cprbroker.IPersonRelationships;
+import util.cprbroker.IRegisterInformation;
 import util.cprbroker.ITidspunkt;
+import util.cprbroker.ITilstand;
 import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IRelationship;
@@ -50,8 +54,10 @@ import util.cprbroker.models.Tidspunkt;
 import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
 import util.cprbroker.models.Virkning;
+import util.cprbroker.models.WorldAddress;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
+import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.ForeignAddressStructureType;
 import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
 import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
@@ -114,97 +120,13 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		//TODO Magic number removal (What status codes can it return?)
 		if(standardReturType.getStatusKode().intValue() == 200) {
 
-			// Assigning PersonTilstand
-			TilstandListeType personTilstandsListe =
-					laesOutput.getLaesResultat().getRegistrering().getTilstandListe();
-			
-			// null check
-			if(personTilstandsListe != null) {
-				
-				// make a builder
-				Tilstand.Builder tilstandBuilder = new Tilstand.Builder();
-				
-				CivilStatusType civilStatus = personTilstandsListe.getCivilStatus();
-				if(civilStatus != null) {
-					if(civilStatus.getCivilStatusKode() != null) {
-						tilstandBuilder.civilStatusKode(civilStatus.getCivilStatusKode().name());
-					}
-					if(civilStatus.getTilstandVirkning() != null) {
-						IVirkning virkning = getTilstandVirkning(civilStatus.getTilstandVirkning());
-						tilstandBuilder.civilTilstandsVirkning(virkning);
-					}
-				}
-				
-				LivStatusType livStatus = personTilstandsListe.getLivStatus();
-				if(livStatus != null) {
-					if(livStatus.getLivStatusKode() != null) {
-						tilstandBuilder.livStatusKode(livStatus.getLivStatusKode().name());
-					}
-					
-					if(livStatus.getTilstandVirkning() != null) {
-						IVirkning virkning = getTilstandVirkning(livStatus.getTilstandVirkning());
-						tilstandBuilder.livTilstandsVirkning(virkning);
-					}
-				}
-				//Add tilstand to person
-				builder.tilstand(tilstandBuilder.build());
-			}
+			// Assigning person tilstand
+			ITilstand newTilstand = getTilstande(laesOutput);
+			builder.tilstand(newTilstand);
 			
 			// Assigning person relations
-			RelationListeType personRelations =
-					laesOutput.getLaesResultat().getRegistrering().getRelationListe();
-			
-			// yet another null check
-			if(personRelations != null) {
-				// Get builder
-				PersonRelationships.Builder relationsBuilder = new PersonRelationships.Builder();
-
-				// tmpList for reuse
-				List<IRelationship> tmpRelationship;
-				
-				// Add PersonRelation
-				tmpRelationship = getPersonRelation(personRelations.getAegtefaelle());
-				relationsBuilder.aegtefaelle(tmpRelationship);
-				
-				tmpRelationship = getPersonRelation(personRelations.getErstatningAf());
-				relationsBuilder.erstatingAf(tmpRelationship);
-				
-				tmpRelationship = getPersonRelation(personRelations.getFader());
-				relationsBuilder.fader(tmpRelationship);
-				
-				tmpRelationship = getPersonRelation(personRelations.getForaeldremyndighedsindehaver());
-				relationsBuilder.foraeldremyndighedsindehaver(tmpRelationship);
-				
-				tmpRelationship = getPersonRelation(personRelations.getModer());
-				relationsBuilder.moder(tmpRelationship);
-				
-				tmpRelationship = getPersonRelation(personRelations.getRegistreretPartner());
-				relationsBuilder.registreretPartner(tmpRelationship);
-				
-				tmpRelationship = getPersonRelation(personRelations.getRetligHandleevneVaergeForPersonen());
-				relationsBuilder.retligHandleevneVaergeForPersonen(tmpRelationship);
-				
-				// Add PersonFlerRelation
-				tmpRelationship = getPersonFlerRelation(personRelations.getBoern());
-				relationsBuilder.boern(tmpRelationship);
-				
-				tmpRelationship = getPersonFlerRelation(personRelations.getBopaelssamling());
-				relationsBuilder.bopaelssamling(tmpRelationship);
-
-				tmpRelationship = getPersonFlerRelation(personRelations.getErstatningFor());
-				relationsBuilder.erstatingFor(tmpRelationship);
-
-				tmpRelationship = getPersonFlerRelation(personRelations.getForaeldremyndighedsboern());
-				relationsBuilder.foraeldremydighedsboern(tmpRelationship);
-
-				tmpRelationship = getPersonFlerRelation(personRelations.getRetligHandleevneVaergemaalsindehaver());
-				relationsBuilder.retligHandleevneVaergemaalsindehaver(tmpRelationship);
-			
-				// add the relations to the person
-				builder.relations(relationsBuilder.build());
-				
-			}
-			
+			IPersonRelationships newRelations = getAllPersonRelations(laesOutput);
+			builder.relations(newRelations);
 			
 			// Assigning person attributes
 			List<EgenskabType> personAttributes =
@@ -252,14 +174,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 			// Get the birthRegisteringAutherity
 			String birthreg = attributes.getFoedselsregistreringMyndighedNavn();
-			if(birthreg != null) { builder.birthRegisteringAuthority(birthreg); }
-					
+			if(birthreg != null) { builder.birthRegisteringAuthority(birthreg); }	
+			
 			// Add the contact information
-			addContact(builder, attributes.getKontaktKanal(), false);
+			IContact newContact = getContact(attributes.getKontaktKanal());
+			builder.contact(newContact);
 			
 			// Add the next of kin contact information
-			addContact(builder, attributes.getNaermestePaaroerende(), true);
-
+			IContact newNextOfKinContact = getContact(attributes.getNaermestePaaroerende());
+			builder.nextOfKinContact(newNextOfKinContact);
+			
 			// Add effect to the person
 			IVirkning newEffect = getEffect(attributes.getVirkning());
 			builder.effect(newEffect);
@@ -274,55 +198,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			builder.tidspunkt(tidspunkt);
 			
-			List<RegisterOplysningType> registerList = 
-					registering.getAttributListe().getRegisterOplysning();
-
-			// TODO make a guard check if the list has values
-			RegisterOplysningType register = registerList.get(0);
-
-			//// Make a builder
-			CprCitizenData.Builder regInfoBuilder = new CprCitizenData.Builder();
-
-			// Adding virkning to IRegisterInformation
-			IVirkning regVirkning = getEffect(register.getVirkning());
-			regInfoBuilder.virkning(regVirkning);
-			
-			// TODO make a guard check if the register has a cprCitizen
-			CprBorgerType citizenData = register.getCprBorger();
-		
-			// Get social security information
-			String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
-			if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
-			
-			// Get nationality code
-			CountryIdentificationCodeType nationalityCode = citizenData.getPersonNationalityCode();
-			if(nationalityCode != null) { regInfoBuilder.personNationalityCode(nationalityCode.getValue()); }
-
-			// Is member of the church?
-			Boolean isChurchMember = citizenData.isFolkekirkeMedlemIndikator();
-			if (isChurchMember != null) { regInfoBuilder.isMemberOfTheChurch(isChurchMember); }
-
-			// Has researcher protection?
-			Boolean isResearcherProtected = citizenData.isForskerBeskyttelseIndikator();
-			if (isResearcherProtected != null) { regInfoBuilder.isResearcherProtected(isResearcherProtected); }
-
-			// Valid social security number?
-			Boolean isCprValid = citizenData.isPersonNummerGyldighedStatusIndikator();
-			if (isCprValid != null) { regInfoBuilder.isSocialSecurityNumberValid(isCprValid); }
-		
-			// Name/Address protection?
-			Boolean isNameAddressProtected = citizenData.isNavneAdresseBeskyttelseIndikator();
-			if (isNameAddressProtected != null) { regInfoBuilder.isNameAdressProtected(isNameAddressProtected); }
-
-			// Name/Address protection?
-			Boolean isPhoneNumberProtected = citizenData.isTelefonNummerBeskyttelseIndikator();
-			if (isPhoneNumberProtected != null) { regInfoBuilder.isPhoneNumberProtected(isPhoneNumberProtected); }		
-						
-			// Add the register information data to the person
-			builder.registerInformation(regInfoBuilder.build());
+			IRegisterInformation newRegInfo = getRegisterOplysning(registering);
+			builder.registerInformation(newRegInfo);
 			
 			// Get the address information and add it to the person
-			IAddress newAddress = getAddress(citizenData);
+			IAddress newAddress = getAddress(registering);
 			builder.address(newAddress);
 			
 		}
@@ -330,13 +210,124 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return builder.build();
 	}
 
-	private IAddress getAddress(CprBorgerType citizenData) {
+	private IRegisterInformation getRegisterOplysning(RegistreringType registering) {
 		
+		List<RegisterOplysningType> registerList = 
+				registering.getAttributListe().getRegisterOplysning();
+
+		// TODO make a guard check if the list has values
+		RegisterOplysningType register = registerList.get(0);
+
+		//// Make a builder
+		CprCitizenData.Builder regInfoBuilder = new CprCitizenData.Builder();
+
+		// Adding virkning to IRegisterInformation
+		IVirkning regVirkning = getEffect(register.getVirkning());
+		regInfoBuilder.virkning(regVirkning);
+		
+		// TODO make a guard check if the register has a cprCitizen
+		CprBorgerType citizenData = register.getCprBorger();
+
+		// Get social security information
+		String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
+		if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
+		
+		// Get nationality code
+		CountryIdentificationCodeType nationalityCode = citizenData.getPersonNationalityCode();
+		if(nationalityCode != null) { regInfoBuilder.personNationalityCode(nationalityCode.getValue()); }
+
+		// Is member of the church?
+		Boolean isChurchMember = citizenData.isFolkekirkeMedlemIndikator();
+		if (isChurchMember != null) { regInfoBuilder.isMemberOfTheChurch(isChurchMember); }
+
+		// Has researcher protection?
+		Boolean isResearcherProtected = citizenData.isForskerBeskyttelseIndikator();
+		if (isResearcherProtected != null) { regInfoBuilder.isResearcherProtected(isResearcherProtected); }
+
+		// Valid social security number?
+		Boolean isCprValid = citizenData.isPersonNummerGyldighedStatusIndikator();
+		if (isCprValid != null) { regInfoBuilder.isSocialSecurityNumberValid(isCprValid); }
+
+		// Name/Address protection?
+		Boolean isNameAddressProtected = citizenData.isNavneAdresseBeskyttelseIndikator();
+		if (isNameAddressProtected != null) { regInfoBuilder.isNameAdressProtected(isNameAddressProtected); }
+
+		// Name/Address protection?
+		Boolean isPhoneNumberProtected = citizenData.isTelefonNummerBeskyttelseIndikator();
+		if (isPhoneNumberProtected != null) { regInfoBuilder.isPhoneNumberProtected(isPhoneNumberProtected); }		
+					
+		// Return the register information data to the person
+		return regInfoBuilder.build();
+	}
+
+	private ITilstand getTilstande(LaesOutputType laesOutput) {
+		// Assigning PersonTilstand
+		TilstandListeType personTilstandsListe =
+				laesOutput.getLaesResultat().getRegistrering().getTilstandListe();
+		
+		// null check
+		if(personTilstandsListe != null) {
+			
+			// make a builder
+			Tilstand.Builder tilstandBuilder = new Tilstand.Builder();
+			
+			CivilStatusType civilStatus = personTilstandsListe.getCivilStatus();
+			if(civilStatus != null) {
+				if(civilStatus.getCivilStatusKode() != null) {
+					tilstandBuilder.civilStatusKode(civilStatus.getCivilStatusKode().name());
+				}
+				if(civilStatus.getTilstandVirkning() != null) {
+					IVirkning virkning = getTilstandVirkning(civilStatus.getTilstandVirkning());
+					tilstandBuilder.civilTilstandsVirkning(virkning);
+				}
+			}
+			
+			LivStatusType livStatus = personTilstandsListe.getLivStatus();
+			if(livStatus != null) {
+				if(livStatus.getLivStatusKode() != null) {
+					tilstandBuilder.livStatusKode(livStatus.getLivStatusKode().name());
+				}
+				
+				if(livStatus.getTilstandVirkning() != null) {
+					IVirkning virkning = getTilstandVirkning(livStatus.getTilstandVirkning());
+					tilstandBuilder.livTilstandsVirkning(virkning);
+				}
+			}
+			//return tilstand to person
+			return tilstandBuilder.build();
+		}
+		return null;
+	}
+
+	
+	/**
+	 * Helper method to figure out what kind of address is attached,
+	 * call the appropriate helper method to extract that data
+	 * and return an instance of the the specific IAddress or
+	 * null if there wasn't any information to extract
+	 * 
+	 * CAVEAT! CPR Broker doesn't return anything other than 
+	 * DanskAdresseType, so this type is the mostlikely used.. 
+	 * 
+	 * @param RegistreringType
+	 * @return IDanishAddress, IGreenlandicAddress, IWorldAddress or null
+	 * 	
+	 */
+	private IAddress getAddress(RegistreringType registering) {
+		
+		List<RegisterOplysningType> registerList = 
+				registering.getAttributListe().getRegisterOplysning();
+
+		// TODO make a guard check if the list has values
+		RegisterOplysningType register = registerList.get(0);
+		
+		// TODO make a guard check if the register has a cprCitizen
+		CprBorgerType citizenData = register.getCprBorger();
+
 		AdresseType address = citizenData.getFolkeregisterAdresse();
 		
 		if(address != null) {
 			DanskAdresseType danishAddress = address.getDanskAdresse();
-			// TODO Add world
 			GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
 			VerdenAdresseType worldAddress = address.getVerdenAdresse();
 			
@@ -344,26 +335,70 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			// Is there a danish address or maybe a Greenlandic or maybe a world?!?
 			if(danishAddress != null) {
-				newAddress = getDanishAddress(citizenData, danishAddress);
+				newAddress = getDanishAddress(citizenData);
 			} else if (greenlandicAddress != null) {
-				newAddress = getGreenlandicAddress(citizenData, greenlandicAddress);
+				newAddress = getGreenlandicAddress(citizenData);
 			} else if (worldAddress != null) {
-				newAddress = getWorldAddress(citizenData, worldAddress);
+				newAddress = getWorldAddress(citizenData);
 			}
 			
 			return newAddress;
 		}
 		return null;
 	}
+	
 
-	private IAddress getWorldAddress(CprBorgerType citizenData,
-			VerdenAdresseType worldAddress) {
+	/**
+	 * Helper method for getAddress used to extract a WorldAddressType
+	 * @param citizenData CprBorgerType with the address information 
+	 * @return IWorldAddress
+	 */
+	private IAddress getWorldAddress(CprBorgerType citizenData) {
+	
+		// get the address
+		VerdenAdresseType worldAddress = citizenData.getFolkeregisterAdresse().getVerdenAdresse();
+		
+		// null guard
+		if(worldAddress.getForeignAddressStructure() != null) {
+
+			// Let build a bear.. err greenlandic address!
+			WorldAddress.Builder addressBuilder = new WorldAddress.Builder();
+
+			// Add any adress notes
+			addressBuilder.note(citizenData.getAdresseNoteTekst());
+			
+			// reference pointer for less spam
+			ForeignAddressStructureType addressPostal = worldAddress.getForeignAddressStructure();
+
+			// Get country id code
+			CountryIdentificationCodeType idCode = addressPostal.getCountryIdentificationCode();
+			if(idCode != null) {addressBuilder.countryIdentificationCode(idCode.getValue()); }
+		
+			// Just build the rest
+			addressBuilder.locationDescriptionText(addressPostal.getLocationDescriptionText())
+							.postalAddressFirstLineText(addressPostal.getPostalAddressFirstLineText())
+							.postalAddressSecondLineText(addressPostal.getPostalAddressSecondLineText())
+							.postalAddressThirdLineText(addressPostal.getPostalAddressThirdLineText())
+							.postalAddressFourthLineText(addressPostal.getPostalAddressFourthLineText())
+							.postalAddressFifthLineText(addressPostal.getPostalAddressFifthLineText())
+							.isUkendtAdresseIndikator(worldAddress.isUkendtAdresseIndikator());
+							
+			// return the address to the person
+			return addressBuilder.build();
+		}
 
 		return null;
 	}
 
-	private IAddress getGreenlandicAddress(CprBorgerType citizenData,
-			GroenlandAdresseType greenlandicAddress) {
+	
+	/**
+	 * Helper method for getAddress used to extract a GreenlandicAddressType
+	 * @param citizenData CprBorgerType with the address information 
+	 * @return IGreenladicAddress
+	 */
+	private IAddress getGreenlandicAddress(CprBorgerType citizenData) {
+		
+		GroenlandAdresseType greenlandicAddress= citizenData.getFolkeregisterAdresse().getGroenlandAdresse();
 
 		// null guard
 		if(greenlandicAddress.getAddressCompleteGreenland() != null) {
@@ -405,8 +440,14 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 	}
 
-	private IDanishAddress getDanishAddress(CprBorgerType citizenData, DanskAdresseType danishAddress) {
+	/**
+	 * Helper method for getAddress used to extract a DanishAddressType
+	 * @param citizenData CprBorgerType with the address information 
+	 * @return IDanishAddress
+	 */
+	private IDanishAddress getDanishAddress(CprBorgerType citizenData) {
 
+		DanskAdresseType danishAddress = citizenData.getFolkeregisterAdresse().getDanskAdresse();
 		// null guard
 		if(danishAddress.getAddressComplete() != null &&
 				danishAddress.getAddressComplete().getAddressPostal() != null) {
@@ -463,6 +504,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return null;
 	}
 
+	/**
+	 * Helper method to extract TidspunktType
+	 * @param registering RegistreringType
+	 * @return An instance of the type ITidspunkt
+	 */
 	private ITidspunkt getRegisteringsTidspunkt(RegistreringType registering) {
 		if(registering != null) {
 			
@@ -484,6 +530,64 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			return tidspunktBuilder.build();
 		}
 		
+		return null;
+	}
+	
+	
+	private IPersonRelationships getAllPersonRelations(LaesOutputType laesOutput) {
+		RelationListeType personRelations =
+				laesOutput.getLaesResultat().getRegistrering().getRelationListe();
+		
+		// yet another null check
+		if(personRelations != null) {
+			// Get builder
+			PersonRelationships.Builder relationsBuilder = new PersonRelationships.Builder();
+
+			// tmpList for reuse
+			List<IRelationship> tmpRelationship;
+			
+			// Add PersonRelation
+			tmpRelationship = getPersonRelation(personRelations.getAegtefaelle());
+			relationsBuilder.aegtefaelle(tmpRelationship);
+			
+			tmpRelationship = getPersonRelation(personRelations.getErstatningAf());
+			relationsBuilder.erstatingAf(tmpRelationship);
+			
+			tmpRelationship = getPersonRelation(personRelations.getFader());
+			relationsBuilder.fader(tmpRelationship);
+			
+			tmpRelationship = getPersonRelation(personRelations.getForaeldremyndighedsindehaver());
+			relationsBuilder.foraeldremyndighedsindehaver(tmpRelationship);
+			
+			tmpRelationship = getPersonRelation(personRelations.getModer());
+			relationsBuilder.moder(tmpRelationship);
+			
+			tmpRelationship = getPersonRelation(personRelations.getRegistreretPartner());
+			relationsBuilder.registreretPartner(tmpRelationship);
+			
+			tmpRelationship = getPersonRelation(personRelations.getRetligHandleevneVaergeForPersonen());
+			relationsBuilder.retligHandleevneVaergeForPersonen(tmpRelationship);
+			
+			// Add PersonFlerRelation
+			tmpRelationship = getPersonFlerRelation(personRelations.getBoern());
+			relationsBuilder.boern(tmpRelationship);
+			
+			tmpRelationship = getPersonFlerRelation(personRelations.getBopaelssamling());
+			relationsBuilder.bopaelssamling(tmpRelationship);
+
+			tmpRelationship = getPersonFlerRelation(personRelations.getErstatningFor());
+			relationsBuilder.erstatingFor(tmpRelationship);
+
+			tmpRelationship = getPersonFlerRelation(personRelations.getForaeldremyndighedsboern());
+			relationsBuilder.foraeldremydighedsboern(tmpRelationship);
+
+			tmpRelationship = getPersonFlerRelation(personRelations.getRetligHandleevneVaergemaalsindehaver());
+			relationsBuilder.retligHandleevneVaergemaalsindehaver(tmpRelationship);
+		
+			// return the relations to the person
+			return relationsBuilder.build();
+			
+		}
 		return null;
 	}
 	
@@ -621,8 +725,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @param builder Instance of Person.Builder
 	 * @param contact 
 	 * @param isNextOfKin is it a next of kin contact or not?
+	 * @return 
 	 */
-	private void addContact(Person.Builder builder, KontaktKanalType contact, boolean isNextOfKin) {
+	private IContact getContact(KontaktKanalType contact) {
 		
 		if(contact != null) {
 			//Lets build
@@ -644,13 +749,10 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 							  .isPhoneAbleToRecieveSms(contact.getTelefon().isKanBrugesTilSmsIndikator());
 			}
 
-			// Add the contact information to the person
-			if(isNextOfKin) {
-				builder.nextOfKinContact(contactBuilder.build());
-			} else {
-				builder.contact(contactBuilder.build());	
-			}
+			return contactBuilder.build();
 		}
+		
+		return null;
 	}
 
 }
