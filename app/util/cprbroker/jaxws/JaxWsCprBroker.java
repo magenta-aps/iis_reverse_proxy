@@ -7,10 +7,11 @@ import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import itst.dk.PartSoap12;
+import oio.dkal._1_0.ArrayOfString;
 import oio.sagdok._2_0.LaesInputType;
 import oio.sagdok._2_0.PersonFlerRelationType;
+import oio.sagdok._2_0.SoegOutputType;
 import oio.sagdok._2_0.StandardReturType;
-import oio.sagdok._2_0.TidspunktType;
 import oio.sagdok._2_0.TilstandVirkningType;
 import oio.sagdok._2_0.UnikIdType;
 import oio.sagdok._2_0.VirkningType;
@@ -25,10 +26,15 @@ import oio.sagdok.person._1_0.GroenlandAdresseType;
 import oio.sagdok.person._1_0.KontaktKanalType;
 import oio.sagdok.person._1_0.LaesOutputType;
 import oio.sagdok.person._1_0.LivStatusType;
+import oio.sagdok.person._1_0.NavnStrukturType;
 import oio.sagdok.person._1_0.PersonRelationType;
 import oio.sagdok.person._1_0.RegisterOplysningType;
 import oio.sagdok.person._1_0.RegistreringType;
 import oio.sagdok.person._1_0.RelationListeType;
+import oio.sagdok.person._1_0.SoegAttributListeType;
+import oio.sagdok.person._1_0.SoegEgenskabType;
+import oio.sagdok.person._1_0.SoegInputType;
+import oio.sagdok.person._1_0.SoegObjektType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
 import util.cprbroker.IAddress;
@@ -39,6 +45,7 @@ import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRegisterInformation;
 import util.cprbroker.ITidspunkt;
 import util.cprbroker.ITilstand;
+import util.cprbroker.IUuids;
 import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IRelationship;
@@ -53,12 +60,14 @@ import util.cprbroker.models.Relationship;
 import util.cprbroker.models.Tidspunkt;
 import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
+import util.cprbroker.models.Uuids;
 import util.cprbroker.models.Virkning;
 import util.cprbroker.models.WorldAddress;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.ForeignAddressStructureType;
 import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
+import dk.oio.rep.itst_dk.xml.schemas._2006._01._17.PersonNameStructureType;
 import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
@@ -90,6 +99,62 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return new Uuid(uuid.getUUID(),
 						uuid.getStandardRetur().getStatusKode().intValue(),
 						uuid.getStandardRetur().getFejlbeskedTekst()); 
+	}
+	
+	@Override
+	public IUuids search(String firstname, String middlename, String lastname, int maxResults) {
+
+		// Setup the input parameters
+		SoegInputType input = new SoegInputType();
+		input.setMaksimalAntalKvantitet(BigInteger.valueOf(maxResults));
+		
+		// Set the name search criteria
+		PersonNameStructureType nameStructure = new PersonNameStructureType();
+		nameStructure.setPersonGivenName(firstname);
+		nameStructure.setPersonMiddleName(middlename);
+		nameStructure.setPersonSurnameName(lastname);
+
+		// Playing the matryoshka doll game
+		NavnStrukturType navnStrukturType = new NavnStrukturType();
+		navnStrukturType.setPersonNameStructure(nameStructure);
+		
+		SoegEgenskabType soegEgenskabType = new SoegEgenskabType();
+		soegEgenskabType.setNavnStruktur(navnStrukturType);
+		
+		SoegAttributListeType soegAttributListeType = new SoegAttributListeType();
+		List<SoegEgenskabType> soegEgenskabTypeList = soegAttributListeType.getSoegEgenskab();
+		soegEgenskabTypeList.add(soegEgenskabType);
+			
+		SoegObjektType soegObjekt = new SoegObjektType();
+		soegObjekt.setSoegAttributListe(soegAttributListeType);
+		
+		input.setSoegObjekt(soegObjekt);
+		
+		// Access CPR broker	
+		SoegOutputType soegOutput =  port.search(input);
+		
+		
+		// Add the Uuids
+		ArrayOfString idList = soegOutput.getIdliste();
+		List<String> newUuids = null;
+		
+		if(idList != null) {
+			newUuids = idList.getUUID();
+		}	
+		
+		//TODO REMOVE THIS TEST LOGGING
+		play.Logger.info(soegOutput.getStandardRetur().getStatusKode().toString() + ": " + soegOutput.getStandardRetur().getFejlbeskedTekst());
+		play.Logger.info("" + newUuids.size());
+		
+		for(String uuid : newUuids) {
+			play.Logger.info("Uuid: " + uuid);
+		}
+			
+		//return the Uuids
+		return new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
+						soegOutput.getStandardRetur().getFejlbeskedTekst(),
+						newUuids);
+		
 	}
 
 	@Override

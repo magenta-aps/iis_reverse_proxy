@@ -34,6 +34,9 @@ public class Search extends Controller {
 		if (searchForm.hasErrors()) {
 			return badRequest(search.render(Form.form(SearchInput.class), null));
 		}
+
+		//TODO REMOVE THE FOLLOWING LINE AND ADD IT AS A CONTROLLER METHOD - Just a quick and dirty test
+		cprBroker.search(null, null, "Jensen", 100);
 		
 		//Input type == cprnumber
 		IUuid uuid = cprBroker.getUuid(searchForm.get().query);

@@ -1,5 +1,7 @@
 package util.cprbroker;
 
+import java.util.List;
+
 /**
  * Interface for accessing the CPR Broker
  * 
@@ -24,5 +26,6 @@ public interface ICprBrokerAccessor {
 	IPerson read(final String uuid);
 	
 	//TODO Add methods for SEARCH
+	IUuids search(final String firstname, final String middlename, final String lastname, int maxResults);
 
 }
