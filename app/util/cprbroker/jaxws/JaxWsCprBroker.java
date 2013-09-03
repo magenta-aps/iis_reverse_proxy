@@ -239,12 +239,10 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 			}			
 			// Get the gender
-			// TODO Convert to enum?
 			String gender = attributes.getPersonGenderCode().name();
 			if(gender != null) { builder.gender(gender); }
 			
 			// Get the birthdate
-			// TODO This date type? Maybe just convert to String? pro/con?
 			XMLGregorianCalendar birthdate = attributes.getBirthDate();
 			if(birthdate != null) { builder.birthdate(birthdate); }
 			
@@ -319,35 +317,49 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			// Name/Address protection?
 			Boolean isPhoneNumberProtected = citizenData.isTelefonNummerBeskyttelseIndikator();
 			if (isPhoneNumberProtected != null) { regInfoBuilder.isPhoneNumberProtected(isPhoneNumberProtected); }		
-			
-			AdresseType address = citizenData.getFolkeregisterAdresse();
-			if(address != null) {
-				DanskAdresseType danishAddress = address.getDanskAdresse();
-				// TODO Add world, greenlandic address
-				GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
-				VerdenAdresseType worldAddress = address.getVerdenAdresse();
-				
-				IAddress newAddress = null;
-				
-				// Is there a danish address?
-				if(danishAddress != null) {
-					newAddress = getDanishAddress(citizenData, danishAddress);
-				
-				} else if (greenlandicAddress != null) {
-					newAddress = getGreenlandicAddress(citizenData, greenlandicAddress);
-				} else if (worldAddress != null) {
-					
-				}
-				
-				
-				builder.address(newAddress);
-			}
+						
 			// Add the register information data to the person
 			builder.registerInformation(regInfoBuilder.build());
-												
+			
+			// Get the address information and add it to the person
+			IAddress newAddress = getAddress(citizenData);
+			builder.address(newAddress);
+			
 		}
 
 		return builder.build();
+	}
+
+	private IAddress getAddress(CprBorgerType citizenData) {
+		
+		AdresseType address = citizenData.getFolkeregisterAdresse();
+		
+		if(address != null) {
+			DanskAdresseType danishAddress = address.getDanskAdresse();
+			// TODO Add world
+			GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
+			VerdenAdresseType worldAddress = address.getVerdenAdresse();
+			
+			IAddress newAddress = null;
+			
+			// Is there a danish address or maybe a Greenlandic or maybe a world?!?
+			if(danishAddress != null) {
+				newAddress = getDanishAddress(citizenData, danishAddress);
+			} else if (greenlandicAddress != null) {
+				newAddress = getGreenlandicAddress(citizenData, greenlandicAddress);
+			} else if (worldAddress != null) {
+				newAddress = getWorldAddress(citizenData, worldAddress);
+			}
+			
+			return newAddress;
+		}
+		return null;
+	}
+
+	private IAddress getWorldAddress(CprBorgerType citizenData,
+			VerdenAdresseType worldAddress) {
+
+		return null;
 	}
 
 	private IAddress getGreenlandicAddress(CprBorgerType citizenData,

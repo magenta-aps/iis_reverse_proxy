@@ -30,7 +30,7 @@ public interface IDanishAddress extends IAddress {
 	danishAddress.isSpecielVejkodeIndikator()
 	danishAddress.isUkendtAdresseIndikator()
 
-	//TODO Implement these!
+	//TODO Implement these another day - not yet implemented in the CPR Broker!
 	danishAddress.getAddressPoint().getAddressPointIdentifier()
 	danishAddress.getAddressPoint().getAddressPointStatusStructure().getAddressCoordinateQualityClassCode().name()
 	danishAddress.getAddressPoint().getAddressPointStatusStructure().getAddressPointRevisionDateTime()
