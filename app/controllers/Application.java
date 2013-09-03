@@ -31,7 +31,7 @@ public class Application extends Controller {
 		authenticationStrategy = newAuthenticationStrategy;
 	}
 		
-	@Security.Authenticated(Secured.class)
+	//@Security.Authenticated(Secured.class)
     public static Result index() {
         return ok(index.render(Form.form(SearchInput.class), request().username()));
     }
