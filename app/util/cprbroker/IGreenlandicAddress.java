@@ -22,18 +22,18 @@ public interface IGreenlandicAddress extends IAddress {
 
 	String countryIdentificationCode();
 	String districtName();
-	String districtSubdivisionIdentifier();
-	String floorIdentifier();
-	String greenlandBuildingIdentifier();
-	String mailDeliverySublocationIdentifier();
+	String districtSubdivision();
+	String floor();
+	String greenlandBuilding();
+	String mailDeliverySublocation();
 	String municipalityCode();
-	String postCodeIdentifier();
-	String streetBuildingIdentifier();
+	String postCode();
+	String streetBuilding();
 	String streetCode();
 	String streetName();
-	String streetNameForAddressingName();
-	String suiteIdentifier();
-	Boolean isSpecielVejkodeIndikator();
-	Boolean isUkendtAdresseIndikator();
+	String streetNameForAddressing();
+	String suite();
+	Boolean isSpecielVejkode();
+	Boolean isUkendtAdresse();
 
 }

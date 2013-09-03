@@ -31,7 +31,9 @@ import oio.sagdok.person._1_0.RegistreringType;
 import oio.sagdok.person._1_0.RelationListeType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
+import util.cprbroker.IAddress;
 import util.cprbroker.ICprBrokerAccessor;
+import util.cprbroker.IDanishAddress;
 import util.cprbroker.ITidspunkt;
 import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
@@ -40,6 +42,7 @@ import util.cprbroker.IUuid;
 import util.cprbroker.models.Contact;
 import util.cprbroker.models.CprCitizenData;
 import util.cprbroker.models.DanishAddress;
+import util.cprbroker.models.GreenlandicAddress;
 import util.cprbroker.models.Person;
 import util.cprbroker.models.PersonRelationships;
 import util.cprbroker.models.Relationship;
@@ -48,7 +51,9 @@ import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
 import util.cprbroker.models.Virkning;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
+import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
 import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
+import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
 public class JaxWsCprBroker implements ICprBrokerAccessor {
@@ -322,45 +327,20 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
 				VerdenAdresseType worldAddress = address.getVerdenAdresse();
 				
+				IAddress newAddress = null;
+				
 				// Is there a danish address?
 				if(danishAddress != null) {
+					newAddress = getDanishAddress(citizenData, danishAddress);
+				
+				} else if (greenlandicAddress != null) {
+					newAddress = getGreenlandicAddress(citizenData, greenlandicAddress);
+				} else if (worldAddress != null) {
 					
-					// null guard
-					if(danishAddress.getAddressComplete() != null &&
-							danishAddress.getAddressComplete().getAddressPostal() != null) {
-
-						// Let build a bear.. err danish address!
-						DanishAddress.Builder addressBuilder = new DanishAddress.Builder();
-
-						// Add any adress notes
-						addressBuilder.note(citizenData.getAdresseNoteTekst());
-						
-						// reference pointer for less spam
-						AddressPostalType addressPostal = danishAddress.getAddressComplete().getAddressPostal();
-
-						// Get country id code
-						CountryIdentificationCodeType idCode = addressPostal.getCountryIdentificationCode();
-						if(idCode != null) {addressBuilder.countryIdentificationCode(idCode.getValue()); }
-
-						// Get postofficebox
-						BigInteger postOfficeBox = addressPostal.getPostOfficeBoxIdentifier();
-						if(postOfficeBox != null) {addressBuilder.postOfficeBox(addressPostal.getPostOfficeBoxIdentifier().toString()); }
-						
-						// Just build the rest
-						addressBuilder.districtName(addressPostal.getDistrictName())
-									.districtSubdivision(addressPostal.getDistrictSubdivisionIdentifier())
-									.floor(addressPostal.getFloorIdentifier())
-									.mailSubLocaltion(addressPostal.getMailDeliverySublocationIdentifier())
-									.postCode(addressPostal.getPostCodeIdentifier())
-									.streetBuilding(addressPostal.getStreetBuildingIdentifier())
-									.streetName(addressPostal.getStreetName())
-									.streetNameForAdressing(addressPostal.getStreetNameForAddressingName())
-									.suite(addressPostal.getSuiteIdentifier());
-
-						// add the address to the person
-						builder.address(addressBuilder.build());
-					}
 				}
+				
+				
+				builder.address(newAddress);
 			}
 			// Add the register information data to the person
 			builder.registerInformation(regInfoBuilder.build());
@@ -368,6 +348,107 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}
 
 		return builder.build();
+	}
+
+	private IAddress getGreenlandicAddress(CprBorgerType citizenData,
+			GroenlandAdresseType greenlandicAddress) {
+
+		// null guard
+		if(greenlandicAddress.getAddressCompleteGreenland() != null) {
+
+			// Let build a bear.. err greenlandic address!
+			GreenlandicAddress.Builder addressBuilder = new GreenlandicAddress.Builder();
+
+			// Add any adress notes
+			addressBuilder.note(citizenData.getAdresseNoteTekst());
+			
+			// reference pointer for less spam
+			AddressCompleteGreenlandType addressPostal = greenlandicAddress.getAddressCompleteGreenland();
+
+			// Get country id code
+			CountryIdentificationCodeType idCode = addressPostal.getCountryIdentificationCode();
+			if(idCode != null) {addressBuilder.countryIdentificationCode(idCode.getValue()); }
+		
+			// Just build the rest
+			addressBuilder.districtName(addressPostal.getDistrictName())
+						.districtSubdivision(addressPostal.getDistrictSubdivisionIdentifier())
+						.floor(addressPostal.getFloorIdentifier())
+						.greenlandBuilding(addressPostal.getGreenlandBuildingIdentifier())
+						.mailDeliverySublocation(addressPostal.getMailDeliverySublocationIdentifier())
+						.municipalityCode(addressPostal.getMunicipalityCode())
+						.postCode(addressPostal.getPostCodeIdentifier())
+						.streetBuilding(addressPostal.getStreetBuildingIdentifier())
+						.streetCode(addressPostal.getStreetCode())
+						.streetName(addressPostal.getStreetName())
+						.streetNameForAddressing(addressPostal.getStreetNameForAddressingName())
+						.suite(addressPostal.getSuiteIdentifier())
+						.isSpecielVejkode(greenlandicAddress.isSpecielVejkodeIndikator())
+						.isUkendtAdresse(greenlandicAddress.isUkendtAdresseIndikator());
+
+			// add the address to the person
+			return addressBuilder.build();
+		}
+
+		return null;
+
+	}
+
+	private IDanishAddress getDanishAddress(CprBorgerType citizenData, DanskAdresseType danishAddress) {
+
+		// null guard
+		if(danishAddress.getAddressComplete() != null &&
+				danishAddress.getAddressComplete().getAddressPostal() != null) {
+
+			// Let build a bear.. err danish address!
+			DanishAddress.Builder addressBuilder = new DanishAddress.Builder();
+
+			// Add any adress notes
+			addressBuilder.note(citizenData.getAdresseNoteTekst());
+			
+			// reference pointer for less spam
+			AddressAccessType addressAccess = danishAddress.getAddressComplete().getAddressAccess();
+			AddressPostalType addressPostal = danishAddress.getAddressComplete().getAddressPostal();
+
+			if(addressPostal != null) {
+				// Get country id code
+				CountryIdentificationCodeType idCode = addressPostal.getCountryIdentificationCode();
+				if(idCode != null) {addressBuilder.countryIdentificationCode(idCode.getValue()); }
+
+				// Get postofficebox
+				BigInteger postOfficeBox = addressPostal.getPostOfficeBoxIdentifier();
+				if(postOfficeBox != null) {addressBuilder.postOfficeBox(addressPostal.getPostOfficeBoxIdentifier().toString()); }
+				
+				// Just build the rest
+				addressBuilder.districtName(addressPostal.getDistrictName())
+							.districtSubdivision(addressPostal.getDistrictSubdivisionIdentifier())
+							.floor(addressPostal.getFloorIdentifier())
+							.mailSubLocaltion(addressPostal.getMailDeliverySublocationIdentifier())
+							.postCode(addressPostal.getPostCodeIdentifier())
+							.streetBuilding(addressPostal.getStreetBuildingIdentifier())
+							.streetName(addressPostal.getStreetName())
+							.streetNameForAdressing(addressPostal.getStreetNameForAddressingName())
+							.suite(addressPostal.getSuiteIdentifier());			
+			}
+
+			if(addressAccess != null) {
+				addressBuilder.municipalityCode(addressAccess.getMunicipalityCode())
+								.streetBuildingIdentifier(addressAccess.getStreetBuildingIdentifier())
+								.streetCode(addressAccess.getStreetCode());
+			}
+			
+			addressBuilder.danishNote(danishAddress.getNoteTekst())
+							.politiDistrikt(danishAddress.getPolitiDistriktTekst())
+							.postDistrikt(danishAddress.getPostDistriktTekst())
+							.skoleDistrikt(danishAddress.getSkoleDistriktTekst())
+							.socialDistrikt(danishAddress.getSocialDistriktTekst())
+							.sogneDistrikt(danishAddress.getSogneDistriktTekst())
+							.isSpecielVejkode(danishAddress.isSpecielVejkodeIndikator())
+							.isUkendtAdresse(danishAddress.isUkendtAdresseIndikator());
+			
+			// add the address to the person
+			return addressBuilder.build();
+		}
+		return null;
 	}
 
 	private ITidspunkt getRegisteringsTidspunkt(RegistreringType registering) {

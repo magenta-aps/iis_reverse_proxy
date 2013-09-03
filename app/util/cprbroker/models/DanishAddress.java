@@ -8,6 +8,10 @@ import util.cprbroker.IWorldAddress;
 
 public class DanishAddress implements IDanishAddress {
 
+	private final String municipalityCode;
+	private final String streetBuildingIdentifier;
+	private final String streetCode;
+	
 	private final String countryIdentificationCode;
 	private final String districtName;
 	private final String districtSubdivision;
@@ -20,6 +24,17 @@ public class DanishAddress implements IDanishAddress {
 	private final String streetNameForAdressing;
 	private final String suite;
 	private final String note;
+
+	private final String danishNote;
+	private final String politiDistrikt;
+	private final String postDistrikt;
+	private final String skoleDistrikt;
+	private final String socialDistrikt;
+	private final String sogneDistrikt;
+	private final String valgkredsDistrikt;
+	private final Boolean isSpecielVejkode;
+	private final Boolean isUkendtAdresse;
+
 	
 	public static class Builder implements IBuilder<IDanishAddress> {
 
@@ -36,6 +51,20 @@ public class DanishAddress implements IDanishAddress {
 		private String suite;
 		private String note;
 
+		private String municipalityCode;
+		private String streetBuildingIdentifier;
+		private String streetCode;
+
+		private String danishNote;
+		private String politiDistrikt;
+		private String postDistrikt;
+		private String skoleDistrikt;
+		private String socialDistrikt;
+		private String sogneDistrikt;
+		private String valgkredsDistrikt;
+		private Boolean isSpecielVejkode;
+		private Boolean isUkendtAdresse;
+		
 		// build method
 		public IDanishAddress build() { return new DanishAddress(this); }
 		
@@ -53,6 +82,20 @@ public class DanishAddress implements IDanishAddress {
 		public Builder suite(String newSuite) { suite = newSuite; return this;}
 		public Builder note(String newNote) { note = newNote; return this;}
 		
+		public Builder municipalityCode(String newCode) { municipalityCode = newCode; return this;}
+		public Builder streetBuildingIdentifier(String newIdentifier) { streetBuildingIdentifier = newIdentifier; return this;}
+		public Builder streetCode(String newCode) { streetCode = newCode; return this;}
+		
+		public Builder danishNote(String newNote) { danishNote = newNote; return this;}
+		public Builder politiDistrikt(String newDistrikt) { politiDistrikt = newDistrikt; return this;}
+		public Builder postDistrikt(String newDistrikt) { postDistrikt = newDistrikt; return this;}
+		public Builder skoleDistrikt(String newDistrikt) { skoleDistrikt = newDistrikt; return this;}
+		public Builder socialDistrikt(String newDistrikt) { socialDistrikt = newDistrikt; return this;}
+		public Builder sogneDistrikt(String newDistrikt) { sogneDistrikt = newDistrikt; return this;}
+		public Builder valgkredsDistrikt(String newDistrikt) { valgkredsDistrikt = newDistrikt; return this;}
+		public Builder isSpecielVejkode(Boolean isSpecial) { isSpecielVejkode = isSpecial; return this;}
+		public Builder isUkendtAdresse(Boolean isUkendt) { isUkendtAdresse = isUkendt; return this;}
+		
 	}
 	
 	private DanishAddress(Builder builder) {
@@ -68,6 +111,21 @@ public class DanishAddress implements IDanishAddress {
 		streetNameForAdressing = builder.streetNameForAdressing;
 		suite = builder.suite;
 		note = builder.note;
+		
+		municipalityCode = builder.municipalityCode;
+		streetBuildingIdentifier = builder.streetBuildingIdentifier;
+		streetCode = builder.streetCode;
+
+		danishNote = builder.danishNote;
+		politiDistrikt = builder.politiDistrikt;
+		postDistrikt = builder.postDistrikt;
+		skoleDistrikt = builder.skoleDistrikt;
+		socialDistrikt = builder.socialDistrikt;
+		sogneDistrikt = builder.sogneDistrikt;
+		valgkredsDistrikt = builder.valgkredsDistrikt;
+		isSpecielVejkode = builder.isSpecielVejkode;
+		isUkendtAdresse = builder.isUkendtAdresse;
+
 	}
 	
 	// no-brainers - this is a danish address
@@ -112,5 +170,41 @@ public class DanishAddress implements IDanishAddress {
 
 	@Override
 	public String note() { return note; }
+
+	@Override
+	public String municipalityCode() { return municipalityCode; }
+
+	@Override
+	public String streetBuildingIdentifier() { return streetBuildingIdentifier;	}
+
+	@Override
+	public String streetCode() { return streetCode; }
+
+	@Override
+	public String danishNote() { return danishNote; }
+
+	@Override
+	public String politiDistrikt() { return politiDistrikt; }
+
+	@Override
+	public String postDistrikt() { return postDistrikt;	}
+
+	@Override
+	public String skoleDistrikt() {	return skoleDistrikt; }
+
+	@Override
+	public String socialDistrikt() { return socialDistrikt; }
+
+	@Override
+	public String sogneDistrikt() { return sogneDistrikt; }
+
+	@Override
+	public String valgkredsDistrikt() { return valgkredsDistrikt; }
+
+	@Override
+	public Boolean isSpecielVejkode() {	return isSpecielVejkode; }
+
+	@Override
+	public Boolean isUkendtAdresse() { return isUkendtAdresse;	}
 
 }
