@@ -144,15 +144,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		if(idList != null) {
 			newUuids = idList.getUUID();
 		}	
-		
-		//TODO REMOVE THIS TEST LOGGING
-		play.Logger.info(soegOutput.getStandardRetur().getStatusKode().toString() + ": " + soegOutput.getStandardRetur().getFejlbeskedTekst());
-		play.Logger.info("" + newUuids.size());
-		
-		for(String uuid : newUuids) {
-			play.Logger.info("Uuid: " + uuid);
-		}
-			
+					
 		//return the Uuids
 		return new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
 						soegOutput.getStandardRetur().getFejlbeskedTekst(),
@@ -173,11 +165,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// Access CPR broker	
 		ListOutputType listOutput =  port.list(listInput);
 		long response = System.currentTimeMillis();
-				
-		play.Logger.info(listOutput.getStandardRetur().getStatusKode().toString());
-		play.Logger.info(listOutput.getStandardRetur().getFejlbeskedTekst());
-		play.Logger.info("Size: " +listOutput.getLaesResultat().size());
-		
+						
 		List<LaesResultatType> laesResultatTypeList = listOutput.getLaesResultat();
 		
 		List<IPerson> persons = new LinkedList<IPerson>();
