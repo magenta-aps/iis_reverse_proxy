@@ -26,6 +26,49 @@
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
+    <script type='text/javascript'>
+
+            // very crude check on where to pass the submition
+		    $('#quicksearch').submit(function() {
+
+		        //get the content of the input field
+		        var query = $('#query').val();
+
+		        // a cpr consists of exactly 10 numbers
+		        var cpr = /\b[0-9]{10}$/;
+
+		        //TODO make a match with anything that has numbers
+                var containsnumbers = /[0-9]/;
+
+		        // no commas 
+		        var lastname = /.*$/;
+
+		        // one comma 
+		        var lastfirstname = /.*,\s*.*$/;
+
+		        // two commas
+		        var lastmiddlefirstname = /.*,\s*.*,\s.*$/;
+
+		        var action = $(this).val() == "people" ? "user" : "content";
+		        
+		        //  *?\s(?=/)|(?<=/) \s*
+		        
+		        if(cpr.test(query)) {
+		            var action = 'cpr/' + query + '/';
+		        } else if(containsnumbers.test(query)) {
+		        	alert('contains numbers and is not a cpr!');
+		        	return false;
+		        } else if (lastmiddlefirstname.test(query) || lastfirstname.test(query)) {
+		        	var action = 'name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/') + '/';
+		        } else if(lastname.test(query)) {
+		        	var action = 'name/' + query + '/';
+		        } else {
+		            alert('error');
+		            return false;
+		        }
+		        $("#quicksearch").attr("action", "/search/" + action);
+		    });
+    </script>
 
   </body>
 </html>

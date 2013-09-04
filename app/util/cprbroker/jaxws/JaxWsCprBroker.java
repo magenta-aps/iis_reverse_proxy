@@ -9,6 +9,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import itst.dk.PartSoap12;
 import oio.dkal._1_0.ArrayOfString;
 import oio.sagdok._2_0.LaesInputType;
+import oio.sagdok._2_0.ListInputType;
 import oio.sagdok._2_0.PersonFlerRelationType;
 import oio.sagdok._2_0.SoegOutputType;
 import oio.sagdok._2_0.StandardReturType;
@@ -25,6 +26,8 @@ import oio.sagdok.person._1_0.GetUuidOutputType;
 import oio.sagdok.person._1_0.GroenlandAdresseType;
 import oio.sagdok.person._1_0.KontaktKanalType;
 import oio.sagdok.person._1_0.LaesOutputType;
+import oio.sagdok.person._1_0.LaesResultatType;
+import oio.sagdok.person._1_0.ListOutputType;
 import oio.sagdok.person._1_0.LivStatusType;
 import oio.sagdok.person._1_0.NavnStrukturType;
 import oio.sagdok.person._1_0.PersonRelationType;
@@ -158,6 +161,44 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	@Override
+	public List<IPerson> list(final IUuids uuids) {
+		long start = System.currentTimeMillis();
+		
+		ListInputType listInput = new ListInputType();
+		
+		List<String> list = listInput.getUUID();
+		list.addAll(uuids.uuids());
+		
+		long request = System.currentTimeMillis();
+		// Access CPR broker	
+		ListOutputType listOutput =  port.list(listInput);
+		long response = System.currentTimeMillis();
+				
+		play.Logger.info(listOutput.getStandardRetur().getStatusKode().toString());
+		play.Logger.info(listOutput.getStandardRetur().getFejlbeskedTekst());
+		play.Logger.info("Size: " +listOutput.getLaesResultat().size());
+		
+		List<LaesResultatType> laesResultatTypeList = listOutput.getLaesResultat();
+		
+		List<IPerson> persons = new LinkedList<IPerson>();
+		IPerson tmpPerson;
+
+		int size = laesResultatTypeList.size();
+		List<String> uuidList = uuids.uuids();
+		
+		for(int i=0;i<size;i++) {
+			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur());
+			persons.add(tmpPerson);
+		}
+				
+		long done = System.currentTimeMillis();
+		play.Logger.info("Time: " + (done - start) + "ms, before request: " + (request - start) + "ms, request: " + (response - request) + " parsing: " + (done - response) +"ms");
+		
+		return persons;
+				
+	}
+	
+	@Override
 	public IPerson read(final String uuid) {
 		
 		// Setup the input parameters
@@ -175,6 +216,12 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		//// Getting the standardReturType 
 		StandardReturType standardReturType = laesOutput.getStandardRetur();
 
+		
+		return getPerson(uuid, laesOutput.getLaesResultat(), standardReturType);
+	}
+
+	private IPerson getPerson(final String uuid, LaesResultatType laesResultatType,
+			StandardReturType standardReturType) {
 		//// Start building with the required parameters
 		Person.Builder builder =
 				new Person.Builder(standardReturType.getStatusKode().intValue(),
@@ -186,16 +233,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		if(standardReturType.getStatusKode().intValue() == 200) {
 
 			// Assigning person tilstand
-			ITilstand newTilstand = getTilstande(laesOutput);
+			ITilstand newTilstand = getTilstande(laesResultatType);
 			builder.tilstand(newTilstand);
 			
 			// Assigning person relations
-			IPersonRelationships newRelations = getAllPersonRelations(laesOutput);
+			IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
 			builder.relations(newRelations);
 			
 			// Assigning person attributes
 			List<EgenskabType> personAttributes =
-					laesOutput.getLaesResultat().getRegistrering().getAttributListe().getEgenskab();
+					laesResultatType.getRegistrering().getAttributListe().getEgenskab();
 
 			// Get the first from the list
 			EgenskabType attributes = personAttributes.get(0);
@@ -257,7 +304,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			////////////////////////
 			// Get the registration information
 			
-			RegistreringType registering = laesOutput.getLaesResultat().getRegistrering();
+			RegistreringType registering = laesResultatType.getRegistrering();
 			
 			ITidspunkt tidspunkt = getRegisteringsTidspunkt(registering);
 			
@@ -325,10 +372,10 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return regInfoBuilder.build();
 	}
 
-	private ITilstand getTilstande(LaesOutputType laesOutput) {
+	private ITilstand getTilstande(LaesResultatType laesResultatType) {
 		// Assigning PersonTilstand
 		TilstandListeType personTilstandsListe =
-				laesOutput.getLaesResultat().getRegistrering().getTilstandListe();
+				laesResultatType.getRegistrering().getTilstandListe();
 		
 		// null check
 		if(personTilstandsListe != null) {
@@ -599,9 +646,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 	
 	
-	private IPersonRelationships getAllPersonRelations(LaesOutputType laesOutput) {
+	private IPersonRelationships getAllPersonRelations(LaesResultatType laesResultatType) {
 		RelationListeType personRelations =
-				laesOutput.getLaesResultat().getRegistrering().getRelationListe();
+				laesResultatType.getRegistrering().getRelationListe();
 		
 		// yet another null check
 		if(personRelations != null) {

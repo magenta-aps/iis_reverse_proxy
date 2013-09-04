@@ -1,0 +1,26 @@
+@(persons : List[util.cprbroker.IPerson])
+
+@main("CPR Look-up") {
+
+ <div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">There is @persons.size people in the list</h3>
+    </div>
+        <div class="panel-body">
+             <ul>
+                @for(person <- persons) {
+                    <li>
+                       <a href="/show/uuid/@person.uuid/">
+                            @if(person.firstname) {@person.firstname}
+                            @if(person.middelname) { @person.middelname}
+                            @if(person.lastname) { @person.lastname}
+                            @if(person.gender) { @person.gender}
+                            @if(person.birthdate != null) { @person.birthdate}
+                        </a>                       
+                    </li>
+                } 
+             </ul>
+        </div>
+ </div>
+  
+}
