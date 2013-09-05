@@ -11,6 +11,13 @@ import java.util.List;
 public interface ICprBrokerAccessor {
 
 	/**
+	 * Set the sourceUsageOrderHeader of the request should default to
+	 * LocalOnly if not set
+	 * @param sourceUsageOrderHeader LocalThenExternal, LocalOnly, ExternalOnly
+	 */
+	void setSourceUsageOrderHeader(final String sourceUsageOrderHeader);
+	
+	/**
 	 * Get UUID from a CPR number
 	 * @param cprNumber
 	 * @return Uuid for the cprNumber

@@ -76,31 +76,46 @@ import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
 public class JaxWsCprBroker implements ICprBrokerAccessor {
 
-	PartSoap12 port;
 	
-	public JaxWsCprBroker(final String endpoint,
-							final String applicationToken,
-							final String userToken,
-							final String sourceUsage) {
-
-		CPRBrokerSOAPFactory factory = new CPRBrokerSOAPFactory();
+	private String source = "LocalOnly";
+	private final String endpoint;
+	private final String applicationToken;
+	private final String userToken;
+	private final CPRBrokerSOAPFactory factory;
+	
+	public JaxWsCprBroker(final String newEndpoint,
+							final String newApplicationToken,
+							final String newUserToken) {
+		endpoint = newEndpoint;
+		applicationToken = newApplicationToken;
+		userToken = newUserToken;
+		factory = new CPRBrokerSOAPFactory();
+	}
+	
+	private PartSoap12 getService(final String sourceUsageOrderHeader) {
+		PartSoap12 tmpService = null;
 		factory.setEndpoint(endpoint);
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
 		//TODO - figure out how to seperate this, so it can be set dynamically
-		factory.setSourceUsageOrderHeader("LocalOnly");
+		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader);
 
 		try {
-			port = factory.getInstance();
+			tmpService = factory.getInstance();
 		} catch (InstantiationException e) {
 			play.Logger.error(e.getMessage());
 		}
-
+		return tmpService;
+	}
+	
+	@Override
+	public void setSourceUsageOrderHeader(String sourceUsageOrderHeader) {
 	}
 		
 	@Override
 	public IUuid getUuid(final String cprNumber) {
-		GetUuidOutputType uuid = port.getUuid(cprNumber);
+		PartSoap12 service = getService("LocalOnly");
+		GetUuidOutputType uuid = service.getUuid(cprNumber);
 		
 		return new Uuid(uuid.getUUID(),
 						uuid.getStandardRetur().getStatusKode().intValue(),
@@ -136,8 +151,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		input.setSoegObjekt(soegObjekt);
 		
-		// Access CPR broker	
-		SoegOutputType soegOutput =  port.search(input);
+		// Access CPR broker
+		PartSoap12 service = getService("LocalOnly");
+		SoegOutputType soegOutput =  service.search(input);
 		
 		
 		// Add the Uuids
@@ -165,8 +181,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		list.addAll(uuids.uuids());
 		
 		long request = System.currentTimeMillis();
-		// Access CPR broker	
-		ListOutputType listOutput =  port.list(listInput);
+		// Access CPR broker
+		PartSoap12 service = getService("LocalOnly");
+		ListOutputType listOutput =  service.list(listInput);
 		long response = System.currentTimeMillis();
 						
 		List<LaesResultatType> laesResultatTypeList = listOutput.getLaesResultat();
@@ -199,8 +216,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// laesInput.setRegistreringFraFilter(value) Registrations reported after this date
 		// laesInput.setRegistreringTilFilter(value) Registrations reported before this date
 		
-		// Access CPR broker	
-		LaesOutputType laesOutput =  port.read(laesInput);
+		// Access CPR broker
+		PartSoap12 service = getService("LocalOnly");
+		LaesOutputType laesOutput =  service.read(laesInput);
 				
 		// Building a person from the result
 		//// Getting the standardReturType 
