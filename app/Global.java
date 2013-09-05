@@ -64,7 +64,7 @@ public class Global extends GlobalSettings {
 			    		String appToken  = conf.getString("cprbroker.applicationtoken");
 			    		String userToken = conf.getString("cprbroker.usertoken");
 			            
-	            		return new JaxWsCprBroker(endpoint, appToken, userToken);
+	            		return new JaxWsCprBroker(endpoint, appToken, userToken, "");
 					}	
             	});	            
 	            

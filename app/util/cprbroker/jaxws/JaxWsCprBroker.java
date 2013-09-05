@@ -80,13 +80,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	public JaxWsCprBroker(final String endpoint,
 							final String applicationToken,
-							final String userToken) {
+							final String userToken,
+							final String sourceUsage) {
 
 		CPRBrokerSOAPFactory factory = new CPRBrokerSOAPFactory();
 		factory.setEndpoint(endpoint);
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
-		
+		//TODO - figure out how to seperate this, so it can be set dynamically
+		factory.setSourceUsageOrderHeader("LocalOnly");
+
 		try {
 			port = factory.getInstance();
 		} catch (InstantiationException e) {
@@ -94,7 +97,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}
 
 	}
-	
+		
 	@Override
 	public IUuid getUuid(final String cprNumber) {
 		GetUuidOutputType uuid = port.getUuid(cprNumber);
@@ -192,7 +195,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// Setup the input parameters
 		LaesInputType laesInput = new LaesInputType();
 		laesInput.setUUID(uuid);
-
 		// TODO Make it so you can call read with these parameters
 		// laesInput.setRegistreringFraFilter(value) Registrations reported after this date
 		// laesInput.setRegistreringTilFilter(value) Registrations reported before this date
