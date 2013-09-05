@@ -1,5 +1,5 @@
 # route /login
-login.pagetitle = CPR Look Up - Log på
+login.pagetitle = CPR Broker WIn - Log på
 login.title = Indtast venligst dine oplysninger
 login.submit = Log på
 
@@ -25,6 +25,7 @@ nav.logout_button = Log ud
 resultat.egenskaber = Egenskaber
 resultat.tilstande = Tilstande
 resultat.registeroplysninger = Registeroplysninger
+resultat.postaddresse = Post addresse
 
 #------ EGENSKABER
 person.firstname = fornavn
@@ -49,3 +50,33 @@ person.registerInformation.cprCitizen.isMemberOfTheChurch = Folkekirkemedlem
 person.registerInformation.cprCitizen.isResearcherProtected = Forskerbeskyttelse
 person.registerInformation.cprCitizen.isNameAddressProtected = Navn- og Addressebeskyttelse
 person.registerInformation.cprCitizen.isPhoneNumberProtected = Telefonnummerbeskyttelse
+
+#------ ADDRESSE
+person.address.danishAddress.countryIdentificationCode = landekode
+person.address.danishAddress.districtName = by
+person.address.danishAddress.districtSubdivision = forstad
+person.address.danishAddress.floor = etage
+person.address.danishAddress.mailSubLocaltion = postunderlokalition
+person.address.danishAddress.postCode = postnummer
+person.address.danishAddress.postOfficeBox = postboks
+person.address.danishAddress.streetName = gadenavn
+person.address.danishAddress.streetBuilding = gadenummer
+
+person.address.danishAddress.streetNameForAddressing = adresseforaddresering
+person.address.danishAddress.suite = suite
+person.address.danishAddress.note = note
+   
+person.address.danishAddress.municipalityCode = kommunekode
+person.address.danishAddress.streetCode = vejkode
+person.address.danishAddress.streetBuildingIdentifier = gadenummer
+
+   
+person.address.danishAddress.danishNote = ekstranote
+person.address.danishAddress.politiDistrikt = politidistrikt
+person.address.danishAddress.postDistrikt = postdistrikt
+person.address.danishAddress.skoleDistrikt = skoledistrikt
+person.address.danishAddress.socialDistrikt = socialdistrikt
+person.address.danishAddress.sogneDistrikt = sognedistrikt
+person.address.danishAddress.valgkredsDistrikt = valgdistrikt
+person.address.danishAddress.isSpecielVejkode = specielvejkode
+person.address.danishAddress.isUkendtAdresse = ukendt addresse
