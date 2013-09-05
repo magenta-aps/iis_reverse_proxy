@@ -4,147 +4,261 @@
 
 @main("CPR Look-up") {
       
-    <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Result</h3>
+    <div class="well">           
+        <h3>
+            <span class="glyphicon glyphicon-user"></span> Person: @person.registerInformation.cprCitizen.socialSecurityNumber
+        </h3>
     </div>
-        <div class="panel-body">
-	        <ul>
-	            <li>Uuid: @person.uuid</li>
-	            <li>Code: @person.code</li>
-	            <li>Message: @person.message</li>
-	        </ul>            
-            @if(person.code == 200) {
-                
-                <ul>
-                    @if(person.tidspunkt != null) {
-                        @if(person.tidspunkt.aktoerRefUrn) {<li>person.tidspunkt.aktoerRefUrn: @person.tidspunkt.aktoerRefUrn </li>}
-                        @if(person.tidspunkt.aktoerRefUuid) {<li>person.tidspunkt.aktoerRefUuid: @person.tidspunkt.aktoerRefUuid </li>}
-                        @if(person.tidspunkt.kommentar) {<li>person.tidspunkt.kommentar: @person.tidspunkt.kommentar </li>}
-                        @if(person.tidspunkt.livscyklusKode) {<li>person.tidspunkt.livscyklusKode: @person.tidspunkt.livscyklusKode </li>}
-                        @if(person.tidspunkt.tidspunkt != null) {<li>person.tidspunkt.tidspunkt: @person.tidspunkt.tidspunkt </li>}
-                        @if(person.tidspunkt.isTidspunktGraenseIndikator != null) {<li>person.tidspunkt.isTidspunktGraenseIndikator: @person.tidspunkt.isTidspunktGraenseIndikator </li>}
-                    }
-                </ul>
-                <ul>              
-		            @if(person.firstname) {<li>Firstname: @person.firstname</li>}
-		            @if(person.middelname) {<li>Middelname: @person.middelname</li>}
-		            @if(person.lastname) {<li>Lastname: @person.lastname</li>}
-		            @if(person.callname) {<li>Callname: @person.callname</li>}
-		            @if(person.nameForAdressing) {<li>Fullname: @person.nameForAdressing</li>}
-		            @if(person.gender) {<li>Gender: @person.gender</li>}
-		            @if(person.birthdate != null) {<li>Birthdate: @person.birthdate</li>}
-		            @if(person.birthplace) {<li>Birthplace: @person.birthplace</li>}
-		            @if(person.birthRegisteringAuthority) {<li>BirthRegisteringAuthority: @person.birthRegisteringAuthority</li>}
-		            
-		            @*Add the effect for the person*@
-		            @virkning(person.effect)
-	            </ul>
-	            
-	            @if(person.tilstand != null) {
-	               <ul>
-		               @if(person.tilstand.civilStatusKode) {<li>civilStatusKode: @person.tilstand.civilStatusKode</li>}
-		               @if(person.tilstand.civilTilstandsVirkning != null) {@virkning(person.tilstand.civilTilstandsVirkning)}
-		               @if(person.tilstand.livStatusKode) {<li>livStatusKode: @person.tilstand.livStatusKode</li>}
-		               @if(person.tilstand.livTilstandsVirkning != null) {@virkning(person.tilstand.livTilstandsVirkning)}
-	               </ul>    
-	            }
-	            
-	            
-	            @if(person.registerInformation != null) {
-	               <ul>
-	                   @if(person.registerInformation.cprCitizen.socialSecurityNumber){<li>CPR nummer: @person.registerInformation.cprCitizen.socialSecurityNumber</li>}
-	                   @if(person.registerInformation.cprCitizen.isSocialSecurityNumberValid != null){<li>Cpr number valid: @person.registerInformation.cprCitizen.isSocialSecurityNumberValid</li>}
-	                   @if(person.registerInformation.cprCitizen.personNationalityCode){<li>Country code: @person.registerInformation.cprCitizen.personNationalityCode</li>}
-	                   
-	                   @if(person.registerInformation.cprCitizen.isMemberOfTheChurch != null){<li>Folkekirken: @person.registerInformation.cprCitizen.isMemberOfTheChurch</li>}
-                       @if(person.registerInformation.cprCitizen.isResearcherProtected != null){<li>Forskerbeskyttelse: @person.registerInformation.cprCitizen.isResearcherProtected</li>}
-                       @if(person.registerInformation.cprCitizen.isNameAddressProtected != null){<li>Navn/Adresse beskyttelse: @person.registerInformation.cprCitizen.isNameAddressProtected</li>}
-                       @if(person.registerInformation.cprCitizen.isPhoneNumberProtected != null){<li>Hemmeligt nummer: @person.registerInformation.cprCitizen.isPhoneNumberProtected</li>}
-                       @if(person.registerInformation.virkning != null) { @virkning(person.registerInformation.virkning) }
-	                   
-	               </ul>
-	            }
-	            
-	            @if(person.relations != null) {
-	                <ul>
-		                @if(person.relations.aegtefaelle != null) {<li>aegtefaelle: @relations(person.relations.aegtefaelle)</li> }
-		                @if(person.relations.erstatingAf != null) {<li>erstatingAf: @relations(person.relations.erstatingAf)</li> }
-		                @if(person.relations.fader != null) {<li>fader: @relations(person.relations.fader)</li> }
-		                @if(person.relations.foraeldremyndighedsindehaver != null) {<li>foraeldremyndighedsindehaver: @relations(person.relations.foraeldremyndighedsindehaver)</li> }
-		                @if(person.relations.moder != null) {<li>moder: @relations(person.relations.moder)</li> }
-		                @if(person.relations.registreretPartner != null) {<li>registreretPartner: @relations(person.relations.registreretPartner)</li> }
-		                @if(person.relations.retligHandleevneVaergeForPersonen != null) {<li>retligHandleevneVaergeForPersonen: @relations(person.relations.retligHandleevneVaergeForPersonen)</li> }
-		                
-		                @if(person.relations.boern != null) {<li>boern: @relations(person.relations.boern)</li> }
-		                @if(person.relations.bopaelssamling != null) {<li>bopaelssamling: @relations(person.relations.bopaelssamling)</li> }
-		                @if(person.relations.erstatingFor != null) {<li>erstatingFor: @relations(person.relations.erstatingFor)</li> }
-		                @if(person.relations.foraeldremydighedsboern != null) {<li>foraeldremydighedsboern: @relations(person.relations.foraeldremydighedsboern)</li> }
-		                @if(person.relations.retligHandleevneVaergemaalsindehaver != null) {<li>retligHandleevneVaergemaalsindehaver: @relations(person.relations.retligHandleevneVaergemaalsindehaver)</li> }
-	                </ul>
-	            }
-	            
-	            @if(person.address != null){
+    
+    <ul class="nav nav-pills nav-justified">
+		<li class="active"><a href="#generelt" data-toggle="pill">Generelt</a></li>
+		<li><a href="#addresse" data-toggle="pill">Addresse</a></li>
+		<li><a href="#relationer" data-toggle="pill">Relationer</a></li>
+    </ul>
+    
+    
+    
+    <div class="tab-content">
+        <div class="tab-pane active" id="generelt">
+        
+			<div class="row">
+	            <div class="col-md-6">
+	                <br/>
+	                <div class="panel panel-default">
 	                
-	                @if(person.address.addressType == EAddressType.Danish) {
-	                   <ul>
-	                       @if(person.address.danishAddress.countryIdentificationCode) {<li>countryIdCode: @person.address.danishAddress.countryIdentificationCode</li>} 
-	                       @if(person.address.danishAddress.districtName) {<li>districtName: @person.address.danishAddress.districtName</li>}
-	                       @if(person.address.danishAddress.districtSubdivision) {<li>districtSubdivision: @person.address.danishAddress.districtSubdivision</li>}
-	                       @if(person.address.danishAddress.floor) {<li>Floor: @person.address.danishAddress.floor</li>}
-	                       @if(person.address.danishAddress.mailSubLocaltion) {<li>mail sublocation: @person.address.danishAddress.mailSubLocaltion</li>}
-	                       @if(person.address.danishAddress.postCode) {<li>postcode: @person.address.danishAddress.postCode</li>}
-	                       @if(person.address.danishAddress.postOfficeBox) {<li>postOfficeBox: @person.address.danishAddress.postOfficeBox</li>}
-	                       @if(person.address.danishAddress.streetBuilding) {<li>streetbuilding: @person.address.danishAddress.streetBuilding</li>}
-	                       @if(person.address.danishAddress.streetName) {<li>streetName: @person.address.danishAddress.streetName</li>}
-	                       @if(person.address.danishAddress.streetNameForAddressing) {<li>streetNameForAddressing:@person.address.danishAddress.streetNameForAddressing</li>}
-	                       @if(person.address.danishAddress.suite) {<li>Suite: @person.address.danishAddress.suite</li>}
-	                       @if(person.address.danishAddress.note) {<li>Note: @person.address.danishAddress.note</li>}
-	                       
-	                       @if(person.address.danishAddress.municipalityCode) {<li>municipalityCode: @person.address.danishAddress.municipalityCode</li>}
-	                       @if(person.address.danishAddress.streetBuildingIdentifier) {<li>streetBuildingIdentifier: @person.address.danishAddress.streetBuildingIdentifier</li>}
-	                       @if(person.address.danishAddress.streetCode) {<li>streetCode: @person.address.danishAddress.streetCode</li>}
-	                       
-	                       @if(person.address.danishAddress.danishNote) {<li>danishNote: @person.address.danishAddress.danishNote</li>}
-	                       @if(person.address.danishAddress.politiDistrikt) {<li>politiDistrikt: @person.address.danishAddress.politiDistrikt</li>}
-	                       @if(person.address.danishAddress.postDistrikt) {<li>postDistrikt: @person.address.danishAddress.postDistrikt</li>}
-	                       @if(person.address.danishAddress.skoleDistrikt) {<li>skoleDistrikt: @person.address.danishAddress.skoleDistrikt</li>}
-	                       @if(person.address.danishAddress.socialDistrikt) {<li>socialDistrikt: @person.address.danishAddress.socialDistrikt</li>}
-	                       @if(person.address.danishAddress.sogneDistrikt) {<li>sogneDistrikt: @person.address.danishAddress.sogneDistrikt</li>}
-	                       @if(person.address.danishAddress.valgkredsDistrikt) {<li>valgkredsDistrikt: @person.address.danishAddress.valgkredsDistrikt</li>}
-	                       @if(person.address.danishAddress.isSpecielVejkode) {<li>isSpecielVejkode: @person.address.danishAddress.isSpecielVejkode</li>}
-	                       @if(person.address.danishAddress.isUkendtAdresse) {<li>isUkendtAdresse: @person.address.danishAddress.isUkendtAdresse</li>}
-	                       
-	                   </ul>
-	                }	                    
-	            }
-	            @* EXTRACT TO TEMPLATE - DRY!!! *@
-	            @if(person.contact != null) {
-	               <ul>
-	                   @if(person.contact.isPhoneAbleToRecieveSms) {<li>isPhoneAbleToRecieveSms: @person.contact.isPhoneAbleToRecieveSms</li>}
-	                   @if(person.contact.limitedUsageText) {<li>limitedUsageText: @person.contact.limitedUsageText</li>}
-	                   @if(person.contact.email) {<li>email: @person.contact.email</li>}
-	                   @if(person.contact.noteText) {<li>noteText: @person.contact.noteText</li>}
-	                   @if(person.contact.phone) {<li>phone: @person.contact.phone</li>}
-	                   @if(person.contact.otherContactText) {<li>otherContactText: @person.contact.otherContactText</li>}
-	                   @if(person.contact.otherContactNoteText) {<li>otherContactNoteText: @person.contact.otherContactNoteText</li>}
-	               </u>    
-	            }
-	            @* EXTRACT TO TEMPLATE - DRY!!! *@
-	            @if(person.nextOfKinContact != null) {
-                   <ul>
-                       @if(person.nextOfKinContact.isPhoneAbleToRecieveSms) {<li>isPhoneAbleToRecieveSms: @person.nextOfKinContact.isPhoneAbleToRecieveSms</li>}
-                       @if(person.nextOfKinContact.limitedUsageText) {<li>limitedUsageText: @person.nextOfKinContact.limitedUsageText</li>}
-                       @if(person.nextOfKinContact.email) {<li>email: @person.nextOfKinContact.email</li>}
-                       @if(person.nextOfKinContact.noteText) {<li>noteText: @person.nextOfKinContact.noteText</li>}
-                       @if(person.nextOfKinContact.phone) {<li>phone: @person.nextOfKinContact.phone</li>}
-                       @if(person.nextOfKinContact.otherContactText) {<li>otherContactText: @person.nextOfKinContact.otherContactText</li>}
-                       @if(person.nextOfKinContact.otherContactNoteText) {<li>otherContactNoteText: @person.nextOfKinContact.otherContactNoteText</li>}
-                   </u>    
-                }
-                
-	            
-            }
+	                    <div class="panel-heading">
+	                        <h3 class="panel-title">@Messages("resultat.egenskaber")</h3>
+	                    </div>
+	                
+	                    <div class="panel-body">
+							@if(person.firstname) {
+							    <dl class="dl-horizontal">
+							        <dt>@Messages("person.firstname")</dt>
+							        <dd>@person.firstname</dd>
+							    </dl>
+							}
+							@if(person.middelname) {
+						          <dl class="dl-horizontal">
+						              <dt>@Messages("person.middelname")</dt>
+						              <dd>@person.middelname</dd>
+						          </dl>
+						      }
+						      @if(person.lastname) {
+						          <dl class="dl-horizontal">
+						              <dt>@Messages("person.lastname")</dt>
+						              <dd>@person.lastname</dd>
+						          </dl>
+						      }
+						      @if(person.callname) {
+						          <dl class="dl-horizontal">
+						              <dt>@Messages("person.callname")</dt>
+						              <dd>@person.callname</dd>
+						          </dl>
+						      }
+						      
+						      @if(person.nameForAdressing) {
+						          <dl class="dl-horizontal">
+						              <dt>@Messages("person.nameForAdressing")</dt>
+						              <dd>@person.nameForAdressing</dd>
+						          </dl>
+						      }  
+							 @if(person.gender) {
+							     <dl class="dl-horizontal">
+							         <dt>@Messages("person.gender")</dt>
+							         <dd>@person.gender</dd>
+							     </dl>
+							 }
+							 @if(person.birthdate != null) {
+							     <dl class="dl-horizontal">
+							         <dt>@Messages("person.birthdate")</dt>
+							         <dd>@person.birthdate</dd>
+							     </dl>
+							 }
+							 @if(person.birthplace) {
+							     <dl class="dl-horizontal">
+							         <dt>@Messages("person.birthplace")</dt>
+							         <dd>@person.nameForAdressing</dd>
+							     </dl>
+							 }
+							 @if(person.birthRegisteringAuthority) {
+							     <dl class="dl-horizontal">
+							         <dt>@Messages("person.birthRegisteringAuthority")</dt>
+							         <dd>@person.birthRegisteringAuthority</dd>
+							     </dl>
+							 }                       
+	                    </div>
+	                    <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
+	                </div>
+	            </div>
+	            <div class="col-md-6">
+	                <br/>
+	                <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@Messages("resultat.tilstande")</h3>
+                        </div>	                
+	                    <div class="panel-body">
+	                        @if(person.tilstand != null) {
+	                            @if(person.tilstand.civilStatusKode) {
+	                                <dl class="dl-horizontal">
+	                                    <dt>@Messages("person.tilstand.civilStatusKode")</dt>
+	                                    <dd>@person.tilstand.civilStatusKode</dd>
+	                                    @if(person.tilstand.civilTilstandsVirkning.fraTidspunkt != null) {
+    	                                    <dd>@virkning(person.tilstand.civilTilstandsVirkning, false)</dd>
+    	                                }
+	                                </dl>
+	                            }
+	                            @if(person.tilstand.civilStatusKode) {
+	                                <dl class="dl-horizontal">
+	                                    <dt>@Messages("person.tilstand.livStatusKode")</dt>
+	                                    <dd>@person.tilstand.livStatusKode</dd>
+                                        @if(person.tilstand.livTilstandsVirkning.fraTidspunkt != null) {	                                    
+	                                        <dd>@virkning(person.tilstand.livTilstandsVirkning, false)</dd>
+	                                    }
+	                                </dl>
+	                            }
+	                        }
+						</div>  
+			        </div>
+	
+					<div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@Messages("resultat.registeroplysninger")</h3>
+                        </div>					
+					    <div class="panel-body">
+					        @if(person.registerInformation != null) {
+					            @if(person.registerInformation.cprCitizen.socialSecurityNumber) {
+					                <dl class="dl-horizontal">
+					                    <dt>@Messages("person.registerInformation.cprCitizen.socialSecurityNumber")</dt>
+					                    <dd>
+					                        @person.registerInformation.cprCitizen.socialSecurityNumber
+					
+					               @if(person.registerInformation.cprCitizen.isSocialSecurityNumberValid != null) {
+				                       @glyphiconokban(person.registerInformation.cprCitizen.isSocialSecurityNumberValid)
+					               }				                    
+					                    </dd>
+					                </dl>
+					            }
+					            @if(person.registerInformation.cprCitizen.personNationalityCode) {
+					                <dl class="dl-horizontal">
+					                    <dt>@Messages("person.registerInformation.cprCitizen.personNationalityCode")</dt>
+					                    <dd>@person.registerInformation.cprCitizen.personNationalityCode</dd>
+					                </dl>
+					            }
+					            @if(person.registerInformation.cprCitizen.isMemberOfTheChurch != null) {
+					                <dl class="dl-horizontal">
+					                   <dd>
+						                    @Messages("person.registerInformation.cprCitizen.isMemberOfTheChurch")
+						                    @glyphiconokban(person.registerInformation.cprCitizen.isMemberOfTheChurch)
+					                   </dd> 
+					                </dl>
+					            }
+					            @if(person.registerInformation.cprCitizen.isResearcherProtected != null) {
+					                <dl class="dl-horizontal">					                    
+					                    <dd>
+					                        @Messages("person.registerInformation.cprCitizen.isResearcherProtected")
+					                        @glyphiconokban(person.registerInformation.cprCitizen.isResearcherProtected)
+					                    </dd>
+					                </dl>
+					            }
+					            @if(person.registerInformation.cprCitizen.isNameAddressProtected != null) {
+					                <dl class="dl-horizontal">
+					                    <dd>
+                                            @Messages("person.registerInformation.cprCitizen.isNameAddressProtected")
+                                            @glyphiconokban(person.registerInformation.cprCitizen.isNameAddressProtected)
+					                    </dd>
+					                </dl>
+					            }
+					            @if(person.registerInformation.cprCitizen.isPhoneNumberProtected != null) {
+					                <dl class="dl-horizontal">
+					                    <dd>
+					                        @Messages("person.registerInformation.cprCitizen.isPhoneNumberProtected")
+					                        @glyphiconokban(person.registerInformation.cprCitizen.isPhoneNumberProtected)
+					                    </dd>
+					                </dl>
+					            }					
+					        }
+					    </div>
+					    <div class="panel-footer"><p class="text-right">@virkning(person.registerInformation.virkning, true)</p></div>  
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-   }
+		<div class="tab-pane" id="addresse">
+		
+            @if(person.address != null){
+                @if(person.address.addressType == EAddressType.Danish) {
+                    <ul>
+                        @if(person.address.danishAddress.countryIdentificationCode) {<li>countryIdCode: @person.address.danishAddress.countryIdentificationCode</li>} 
+                        @if(person.address.danishAddress.districtName) {<li>districtName: @person.address.danishAddress.districtName</li>}
+                        @if(person.address.danishAddress.districtSubdivision) {<li>districtSubdivision: @person.address.danishAddress.districtSubdivision</li>}
+                        @if(person.address.danishAddress.floor) {<li>Floor: @person.address.danishAddress.floor</li>}
+                        @if(person.address.danishAddress.mailSubLocaltion) {<li>mail sublocation: @person.address.danishAddress.mailSubLocaltion</li>}
+                        @if(person.address.danishAddress.postCode) {<li>postcode: @person.address.danishAddress.postCode</li>}
+                        @if(person.address.danishAddress.postOfficeBox) {<li>postOfficeBox: @person.address.danishAddress.postOfficeBox</li>}
+                        @if(person.address.danishAddress.streetBuilding) {<li>streetbuilding: @person.address.danishAddress.streetBuilding</li>}
+                        @if(person.address.danishAddress.streetName) {<li>streetName: @person.address.danishAddress.streetName</li>}
+                        @if(person.address.danishAddress.streetNameForAddressing) {<li>streetNameForAddressing:@person.address.danishAddress.streetNameForAddressing</li>}
+                        @if(person.address.danishAddress.suite) {<li>Suite: @person.address.danishAddress.suite</li>}
+                        @if(person.address.danishAddress.note) {<li>Note: @person.address.danishAddress.note</li>}
+                           
+                        @if(person.address.danishAddress.municipalityCode) {<li>municipalityCode: @person.address.danishAddress.municipalityCode</li>}
+                        @if(person.address.danishAddress.streetBuildingIdentifier) {<li>streetBuildingIdentifier: @person.address.danishAddress.streetBuildingIdentifier</li>}
+                        @if(person.address.danishAddress.streetCode) {<li>streetCode: @person.address.danishAddress.streetCode</li>}
+                           
+                        @if(person.address.danishAddress.danishNote) {<li>danishNote: @person.address.danishAddress.danishNote</li>}
+                        @if(person.address.danishAddress.politiDistrikt) {<li>politiDistrikt: @person.address.danishAddress.politiDistrikt</li>}
+                        @if(person.address.danishAddress.postDistrikt) {<li>postDistrikt: @person.address.danishAddress.postDistrikt</li>}
+                        @if(person.address.danishAddress.skoleDistrikt) {<li>skoleDistrikt: @person.address.danishAddress.skoleDistrikt</li>}
+                        @if(person.address.danishAddress.socialDistrikt) {<li>socialDistrikt: @person.address.danishAddress.socialDistrikt</li>}
+                        @if(person.address.danishAddress.sogneDistrikt) {<li>sogneDistrikt: @person.address.danishAddress.sogneDistrikt</li>}
+                        @if(person.address.danishAddress.valgkredsDistrikt) {<li>valgkredsDistrikt: @person.address.danishAddress.valgkredsDistrikt</li>}
+                        @if(person.address.danishAddress.isSpecielVejkode) {<li>isSpecielVejkode: @person.address.danishAddress.isSpecielVejkode</li>}
+                        @if(person.address.danishAddress.isUkendtAdresse) {<li>isUkendtAdresse: @person.address.danishAddress.isUkendtAdresse</li>}
+                    </ul>
+                }
+            }                     
+		</div>
+		
+		<div class="tab-pane" id="relationer">
+                @if(person.relations != null) {
+                    <ul>
+                        @if(person.relations.aegtefaelle != null) {<li>aegtefaelle: @relations(person.relations.aegtefaelle)</li> }
+                        @if(person.relations.erstatingAf != null) {<li>erstatingAf: @relations(person.relations.erstatingAf)</li> }
+                        @if(person.relations.fader != null) {<li>fader: @relations(person.relations.fader)</li> }
+                        @if(person.relations.foraeldremyndighedsindehaver != null) {<li>foraeldremyndighedsindehaver: @relations(person.relations.foraeldremyndighedsindehaver)</li> }
+                        @if(person.relations.moder != null) {<li>moder: @relations(person.relations.moder)</li> }
+                        @if(person.relations.registreretPartner != null) {<li>registreretPartner: @relations(person.relations.registreretPartner)</li> }
+                        @if(person.relations.retligHandleevneVaergeForPersonen != null) {<li>retligHandleevneVaergeForPersonen: @relations(person.relations.retligHandleevneVaergeForPersonen)</li> }
+                        
+                        @if(person.relations.boern != null) {<li>boern: @relations(person.relations.boern)</li> }
+                        @if(person.relations.bopaelssamling != null) {<li>bopaelssamling: @relations(person.relations.bopaelssamling)</li> }
+                        @if(person.relations.erstatingFor != null) {<li>erstatingFor: @relations(person.relations.erstatingFor)</li> }
+                        @if(person.relations.foraeldremydighedsboern != null) {<li>foraeldremydighedsboern: @relations(person.relations.foraeldremydighedsboern)</li> }
+                        @if(person.relations.retligHandleevneVaergemaalsindehaver != null) {<li>retligHandleevneVaergemaalsindehaver: @relations(person.relations.retligHandleevneVaergemaalsindehaver)</li> }
+                    </ul>
+                }
+		
+		<!-- OLD VERSION -->
+		
+	        <div class="panel-body">
+                <ul>
+                    <li>Uuid: @person.uuid</li>
+                    <li>Code: @person.code</li>
+                    <li>Message: @person.message</li>
+                </ul>            
+                @if(person.code == 200) {               
+                    <ul>
+                        @if(person.tidspunkt != null) {
+                            @if(person.tidspunkt.aktoerRefUrn) {<li>person.tidspunkt.aktoerRefUrn: @person.tidspunkt.aktoerRefUrn </li>}
+	                        @if(person.tidspunkt.aktoerRefUuid) {<li>person.tidspunkt.aktoerRefUuid: @person.tidspunkt.aktoerRefUuid </li>}
+	                        @if(person.tidspunkt.kommentar) {<li>person.tidspunkt.kommentar: @person.tidspunkt.kommentar </li>}
+	                        @if(person.tidspunkt.livscyklusKode) {<li>person.tidspunkt.livscyklusKode: @person.tidspunkt.livscyklusKode </li>}
+	                        @if(person.tidspunkt.tidspunkt != null) {<li>person.tidspunkt.tidspunkt: @person.tidspunkt.tidspunkt </li>}
+	                        @if(person.tidspunkt.isTidspunktGraenseIndikator != null) {<li>person.tidspunkt.isTidspunktGraenseIndikator: @person.tidspunkt.isTidspunktGraenseIndikator </li>}
+                        }
+                    </ul>
+                }
+                </div>
+            </div>
+        </div>
+}

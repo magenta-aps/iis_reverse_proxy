@@ -15,8 +15,37 @@ password = Adgangskode
 error.required = Feltet {0} skal udfyldes
 
 # navbar
-nav.title = CPR Look-up
+nav.title = CPR Broker WIn
 nav.quicksearch_placeholder = CPR eller navn
 nav.quicksearch_submit = Søg
 
 nav.logout_button = Log ud
+
+#---RESULTATSIDE
+resultat.egenskaber = Egenskaber
+resultat.tilstande = Tilstande
+resultat.registeroplysninger = Registeroplysninger
+
+#------ EGENSKABER
+person.firstname = fornavn
+person.middelname = mellemnavn
+person.lastname = efternavn
+person.callname = kaldenavn
+person.nameForAdressing = addresseringsnavn
+person.gender = køn
+person.birthdate = fødselsdato
+person.birthplace = fødested
+person.birthRegisteringAuthority = fødereg. myndighed
+
+#------ TILSTANDE
+person.tilstand.civilStatusKode = civilstatus
+person.tilstand.livStatusKode = livstatus 
+
+
+#------ REGISTER OPLYSNINGER
+person.registerInformation.cprCitizen.socialSecurityNumber = CPR-nummer
+person.registerInformation.cprCitizen.personNationalityCode = nationalitetskode
+person.registerInformation.cprCitizen.isMemberOfTheChurch = Folkekirkemedlem
+person.registerInformation.cprCitizen.isResearcherProtected = Forskerbeskyttelse
+person.registerInformation.cprCitizen.isNameAddressProtected = Navn- og Addressebeskyttelse
+person.registerInformation.cprCitizen.isPhoneNumberProtected = Telefonnummerbeskyttelse

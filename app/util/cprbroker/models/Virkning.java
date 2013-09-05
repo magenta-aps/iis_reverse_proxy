@@ -59,7 +59,7 @@ public class Virkning implements IVirkning {
 	public String kommentar() { return comment; }
 
 	@Override
-	public XMLGregorianCalendar fraTidspunkt() { return effectiveFromDate;	}
+	public XMLGregorianCalendar fraTidspunkt() { return effectiveFromDate; }
 
 	@Override
 	public Boolean isFraTidspunktGraenseIndikator() {	return isEffectiveFromLimit; }

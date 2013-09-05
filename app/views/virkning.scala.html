@@ -1,13 +1,13 @@
-@(virkning: util.cprbroker.IVirkning)
+@(virkning: util.cprbroker.IVirkning, isVirkning : Boolean)
 
 @if(virkning != null) {
-    <ul>
-       @if(virkning.aktoerRefUrn) {<li>aktoerRefUrn: @virkning.aktoerRefUrn</li>}
-       @if(virkning.aktoerRefUuid) {<li>aktoerRefUuid: @virkning.aktoerRefUuid</li>}
-       @if(virkning.kommentar) {<li>kommentar: @virkning.kommentar</li>}
-       @if(virkning.fraTidspunkt != null) {<li>fraTidspunkt: @virkning.fraTidspunkt</li>}
-       @if(virkning.isFraTidspunktGraenseIndikator != null) {<li>isFraTidspunktGraenseIndikator: @virkning.isFraTidspunktGraenseIndikator</li>}
-       @if(virkning.tilTidspunkt != null) {<li>tilTidspunkt: @virkning.tilTidspunkt</li>}
-       @if(virkning.isTilTidspunktGraenseIndikator != null) {<li>isTilTidspunktGraenseIndikator: @virkning.isTilTidspunktGraenseIndikator</li>}
-    </ul>
+    <span class="glyphicon glyphicon-time"></span>
+    @if(virkning.fraTidspunkt != null) {@virkning.fraTidspunkt}
+    @if(isVirkning) {
+        <span class="glyphicon glyphicon-arrow-right"></span>
+        @if(virkning.tilTidspunkt != null) {@virkning.tilTidspunkt}
+        @if(virkning.kommentar) {<br/>@virkning.kommentar</}
+        @if(virkning.aktoerRefUrn) {<br/>aktoerRefUrn: @virkning.aktoerRefUrn}
+        @if(virkning.aktoerRefUuid) {<br/>aktoerRefUuid: @virkning.aktoerRefUuid}
+    }
 }
