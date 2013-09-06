@@ -1,5 +1,5 @@
 # route /login
-login.pagetitle = CPR Broker WIn - Log på
+login.pagetitle = CPR Broker Web Interface - Log på
 login.title = Indtast venligst dine oplysninger
 login.submit = Log på
 
@@ -15,7 +15,7 @@ password = Adgangskode
 error.required = Feltet {0} skal udfyldes
 
 # navbar
-nav.title = CPR Broker WIn
+nav.title = CPR Broker Web Interface
 nav.quicksearch_placeholder = CPR eller navn
 nav.quicksearch_submit = Søg
 
