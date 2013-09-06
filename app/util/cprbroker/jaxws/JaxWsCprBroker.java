@@ -40,6 +40,7 @@ import oio.sagdok.person._1_0.SoegInputType;
 import oio.sagdok.person._1_0.SoegObjektType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
+import util.cprbroker.ERelationshipType;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
@@ -666,41 +667,41 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			List<IRelationship> tmpRelationship;
 			
 			// Add PersonRelation
-			tmpRelationship = getPersonRelation(personRelations.getAegtefaelle());
+			tmpRelationship = getPersonRelation(personRelations.getAegtefaelle(), ERelationshipType.aegtefaelle);
 			relationsBuilder.aegtefaelle(tmpRelationship);
 			
-			tmpRelationship = getPersonRelation(personRelations.getErstatningAf());
+			tmpRelationship = getPersonRelation(personRelations.getErstatningAf(), ERelationshipType.erstatingAf);
 			relationsBuilder.erstatingAf(tmpRelationship);
 			
-			tmpRelationship = getPersonRelation(personRelations.getFader());
+			tmpRelationship = getPersonRelation(personRelations.getFader(), ERelationshipType.fader);
 			relationsBuilder.fader(tmpRelationship);
 			
-			tmpRelationship = getPersonRelation(personRelations.getForaeldremyndighedsindehaver());
+			tmpRelationship = getPersonRelation(personRelations.getForaeldremyndighedsindehaver(), ERelationshipType.foraeldremyndighedsindehaver);
 			relationsBuilder.foraeldremyndighedsindehaver(tmpRelationship);
 			
-			tmpRelationship = getPersonRelation(personRelations.getModer());
+			tmpRelationship = getPersonRelation(personRelations.getModer(), ERelationshipType.moder);
 			relationsBuilder.moder(tmpRelationship);
 			
-			tmpRelationship = getPersonRelation(personRelations.getRegistreretPartner());
+			tmpRelationship = getPersonRelation(personRelations.getRegistreretPartner(), ERelationshipType.registreretPartner);
 			relationsBuilder.registreretPartner(tmpRelationship);
 			
-			tmpRelationship = getPersonRelation(personRelations.getRetligHandleevneVaergeForPersonen());
+			tmpRelationship = getPersonRelation(personRelations.getRetligHandleevneVaergeForPersonen(), ERelationshipType.retligHandleevneVaergeForPersonen);
 			relationsBuilder.retligHandleevneVaergeForPersonen(tmpRelationship);
 			
 			// Add PersonFlerRelation
-			tmpRelationship = getPersonFlerRelation(personRelations.getBoern());
+			tmpRelationship = getPersonFlerRelation(personRelations.getBoern(), ERelationshipType.boern);
 			relationsBuilder.boern(tmpRelationship);
 			
-			tmpRelationship = getPersonFlerRelation(personRelations.getBopaelssamling());
+			tmpRelationship = getPersonFlerRelation(personRelations.getBopaelssamling(), ERelationshipType.bopaelssamling);
 			relationsBuilder.bopaelssamling(tmpRelationship);
 
-			tmpRelationship = getPersonFlerRelation(personRelations.getErstatningFor());
+			tmpRelationship = getPersonFlerRelation(personRelations.getErstatningFor(), ERelationshipType.erstatingFor);
 			relationsBuilder.erstatingFor(tmpRelationship);
 
-			tmpRelationship = getPersonFlerRelation(personRelations.getForaeldremyndighedsboern());
+			tmpRelationship = getPersonFlerRelation(personRelations.getForaeldremyndighedsboern(), ERelationshipType.foraeldremydighedsboern);
 			relationsBuilder.foraeldremydighedsboern(tmpRelationship);
 
-			tmpRelationship = getPersonFlerRelation(personRelations.getRetligHandleevneVaergemaalsindehaver());
+			tmpRelationship = getPersonFlerRelation(personRelations.getRetligHandleevneVaergemaalsindehaver(), ERelationshipType.retligHandleevneVaergemaalsindehaver);
 			relationsBuilder.retligHandleevneVaergemaalsindehaver(tmpRelationship);
 		
 			// return the relations to the person
@@ -710,7 +711,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return null;
 	}
 	
-	private List<IRelationship> getPersonFlerRelation(List<PersonFlerRelationType> relations) {
+	private List<IRelationship> getPersonFlerRelation(List<PersonFlerRelationType> relations, ERelationshipType type) {
 		
 		if(!relations.isEmpty()) {
 			
@@ -721,7 +722,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			for(PersonFlerRelationType relation : relations) {
 				// get builder - NOTICE SINGULAR!
 				Relationship.Builder relationBuilder = new Relationship.Builder();
-			
+				
+				relationBuilder.type(type);
 				relationBuilder.comment(relation.getCommentText());
 				
 				if(relation.getReferenceID() != null) {
@@ -754,7 +756,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 
-	private List<IRelationship> getPersonRelation(List<PersonRelationType> relations) {
+	private List<IRelationship> getPersonRelation(List<PersonRelationType> relations, ERelationshipType type) {
 		
 		if(!relations.isEmpty()) {
 			
@@ -765,7 +767,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			for(PersonRelationType relation : relations) {
 				// get builder - NOTICE SINGULAR!
 				Relationship.Builder relationBuilder = new Relationship.Builder();
-			
+				relationBuilder.type(type);
+				
 				relationBuilder.comment(relation.getCommentText());
 				
 				if(relation.getReferenceID() != null) {

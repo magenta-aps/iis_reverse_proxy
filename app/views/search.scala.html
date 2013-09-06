@@ -364,45 +364,55 @@
         
 		
 		<div class="tab-pane" id="relationer">
+            <div class="row">
+            
+                
+                @* Split the relations into two by oddeven*@
                 @if(person.relations != null) {
-                    <ul>
-                        @if(person.relations.aegtefaelle != null) {<li>aegtefaelle: @relations(person.relations.aegtefaelle)</li> }
-                        @if(person.relations.erstatingAf != null) {<li>erstatingAf: @relations(person.relations.erstatingAf)</li> }
-                        @if(person.relations.fader != null) {<li>fader: @relations(person.relations.fader)</li> }
-                        @if(person.relations.foraeldremyndighedsindehaver != null) {<li>foraeldremyndighedsindehaver: @relations(person.relations.foraeldremyndighedsindehaver)</li> }
-                        @if(person.relations.moder != null) {<li>moder: @relations(person.relations.moder)</li> }
-                        @if(person.relations.registreretPartner != null) {<li>registreretPartner: @relations(person.relations.registreretPartner)</li> }
-                        @if(person.relations.retligHandleevneVaergeForPersonen != null) {<li>retligHandleevneVaergeForPersonen: @relations(person.relations.retligHandleevneVaergeForPersonen)</li> }
-                        
-                        @if(person.relations.boern != null) {<li>boern: @relations(person.relations.boern)</li> }
-                        @if(person.relations.bopaelssamling != null) {<li>bopaelssamling: @relations(person.relations.bopaelssamling)</li> }
-                        @if(person.relations.erstatingFor != null) {<li>erstatingFor: @relations(person.relations.erstatingFor)</li> }
-                        @if(person.relations.foraeldremydighedsboern != null) {<li>foraeldremydighedsboern: @relations(person.relations.foraeldremydighedsboern)</li> }
-                        @if(person.relations.retligHandleevneVaergemaalsindehaver != null) {<li>retligHandleevneVaergemaalsindehaver: @relations(person.relations.retligHandleevneVaergemaalsindehaver)</li> }
-                    </ul>
+                    @{
+                           
+                    }
                 }
-		
-		<!-- OLD VERSION -->
-		
-	        <div class="panel-body">
-                <ul>
-                    <li>Uuid: @person.uuid</li>
-                    <li>Code: @person.code</li>
-                    <li>Message: @person.message</li>
-                </ul>            
-                @if(person.code == 200) {               
-                    <ul>
-                        @if(person.tidspunkt != null) {
-                            @if(person.tidspunkt.aktoerRefUrn) {<li>person.tidspunkt.aktoerRefUrn: @person.tidspunkt.aktoerRefUrn </li>}
-	                        @if(person.tidspunkt.aktoerRefUuid) {<li>person.tidspunkt.aktoerRefUuid: @person.tidspunkt.aktoerRefUuid </li>}
-	                        @if(person.tidspunkt.kommentar) {<li>person.tidspunkt.kommentar: @person.tidspunkt.kommentar </li>}
-	                        @if(person.tidspunkt.livscyklusKode) {<li>person.tidspunkt.livscyklusKode: @person.tidspunkt.livscyklusKode </li>}
-	                        @if(person.tidspunkt.tidspunkt != null) {<li>person.tidspunkt.tidspunkt: @person.tidspunkt.tidspunkt </li>}
-	                        @if(person.tidspunkt.isTidspunktGraenseIndikator != null) {<li>person.tidspunkt.isTidspunktGraenseIndikator: @person.tidspunkt.isTidspunktGraenseIndikator </li>}
-                        }
-                    </ul>
+                <div class="col-md-6">
+                    <br/>
+                @if(person.relations != null) {
+                    @for((relation, index) <- person.relations.allRelations.zipWithIndex) {
+                        @if(index % 2 == 0) {
+                            @relations(relation)
+                        }    
+                    }    
                 }
                 </div>
+                
+                <div class="col-md-6">
+                    <br/>
+                @if(person.relations != null) {
+                    @for((relation, index) <- person.relations.allRelations.zipWithIndex) {
+                        @if(index % 2 == 1) {
+                            @relations(relation)
+                        }    
+                    }    
+                }
+                </div>
+                
             </div>
+            <div class="col-md-6">
+		
+                <!-- OLD VERSION -->
+
+	                @if(person.code == 200) {               
+	                    <ul>
+	                        @if(person.tidspunkt != null) {
+	                            @if(person.tidspunkt.aktoerRefUrn) {<li>person.tidspunkt.aktoerRefUrn: @person.tidspunkt.aktoerRefUrn </li>}
+		                        @if(person.tidspunkt.aktoerRefUuid) {<li>person.tidspunkt.aktoerRefUuid: @person.tidspunkt.aktoerRefUuid </li>}
+		                        @if(person.tidspunkt.kommentar) {<li>person.tidspunkt.kommentar: @person.tidspunkt.kommentar </li>}
+		                        @if(person.tidspunkt.livscyklusKode) {<li>person.tidspunkt.livscyklusKode: @person.tidspunkt.livscyklusKode </li>}
+		                        @if(person.tidspunkt.tidspunkt != null) {<li>person.tidspunkt.tidspunkt: @person.tidspunkt.tidspunkt </li>}
+		                        @if(person.tidspunkt.isTidspunktGraenseIndikator != null) {<li>person.tidspunkt.isTidspunktGraenseIndikator: @person.tidspunkt.isTidspunktGraenseIndikator </li>}
+	                        }
+	                    </ul>
+	                }
+	            </div>
+	        </div>
         </div>
 }

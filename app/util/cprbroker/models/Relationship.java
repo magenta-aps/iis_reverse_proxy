@@ -1,5 +1,6 @@
 package util.cprbroker.models;
 
+import util.cprbroker.ERelationshipType;
 import util.cprbroker.IPerson;
 import util.cprbroker.IVirkning;
 import util.cprbroker.IRelationship;
@@ -11,6 +12,7 @@ public class Relationship implements IRelationship {
 	private final String referenceUuid;
 	private final IVirkning effect;
 	private final IPerson person;
+	private final ERelationshipType type;
 	
 	public static class Builder{
 		
@@ -19,6 +21,7 @@ public class Relationship implements IRelationship {
 		private String referenceUuid;
 		private IVirkning effect;
 		private IPerson person;
+		private ERelationshipType type;
 		
 		public IRelationship build() { return new Relationship(this); }
 		
@@ -26,7 +29,8 @@ public class Relationship implements IRelationship {
 		public Builder referenceUrn(String newUrn) { referenceUrn = newUrn; return this; }
 		public Builder referenceUuid(String newUuid) { referenceUuid = newUuid; return this; }
 		public Builder effect(IVirkning newEffect) { effect = newEffect; return this; }
-		public Builder person(IPerson newPerson) {person = newPerson; return this;}
+		public Builder person(IPerson newPerson) { person = newPerson; return this;}
+		public Builder type(ERelationshipType newType) { type = newType; return this; }
 		
 	}
 	
@@ -36,6 +40,7 @@ public class Relationship implements IRelationship {
 		referenceUuid = builder.referenceUuid;
 		effect = builder.effect;
 		person = builder.person;
+		type = builder.type;
 	}
 	
 	@Override
@@ -52,5 +57,8 @@ public class Relationship implements IRelationship {
 	
 	@Override
 	public IPerson person() { return person; }
+
+	@Override
+	public ERelationshipType relationshipType() { return type;}
 
 }

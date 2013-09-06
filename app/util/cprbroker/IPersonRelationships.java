@@ -19,7 +19,8 @@ public interface IPersonRelationships {
 	List<PersonRelationType> p12 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getRetligHandleevneVaergeForPersonen();
 	List<PersonFlerRelationType> p13 = laesOutput.getLaesResultat().getRegistrering().getRelationListe().getRetligHandleevneVaergemaalsindehaver();
 	*/
-	
+	int numberOfRelations();
+	List<IRelationship> allRelations();
 	List<IRelationship> aegtefaelle();
 	List<IRelationship> boern();
 	List<IRelationship> bopaelssamling();

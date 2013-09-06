@@ -20,5 +20,6 @@ public interface IRelationship {
 	String referenceUuid();
 	IVirkning effect();
 	IPerson person();
+	ERelationshipType relationshipType();
 	
 }

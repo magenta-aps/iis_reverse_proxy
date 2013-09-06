@@ -1,12 +1,14 @@
 package util.cprbroker.models;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRelationship;
 
 public class PersonRelationships implements IPersonRelationships {
-
+	
+	private final int numberOfRelations;
 	private final List<IRelationship> aegtefaelle;
 	private final List<IRelationship> boern;
 	private final List<IRelationship> bopaelssamling;
@@ -19,8 +21,10 @@ public class PersonRelationships implements IPersonRelationships {
 	private final List<IRelationship> registreretPartner;
 	private final List<IRelationship> retligHandleevneVaergeForPersonen;
 	private final List<IRelationship> retligHandleevneVaergemaalsindehaver;
+	private final List<IRelationship> allRelations;
 	
 	public static class Builder {
+		private int numberOfRelations = 0; 
 		private List<IRelationship> aegtefaelle;
 		private List<IRelationship> boern;
 		private List<IRelationship> bopaelssamling;
@@ -33,38 +37,56 @@ public class PersonRelationships implements IPersonRelationships {
 		private List<IRelationship> registreretPartner;
 		private List<IRelationship> retligHandleevneVaergeForPersonen;
 		private List<IRelationship> retligHandleevneVaergemaalsindehaver;
-		
+				
 		public IPersonRelationships build() { return new PersonRelationships(this); }
 				
-		public Builder aegtefaelle(List<IRelationship> newRelationship) { aegtefaelle = newRelationship; return this; }
-		public Builder boern(List<IRelationship> newRelationship) { boern = newRelationship; return this; }
-		public Builder bopaelssamling(List<IRelationship> newRelationship) { bopaelssamling = newRelationship; return this; }
-		public Builder erstatingAf(List<IRelationship> newRelationship) { erstatingAf = newRelationship; return this; }
-		public Builder erstatingFor(List<IRelationship> newRelationship) { erstatingFor = newRelationship; return this; }
-		public Builder fader(List<IRelationship> newRelationship) { fader = newRelationship; return this; }
-		public Builder foraeldremydighedsboern(List<IRelationship> newRelationship) { foraeldremydighedsboern = newRelationship; return this; }
-		public Builder foraeldremyndighedsindehaver(List<IRelationship> newRelationship) { foraeldremyndighedsindehaver = newRelationship; return this; }
-		public Builder moder(List<IRelationship> newRelationship) { moder = newRelationship; return this; }
-		public Builder registreretPartner(List<IRelationship> newRelationship) { registreretPartner = newRelationship; return this; }
-		public Builder retligHandleevneVaergeForPersonen(List<IRelationship> newRelationship) { retligHandleevneVaergeForPersonen = newRelationship; return this; }
-		public Builder retligHandleevneVaergemaalsindehaver(List<IRelationship> newRelationship) { retligHandleevneVaergemaalsindehaver = newRelationship; return this; }
+		public Builder aegtefaelle(List<IRelationship> newRelationship) { numberOfRelations++; aegtefaelle = newRelationship; return this; }
+		public Builder boern(List<IRelationship> newRelationship) { numberOfRelations++; boern = newRelationship; return this; }
+		public Builder bopaelssamling(List<IRelationship> newRelationship) { numberOfRelations++; bopaelssamling = newRelationship; return this; }
+		public Builder erstatingAf(List<IRelationship> newRelationship) { numberOfRelations++; erstatingAf = newRelationship; return this; }
+		public Builder erstatingFor(List<IRelationship> newRelationship) { numberOfRelations++; erstatingFor = newRelationship; return this; }
+		public Builder fader(List<IRelationship> newRelationship) { numberOfRelations++; fader = newRelationship; return this; }
+		public Builder foraeldremydighedsboern(List<IRelationship> newRelationship) { numberOfRelations++; foraeldremydighedsboern = newRelationship; return this; }
+		public Builder foraeldremyndighedsindehaver(List<IRelationship> newRelationship) { numberOfRelations++; foraeldremyndighedsindehaver = newRelationship; return this; }
+		public Builder moder(List<IRelationship> newRelationship) { numberOfRelations++; moder = newRelationship; return this; }
+		public Builder registreretPartner(List<IRelationship> newRelationship) { numberOfRelations++; registreretPartner = newRelationship; return this; }
+		public Builder retligHandleevneVaergeForPersonen(List<IRelationship> newRelationship) { numberOfRelations++; retligHandleevneVaergeForPersonen = newRelationship; return this; }
+		public Builder retligHandleevneVaergemaalsindehaver(List<IRelationship> newRelationship) { numberOfRelations++; retligHandleevneVaergemaalsindehaver = newRelationship; return this; }
 	}
 	
 	
 	private PersonRelationships(Builder builder) {
-	
-		aegtefaelle = builder.aegtefaelle;
-		boern = builder.boern;
-		bopaelssamling = builder.bopaelssamling;
+
 		erstatingAf = builder.erstatingAf;
 		erstatingFor = builder.erstatingFor; 
 		fader = builder.fader;
-		foraeldremydighedsboern = builder.foraeldremydighedsboern;
-		foraeldremyndighedsindehaver = builder.foraeldremyndighedsindehaver;
 		moder = builder.moder;
-		registreretPartner = builder.registreretPartner;
-		retligHandleevneVaergeForPersonen = builder.retligHandleevneVaergeForPersonen;
+		foraeldremyndighedsindehaver = builder.foraeldremyndighedsindehaver;
+		retligHandleevneVaergeForPersonen = builder.retligHandleevneVaergeForPersonen;		
+		aegtefaelle = builder.aegtefaelle;
+		registreretPartner = builder.registreretPartner;		
+		boern = builder.boern;
+		foraeldremydighedsboern = builder.foraeldremydighedsboern;
 		retligHandleevneVaergemaalsindehaver = builder.retligHandleevneVaergemaalsindehaver;
+		bopaelssamling = builder.bopaelssamling;
+		numberOfRelations = builder.numberOfRelations;
+		
+		List<IRelationship> tmpAllRelations = new LinkedList<IRelationship>();
+		
+		if(erstatingAf != null) tmpAllRelations.addAll(erstatingAf);
+		if(erstatingFor != null) tmpAllRelations.addAll(erstatingFor);
+		if(fader != null) tmpAllRelations.addAll(fader);
+		if(moder != null) tmpAllRelations.addAll(moder);
+		if(foraeldremyndighedsindehaver != null) tmpAllRelations.addAll(foraeldremyndighedsindehaver);		
+		if(retligHandleevneVaergeForPersonen != null) tmpAllRelations.addAll(retligHandleevneVaergeForPersonen);
+		if(aegtefaelle != null) tmpAllRelations.addAll(aegtefaelle);
+		if(registreretPartner != null) tmpAllRelations.addAll(registreretPartner);
+		if(boern != null) tmpAllRelations.addAll(boern);
+		if(foraeldremydighedsboern != null) tmpAllRelations.addAll(foraeldremydighedsboern);
+		if(retligHandleevneVaergemaalsindehaver != null) tmpAllRelations.addAll(retligHandleevneVaergemaalsindehaver);
+		if(bopaelssamling != null) tmpAllRelations.addAll(bopaelssamling);
+
+		allRelations = tmpAllRelations;
 	}
 	
 	@Override
@@ -102,5 +124,11 @@ public class PersonRelationships implements IPersonRelationships {
 
 	@Override
 	public List<IRelationship> retligHandleevneVaergemaalsindehaver() {	return retligHandleevneVaergemaalsindehaver; }
+
+	@Override
+	public int numberOfRelations() { return numberOfRelations; }
+
+	@Override
+	public List<IRelationship> allRelations() { return allRelations; }
 
 }
