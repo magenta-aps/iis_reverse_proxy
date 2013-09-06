@@ -11,6 +11,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.auth.Secured;
+import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IPerson;
 import util.cprbroker.IUuid;
@@ -76,7 +77,7 @@ public class Search extends Controller {
     	IUuids uuids = cprBroker.search(firstname, middlename, lastname, 100);
 		 
 		if(uuids.code() == 200) {
-			List<IPerson> persons = cprBroker.list(uuids);
+			List<IPerson> persons = cprBroker.list(uuids, ESourceUsageOrder.LocalOnly);
 			
 			return ok(list.render(persons));
 		}
@@ -93,7 +94,7 @@ public class Search extends Controller {
 	public Result show(String uuid) {
 		play.Logger.info(uuid);
 		
-		IPerson person = cprBroker.read(uuid);
+		IPerson person = cprBroker.read(uuid, ESourceUsageOrder.LocalOnly, true);
 		
 		return ok(search.render(Form.form(SearchInput.class), person));
 		

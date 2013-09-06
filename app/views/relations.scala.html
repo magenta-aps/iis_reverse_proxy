@@ -8,6 +8,9 @@
            @if(relation.referenceUrn){<li>referenceUrn: @relation.referenceUrn</li>}
            @if(relation.referenceUuid){<li>referenceUuid: @relation.referenceUuid</li>}
            @if(relation.effect != null) {@virkning(relation.effect, true)}
+           @if(relation.person != null) {
+               <li>@relation.person.code @relation.person.message</li>
+               }
        }
    }
 </ul>

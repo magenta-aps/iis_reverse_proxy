@@ -40,6 +40,7 @@ import oio.sagdok.person._1_0.SoegInputType;
 import oio.sagdok.person._1_0.SoegObjektType;
 import oio.sagdok.person._1_0.TilstandListeType;
 import oio.sagdok.person._1_0.VerdenAdresseType;
+import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
 import util.cprbroker.ICprBrokerAccessor;
@@ -92,13 +93,13 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		factory = new CPRBrokerSOAPFactory();
 	}
 	
-	private PartSoap12 getService(final String sourceUsageOrderHeader) {
+	private PartSoap12 getService(final ESourceUsageOrder sourceUsageOrderHeader) {
 		PartSoap12 tmpService = null;
 		factory.setEndpoint(endpoint);
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
 		//TODO - figure out how to seperate this, so it can be set dynamically
-		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader);
+		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
 
 		try {
 			tmpService = factory.getInstance();
@@ -107,14 +108,10 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}
 		return tmpService;
 	}
-	
-	@Override
-	public void setSourceUsageOrderHeader(String sourceUsageOrderHeader) {
-	}
-		
+			
 	@Override
 	public IUuid getUuid(final String cprNumber) {
-		PartSoap12 service = getService("LocalOnly");
+		PartSoap12 service = getService(ESourceUsageOrder.LocalOnly);
 		GetUuidOutputType uuid = service.getUuid(cprNumber);
 		
 		return new Uuid(uuid.getUUID(),
@@ -152,7 +149,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		input.setSoegObjekt(soegObjekt);
 		
 		// Access CPR broker
-		PartSoap12 service = getService("LocalOnly");
+		PartSoap12 service = getService(ESourceUsageOrder.LocalOnly);
 		SoegOutputType soegOutput =  service.search(input);
 		
 		
@@ -172,7 +169,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	@Override
-	public List<IPerson> list(final IUuids uuids) {
+	public List<IPerson> list(final IUuids uuids, final ESourceUsageOrder sourceUsageOrder) {
 		long start = System.currentTimeMillis();
 		
 		ListInputType listInput = new ListInputType();
@@ -182,7 +179,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		long request = System.currentTimeMillis();
 		// Access CPR broker
-		PartSoap12 service = getService("LocalOnly");
+		PartSoap12 service = getService(sourceUsageOrder);
 		ListOutputType listOutput =  service.list(listInput);
 		long response = System.currentTimeMillis();
 						
@@ -195,7 +192,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		List<String> uuidList = uuids.uuids();
 		
 		for(int i=0;i<size;i++) {
-			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur());
+			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur(), false);
 			persons.add(tmpPerson);
 		}
 				
@@ -207,7 +204,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 	
 	@Override
-	public IPerson read(final String uuid) {
+	public IPerson read(final String uuid, ESourceUsageOrder sourceUsageOrder, boolean isGettingRelations) {
 		
 		// Setup the input parameters
 		LaesInputType laesInput = new LaesInputType();
@@ -217,7 +214,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// laesInput.setRegistreringTilFilter(value) Registrations reported before this date
 		
 		// Access CPR broker
-		PartSoap12 service = getService("LocalOnly");
+		PartSoap12 service = getService(sourceUsageOrder);
 		LaesOutputType laesOutput =  service.read(laesInput);
 				
 		// Building a person from the result
@@ -225,11 +222,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		StandardReturType standardReturType = laesOutput.getStandardRetur();
 
 		
-		return getPerson(uuid, laesOutput.getLaesResultat(), standardReturType);
+		return getPerson(uuid, laesOutput.getLaesResultat(), standardReturType, isGettingRelations);
 	}
 
 	private IPerson getPerson(final String uuid, LaesResultatType laesResultatType,
-			StandardReturType standardReturType) {
+			StandardReturType standardReturType, boolean isGettingRelations) {
 		//// Start building with the required parameters
 		Person.Builder builder =
 				new Person.Builder(standardReturType.getStatusKode().intValue(),
@@ -244,9 +241,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			ITilstand newTilstand = getTilstande(laesResultatType);
 			builder.tilstand(newTilstand);
 			
-			// Assigning person relations
-			IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
-			builder.relations(newRelations);
+			// Assigning person relations, if they should be collected!
+			if(isGettingRelations) {
+				IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
+				builder.relations(newRelations);
+			}
 			
 			// Assigning person attributes
 			List<EgenskabType> personAttributes =
@@ -728,6 +727,15 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				if(relation.getReferenceID() != null) {
 					relationBuilder.referenceUrn(relation.getReferenceID().getURNIdentifikator())
 									.referenceUuid(relation.getReferenceID().getUUID());
+					
+					// Get the information about the person, using LocalOnly
+					// Note this will make multiply calls to the Read method per person
+					if(relation.getReferenceID().getUUID() != null) {
+						IPerson newPerson = read(relation.getReferenceID().getUUID(),
+													ESourceUsageOrder.LocalOnly,
+													false);
+						relationBuilder.person(newPerson);
+					}
 				}
 				// Add effect to the person
 				IVirkning newEffect = getEffect(relation.getVirkning());
@@ -763,7 +771,18 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				if(relation.getReferenceID() != null) {
 					relationBuilder.referenceUrn(relation.getReferenceID().getURNIdentifikator())
 									.referenceUuid(relation.getReferenceID().getUUID());
+
+					// Get the information about the person, using LocalOnly
+					// Note this will make multiply calls to the Read method per person
+					if(relation.getReferenceID().getUUID() != null) {
+						IPerson newPerson = read(relation.getReferenceID().getUUID(),
+													ESourceUsageOrder.LocalOnly,
+													false);
+						relationBuilder.person(newPerson);
+					}
+
 				}
+				
 				// Add effect to the person
 				IVirkning newEffect = getEffect(relation.getVirkning());
 				relationBuilder.effect(newEffect);								
