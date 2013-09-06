@@ -21,7 +21,6 @@ public class PersonRelationships implements IPersonRelationships {
 	private final List<IRelationship> registreretPartner;
 	private final List<IRelationship> retligHandleevneVaergeForPersonen;
 	private final List<IRelationship> retligHandleevneVaergemaalsindehaver;
-	private final List<IRelationship> allRelations;
 	
 	public static class Builder {
 		private int numberOfRelations = 0; 
@@ -52,6 +51,7 @@ public class PersonRelationships implements IPersonRelationships {
 		public Builder registreretPartner(List<IRelationship> newRelationship) { numberOfRelations++; registreretPartner = newRelationship; return this; }
 		public Builder retligHandleevneVaergeForPersonen(List<IRelationship> newRelationship) { numberOfRelations++; retligHandleevneVaergeForPersonen = newRelationship; return this; }
 		public Builder retligHandleevneVaergemaalsindehaver(List<IRelationship> newRelationship) { numberOfRelations++; retligHandleevneVaergemaalsindehaver = newRelationship; return this; }
+		
 	}
 	
 	
@@ -71,22 +71,6 @@ public class PersonRelationships implements IPersonRelationships {
 		bopaelssamling = builder.bopaelssamling;
 		numberOfRelations = builder.numberOfRelations;
 		
-		List<IRelationship> tmpAllRelations = new LinkedList<IRelationship>();
-		
-		if(erstatingAf != null) tmpAllRelations.addAll(erstatingAf);
-		if(erstatingFor != null) tmpAllRelations.addAll(erstatingFor);
-		if(fader != null) tmpAllRelations.addAll(fader);
-		if(moder != null) tmpAllRelations.addAll(moder);
-		if(foraeldremyndighedsindehaver != null) tmpAllRelations.addAll(foraeldremyndighedsindehaver);		
-		if(retligHandleevneVaergeForPersonen != null) tmpAllRelations.addAll(retligHandleevneVaergeForPersonen);
-		if(aegtefaelle != null) tmpAllRelations.addAll(aegtefaelle);
-		if(registreretPartner != null) tmpAllRelations.addAll(registreretPartner);
-		if(boern != null) tmpAllRelations.addAll(boern);
-		if(foraeldremydighedsboern != null) tmpAllRelations.addAll(foraeldremydighedsboern);
-		if(retligHandleevneVaergemaalsindehaver != null) tmpAllRelations.addAll(retligHandleevneVaergemaalsindehaver);
-		if(bopaelssamling != null) tmpAllRelations.addAll(bopaelssamling);
-
-		allRelations = tmpAllRelations;
 	}
 	
 	@Override
@@ -127,8 +111,5 @@ public class PersonRelationships implements IPersonRelationships {
 
 	@Override
 	public int numberOfRelations() { return numberOfRelations; }
-
-	@Override
-	public List<IRelationship> allRelations() { return allRelations; }
 
 }

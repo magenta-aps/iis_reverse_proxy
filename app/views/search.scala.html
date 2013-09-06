@@ -373,24 +373,11 @@
                            
                     }
                 }
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <br/>
-                @if(person.relations != null) {
-                    @for((relation, index) <- person.relations.allRelations.zipWithIndex) {
-                        @if(index % 2 == 0) {
-                            @relations(relation)
-                        }    
-                    }    
-                }
-                </div>
-                
-                <div class="col-md-6">
-                    <br/>
-                @if(person.relations != null) {
-                    @for((relation, index) <- person.relations.allRelations.zipWithIndex) {
-                        @if(index % 2 == 1) {
-                            @relations(relation)
-                        }    
+                @if(person.relationsWithPerson != null) {
+                    @for(r <- person.relationsWithPerson.allRelations) {
+                            @relation(r)
                     }    
                 }
                 </div>

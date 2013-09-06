@@ -11,7 +11,6 @@ public class Relationship implements IRelationship {
 	private final String referenceUrn;
 	private final String referenceUuid;
 	private final IVirkning effect;
-	private final IPerson person;
 	private final ERelationshipType type;
 	
 	public static class Builder{
@@ -20,7 +19,6 @@ public class Relationship implements IRelationship {
 		private String referenceUrn;
 		private String referenceUuid;
 		private IVirkning effect;
-		private IPerson person;
 		private ERelationshipType type;
 		
 		public IRelationship build() { return new Relationship(this); }
@@ -29,7 +27,6 @@ public class Relationship implements IRelationship {
 		public Builder referenceUrn(String newUrn) { referenceUrn = newUrn; return this; }
 		public Builder referenceUuid(String newUuid) { referenceUuid = newUuid; return this; }
 		public Builder effect(IVirkning newEffect) { effect = newEffect; return this; }
-		public Builder person(IPerson newPerson) { person = newPerson; return this;}
 		public Builder type(ERelationshipType newType) { type = newType; return this; }
 		
 	}
@@ -39,7 +36,6 @@ public class Relationship implements IRelationship {
 		referenceUrn = builder.referenceUrn;
 		referenceUuid = builder.referenceUuid;
 		effect = builder.effect;
-		person = builder.person;
 		type = builder.type;
 	}
 	
@@ -55,9 +51,6 @@ public class Relationship implements IRelationship {
 	@Override
 	public IVirkning effect() { return effect; }
 	
-	@Override
-	public IPerson person() { return person; }
-
 	@Override
 	public ERelationshipType relationshipType() { return type;}
 

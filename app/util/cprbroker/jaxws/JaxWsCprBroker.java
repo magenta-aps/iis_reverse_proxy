@@ -48,6 +48,7 @@ import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IDanishAddress;
 import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRegisterInformation;
+import util.cprbroker.IRelationshipWithIPerson;
 import util.cprbroker.ITidspunkt;
 import util.cprbroker.ITilstand;
 import util.cprbroker.IUuids;
@@ -61,7 +62,9 @@ import util.cprbroker.models.DanishAddress;
 import util.cprbroker.models.GreenlandicAddress;
 import util.cprbroker.models.Person;
 import util.cprbroker.models.PersonRelationships;
+import util.cprbroker.models.PersonRelationshipsWithPerson;
 import util.cprbroker.models.Relationship;
+import util.cprbroker.models.RelationshipWithPerson;
 import util.cprbroker.models.Tidspunkt;
 import util.cprbroker.models.Tilstand;
 import util.cprbroker.models.Uuid;
@@ -78,8 +81,6 @@ import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
 public class JaxWsCprBroker implements ICprBrokerAccessor {
 
-	
-	private String source = "LocalOnly";
 	private final String endpoint;
 	private final String applicationToken;
 	private final String userToken;
@@ -122,7 +123,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	@Override
 	public IUuids search(String firstname, String middlename, String lastname, int maxResults) {
-
+		long start = System.currentTimeMillis();
 		// Setup the input parameters
 		SoegInputType input = new SoegInputType();
 		input.setMaksimalAntalKvantitet(BigInteger.valueOf(maxResults));
@@ -148,11 +149,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		soegObjekt.setSoegAttributListe(soegAttributListeType);
 		
 		input.setSoegObjekt(soegObjekt);
-		
+		long request = System.currentTimeMillis();
 		// Access CPR broker
 		PartSoap12 service = getService(ESourceUsageOrder.LocalOnly);
 		SoegOutputType soegOutput =  service.search(input);
-		
+		long response = System.currentTimeMillis();
 		
 		// Add the Uuids
 		ArrayOfString idList = soegOutput.getIdliste();
@@ -163,9 +164,12 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}	
 					
 		//return the Uuids
-		return new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
-						soegOutput.getStandardRetur().getFejlbeskedTekst(),
-						newUuids);
+		IUuids uuids = new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
+				soegOutput.getStandardRetur().getFejlbeskedTekst(),
+				newUuids);
+		long done = System.currentTimeMillis();
+		play.Logger.info("SEARCH: Time: " + (done - start) + "ms, before request: " + (request - start) + "ms, request: " + (response - request) + " parsing: " + (done - response) +"ms");
+		return uuids;
 		
 	}
 
@@ -198,7 +202,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}
 				
 		long done = System.currentTimeMillis();
-		play.Logger.info("Time: " + (done - start) + "ms, before request: " + (request - start) + "ms, request: " + (response - request) + " parsing: " + (done - response) +"ms");
+		play.Logger.info("LIST: Time: " + (done - start) + "ms, before request: " + (request - start) + "ms, request: " + (response - request) + " parsing: " + (done - response) +"ms");
 		
 		return persons;
 				
@@ -206,7 +210,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	@Override
 	public IPerson read(final String uuid, ESourceUsageOrder sourceUsageOrder, boolean isGettingRelations) {
-		
+		long start = System.currentTimeMillis();
 		// Setup the input parameters
 		LaesInputType laesInput = new LaesInputType();
 		laesInput.setUUID(uuid);
@@ -217,13 +221,17 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// Access CPR broker
 		PartSoap12 service = getService(sourceUsageOrder);
 		LaesOutputType laesOutput =  service.read(laesInput);
-				
+		long parse = System.currentTimeMillis();		
 		// Building a person from the result
 		//// Getting the standardReturType 
 		StandardReturType standardReturType = laesOutput.getStandardRetur();
 
+		IPerson person = getPerson(uuid, laesOutput.getLaesResultat(), standardReturType, isGettingRelations);
+		long done = System.currentTimeMillis();
 		
-		return getPerson(uuid, laesOutput.getLaesResultat(), standardReturType, isGettingRelations);
+		play.Logger.info("READ: Time: " + (done - start) + "ms, request: " + (parse - start) + " parsing: " + (done - parse) +"ms" + " isGettingRelations: "+ isGettingRelations);
+		
+		return person;
 	}
 
 	private IPerson getPerson(final String uuid, LaesResultatType laesResultatType,
@@ -242,10 +250,57 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			ITilstand newTilstand = getTilstande(laesResultatType);
 			builder.tilstand(newTilstand);
 			
-			// Assigning person relations, if they should be collected!
+			// Assigning person relations
+			IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
+			builder.relations(newRelations);
+
+			// Getting the person information for each relation
 			if(isGettingRelations) {
-				IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
-				builder.relations(newRelations);
+				
+				List<IRelationship> allRelations = new LinkedList<IRelationship>();
+
+				// Get all the relations				
+				if(newRelations.erstatingAf() != null) allRelations.addAll(newRelations.erstatingAf());
+				if(newRelations.erstatingFor() != null) allRelations.addAll(newRelations.erstatingFor());
+				if(newRelations.fader() != null) allRelations.addAll(newRelations.fader());
+				if(newRelations.moder() != null) allRelations.addAll(newRelations.moder());
+				if(newRelations.foraeldremyndighedsindehaver() != null) allRelations.addAll(newRelations.foraeldremyndighedsindehaver());		
+				if(newRelations.retligHandleevneVaergeForPersonen() != null) allRelations.addAll(newRelations.retligHandleevneVaergeForPersonen());
+				if(newRelations.aegtefaelle() != null) allRelations.addAll(newRelations.aegtefaelle());
+				if(newRelations.registreretPartner() != null) allRelations.addAll(newRelations.registreretPartner());
+				if(newRelations.boern() != null) allRelations.addAll(newRelations.boern());
+				if(newRelations.foraeldremydighedsboern() != null) allRelations.addAll(newRelations.foraeldremydighedsboern());
+				if(newRelations.retligHandleevneVaergemaalsindehaver() != null) allRelations.addAll(newRelations.retligHandleevneVaergemaalsindehaver());
+				if(newRelations.bopaelssamling() != null) allRelations.addAll(newRelations.bopaelssamling());
+
+				List<String> relationUuids = new LinkedList<String>();
+				// Get all the uuids from those relations
+				for( IRelationship relation : allRelations){
+					relationUuids.add(relation.referenceUuid());
+				}
+				IUuids uuidsFromRelations = new Uuids(200, "", relationUuids);
+				
+				// Get all the persons with those uuids
+				List<IPerson> relationshipPersons = list(uuidsFromRelations, ESourceUsageOrder.LocalOnly);
+				
+				
+				RelationshipWithPerson.Builder relationshipWithPersonBuilder;
+				List<IRelationshipWithIPerson> relationshipsWithPersonList = new LinkedList<IRelationshipWithIPerson>();
+				
+				// Make the IPersonRelationshipsWithIPersons
+				for(int i = 0; i < relationshipPersons.size(); i++) {
+					
+					relationshipWithPersonBuilder = new RelationshipWithPerson.Builder();
+					
+					relationshipWithPersonBuilder.relationship(allRelations.get(i));
+					relationshipWithPersonBuilder.person(relationshipPersons.get(i));
+					
+					relationshipsWithPersonList.add(relationshipWithPersonBuilder.build());
+				}
+				
+				// Add the relationshipsWithPerson to the person
+				builder.relationsWithPerson(new PersonRelationshipsWithPerson(relationshipsWithPersonList));
+
 			}
 			
 			// Assigning person attributes
@@ -703,7 +758,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 			tmpRelationship = getPersonFlerRelation(personRelations.getRetligHandleevneVaergemaalsindehaver(), ERelationshipType.retligHandleevneVaergemaalsindehaver);
 			relationsBuilder.retligHandleevneVaergemaalsindehaver(tmpRelationship);
-		
+					
 			// return the relations to the person
 			return relationsBuilder.build();
 			
@@ -729,15 +784,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				if(relation.getReferenceID() != null) {
 					relationBuilder.referenceUrn(relation.getReferenceID().getURNIdentifikator())
 									.referenceUuid(relation.getReferenceID().getUUID());
-					
-					// Get the information about the person, using LocalOnly
-					// Note this will make multiply calls to the Read method per person
-					if(relation.getReferenceID().getUUID() != null) {
-						IPerson newPerson = read(relation.getReferenceID().getUUID(),
-													ESourceUsageOrder.LocalOnly,
-													false);
-						relationBuilder.person(newPerson);
-					}
 				}
 				// Add effect to the person
 				IVirkning newEffect = getEffect(relation.getVirkning());
@@ -774,16 +820,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				if(relation.getReferenceID() != null) {
 					relationBuilder.referenceUrn(relation.getReferenceID().getURNIdentifikator())
 									.referenceUuid(relation.getReferenceID().getUUID());
-
-					// Get the information about the person, using LocalOnly
-					// Note this will make multiply calls to the Read method per person
-					if(relation.getReferenceID().getUUID() != null) {
-						IPerson newPerson = read(relation.getReferenceID().getUUID(),
-													ESourceUsageOrder.LocalOnly,
-													false);
-						relationBuilder.person(newPerson);
-					}
-
 				}
 				
 				// Add effect to the person

@@ -19,7 +19,6 @@ public interface IRelationship {
 	String referenceUrn();
 	String referenceUuid();
 	IVirkning effect();
-	IPerson person();
 	ERelationshipType relationshipType();
 	
 }

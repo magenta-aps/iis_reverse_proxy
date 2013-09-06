@@ -22,5 +22,7 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	
 	IPersonRelationships relations();
 	
+	IPersonRelationshipsWithIPerson relationsWithPerson();
+	
 	ITilstand tilstand();
 }
