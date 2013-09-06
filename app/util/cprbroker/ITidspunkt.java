@@ -18,5 +18,5 @@ public interface ITidspunkt {
 	String livscyklusKode();
 	XMLGregorianCalendar tidspunkt();
 	Boolean isTidspunktGraenseIndikator();
-
+	String sourceName();
 }

@@ -1,5 +1,8 @@
 package util.cprbroker.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import util.cprbroker.ITidspunkt;
@@ -12,7 +15,8 @@ public class Tidspunkt implements ITidspunkt {
 	private final String livscyklusKode;
 	private final XMLGregorianCalendar tidspunkt;
 	private final Boolean isTidspunktGraenseIndikator;
-
+	private final Map<String, String> sourceUuidMap;
+	
 	public static class Builder {
 		private String aktoerRefUrn;
 		private String aktoerRefUuid;
@@ -39,6 +43,12 @@ public class Tidspunkt implements ITidspunkt {
 		livscyklusKode = builder.livscyklusKode;
 		tidspunkt = builder.tidspunkt;
 		isTidspunktGraenseIndikator = builder.isTidspunktGraenseIndikator;
+		
+		sourceUuidMap = new HashMap<String, String>();
+		sourceUuidMap.put("2B2C1518-F466-491F-8149-57AFEF48CC01", "CPR Direct");
+		sourceUuidMap.put("4A953CF9-B4C1-4CE9-BF09-2BF655DC61C7", "DPR");
+		sourceUuidMap.put("F2B564A4-CB97-4984-990C-39A5F010BDE3", "E&M");
+		sourceUuidMap.put("A4E9B3E0-275F-4b76-AADB-4398AA56B871", "KMD");
 	}
 	
 	@Override
@@ -58,5 +68,12 @@ public class Tidspunkt implements ITidspunkt {
 
 	@Override
 	public Boolean isTidspunktGraenseIndikator() { return isTidspunktGraenseIndikator;	}
+
+	@Override
+	public String sourceName() { 
+		play.Logger.info("T UUID " +aktoerRefUuid.toUpperCase());
+		play.Logger.info("T Map " +sourceUuidMap.get(aktoerRefUuid.toUpperCase()));
+		return sourceUuidMap.get(aktoerRefUuid.toUpperCase()); 
+   }
 
 }

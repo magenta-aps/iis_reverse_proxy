@@ -8,6 +8,12 @@
         <h3>
             <span class="glyphicon glyphicon-user"></span> Person: @person.registerInformation.cprCitizen.socialSecurityNumber
         </h3>
+        @if(person.tidspunkt != null) {
+        <p class="text-right">
+            @if(person.tidspunkt.aktoerRefUuid) { @person.tidspunkt.sourceName }, 
+            @if(person.tidspunkt.tidspunkt != null) {<span class="glyphicon glyphicon-time"></span> @person.tidspunkt.tidspunkt}
+        </p>
+        }
     </div>
     
     <ul class="nav nav-pills nav-justified">
@@ -383,23 +389,6 @@
                 </div>
                 
             </div>
-            <div class="col-md-6">
-		
-                <!-- OLD VERSION -->
-
-	                @if(person.code == 200) {               
-	                    <ul>
-	                        @if(person.tidspunkt != null) {
-	                            @if(person.tidspunkt.aktoerRefUrn) {<li>person.tidspunkt.aktoerRefUrn: @person.tidspunkt.aktoerRefUrn </li>}
-		                        @if(person.tidspunkt.aktoerRefUuid) {<li>person.tidspunkt.aktoerRefUuid: @person.tidspunkt.aktoerRefUuid </li>}
-		                        @if(person.tidspunkt.kommentar) {<li>person.tidspunkt.kommentar: @person.tidspunkt.kommentar </li>}
-		                        @if(person.tidspunkt.livscyklusKode) {<li>person.tidspunkt.livscyklusKode: @person.tidspunkt.livscyklusKode </li>}
-		                        @if(person.tidspunkt.tidspunkt != null) {<li>person.tidspunkt.tidspunkt: @person.tidspunkt.tidspunkt </li>}
-		                        @if(person.tidspunkt.isTidspunktGraenseIndikator != null) {<li>person.tidspunkt.isTidspunktGraenseIndikator: @person.tidspunkt.isTidspunktGraenseIndikator </li>}
-	                        }
-	                    </ul>
-	                }
-	            </div>
-	        </div>
         </div>
+    </div>
 }
