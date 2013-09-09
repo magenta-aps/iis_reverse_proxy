@@ -25,7 +25,7 @@ public interface ICprBrokerAccessor {
 	IPerson read(final String uuid, final ESourceUsageOrder sourceUsageOrder, boolean isGettingRelations);
 	
 	//TODO Add methods for SEARCH
-	IUuids search(final String firstname, final String middlename, final String lastname, int maxResults);
+	IUuids search(final String firstname, final String middlename, final String lastname, int maxResults, int startIndex);
 	
 	//TODO Add methods for list
 	List<IPerson> list(final IUuids uuids, final ESourceUsageOrder sourceUsageOrder);

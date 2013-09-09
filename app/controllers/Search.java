@@ -1,23 +1,27 @@
 package controllers;
 
+import java.awt.image.renderable.RenderableImage;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.codehaus.jackson.JsonNode;
+
 import play.data.Form;
 import play.data.validation.Constraints.Required;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
-import util.auth.Secured;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IPerson;
 import util.cprbroker.IUuid;
 import util.cprbroker.IUuids;
-import controllers.Search.SearchInput;
-import views.html.*;
+import util.cprbroker.models.Uuids;
+import views.html.list;
+import views.html.search;
 
 @Singleton
 public class Search extends Controller {
@@ -48,8 +52,8 @@ public class Search extends Controller {
 	 * @param lastname String containing a lastname
 	 * @return Result with the response from the cprBroker
 	 */
-	public Result searchLastname(String lastname) {
-		return searchLastMiddleFirstname(lastname, null, null);
+	public Result searchLastname(String lastname, int page) {
+		return searchLastMiddleFirstname(lastname, null, null, page);
 	}
 
 	/**
@@ -59,8 +63,8 @@ public class Search extends Controller {
 	 * @param firstname String containing a firstname
 	 * @return Result with the response from the cprBroker
 	 */
-	public Result searchLastFirstname(String lastname, String firstname) {
-		return searchLastMiddleFirstname(lastname, null, firstname);
+	public Result searchLastFirstname(String lastname, String firstname, int page) {
+		return searchLastMiddleFirstname(lastname, null, firstname, page);
 	}
 	
 	
@@ -71,21 +75,36 @@ public class Search extends Controller {
 	 * @param firstname String containing a firstname
 	 * @return Result with the response from the cprBroker
 	 */
-	public Result searchLastMiddleFirstname(String lastname, String middlename, String firstname) {
+	public Result searchLastMiddleFirstname(String lastname, String middlename, String firstname, int page) {
 		play.Logger.info(lastname + ", " + middlename + ", " + firstname);
+				
+		// search for the results
+    	IUuids uuids = cprBroker.search(firstname, middlename, lastname, -1, -1);
 		
-    	IUuids uuids = cprBroker.search(firstname, middlename, lastname, 100);
-		 
 		if(uuids.code() == 200) {
-			List<IPerson> persons = cprBroker.list(uuids, ESourceUsageOrder.LocalOnly);
+		
+			// calculate the searchIndex, which is the starting point of the search
+			int fromIndex = ((page-1)*10);
+			int toIndex = ((page)*10);
 			
-			return ok(list.render(persons));
+			if(uuids.uuids().size() < fromIndex) return badRequest();
+			
+			if(uuids.uuids().size() < toIndex) toIndex = uuids.uuids().size();
+			IUuids subUuuids = new Uuids(uuids.code(), uuids.message(), uuids.uuids().subList(fromIndex, toIndex));  
+
+			List<IPerson> persons = cprBroker.list(subUuuids, ESourceUsageOrder.LocalOnly);
+			
+			String path = request().path();
+			path = path.substring(0, path.indexOf("page") + 5 );
+			
+			return ok(list.render(persons, uuids.uuids().size(), page, path));
 		}
 		
 		//TODO Make a decent error! bad request
 		return ok();
 	}
 	
+			
 	/**
 	 * 
 	 * @param uuid String with the uuid of a person
@@ -98,8 +117,7 @@ public class Search extends Controller {
 		
 		return ok(search.render(Form.form(SearchInput.class), person));
 		
-	}
-	
+	}	
 	
 	//@Security.Authenticated(Secured.class)
 	public Result search() {
@@ -126,13 +144,9 @@ public class Search extends Controller {
 		@Required
 		public String query;
 
-		public String getQuery() {
-			return query;
-		}
+		public String getQuery() { return query; }
 
-		public void setQuery(String query) {
-			this.query = query;
-		}
+		public void setQuery(String query) { this.query = query; }
 
 	}
 

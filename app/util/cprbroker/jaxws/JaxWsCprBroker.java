@@ -122,11 +122,21 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 	
 	@Override
-	public IUuids search(String firstname, String middlename, String lastname, int maxResults) {
+	public IUuids search(String firstname, String middlename, String lastname, int maxResults, int startIndex) {
+		
 		long start = System.currentTimeMillis();
 		// Setup the input parameters
 		SoegInputType input = new SoegInputType();
-		input.setMaksimalAntalKvantitet(BigInteger.valueOf(maxResults));
+		
+		// zerobased index of where the search should start
+		if(startIndex > 0) {
+			input.setFoersteResultatReference(BigInteger.valueOf(startIndex));
+		}
+		
+		// defaults to 1000 if nothing is specified
+		if(maxResults > 0) {
+			input.setMaksimalAntalKvantitet(BigInteger.valueOf(maxResults));
+		}
 		
 		// Set the name search criteria
 		PersonNameStructureType nameStructure = new PersonNameStructureType();

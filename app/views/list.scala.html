@@ -1,26 +1,48 @@
-@(persons : List[util.cprbroker.IPerson])
+@(persons : List[util.cprbroker.IPerson], results : Int, currentpage : Int, location : String)
 
 @main("CPR Look-up") {
 
  <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">There is @persons.size people in the list</h3>
+        <h3 class="panel-title">There is @results results on the query xxx</h3>
     </div>
-        <div class="panel-body">
-             <ul>
-                @for(person <- persons) {
-                    <li>
-                       <a href="/show/uuid/@person.uuid/">
-                            @if(person.firstname) {@person.firstname}
-                            @if(person.middelname) { @person.middelname}
-                            @if(person.lastname) { @person.lastname}
-                            @if(person.gender) { @person.gender}
-                            @if(person.birthdate != null) { @person.birthdate}
-                        </a>                       
-                    </li>
-                } 
-             </ul>
-        </div>
  </div>
+ 
+ <ul class="pagination">
+    
+    <li id="prev" @if(currentpage == 1) {class="disabled" }><a href="@location@(currentpage - 1)">&laquo;</a></li>
+    
+    @for(index <- 1 to (Math.ceil(results/10.0).toInt)) {
+        <li @if(index == currentpage) {class="active"}><a href="@location@index">@index <span class="sr-only">(current)</span></a></li>    
+    }
+    @if(results > 10) {
+        <li id="next" @if(currentpage == ((persons.size/10))) {class="disabled" }><a href="@location@(currentpage + 1)">&raquo;</a></li>    
+    }
+ </ul>
+    
+ <div class="list-group">
+     @for(person <- persons) {
+     <a href="/show/uuid/@person.uuid/" class="list-group-item">
+      @person.registerInformation.cprCitizen.socialSecurityNumber
+      @if(person.firstname) { @person.firstname}
+      @if(person.middelname) { @person.middelname}
+      @if(person.lastname) { @person.lastname}
+     </a>
+     }
+ </div>
+ 
+ <ul class="pagination">
+    
+    <li id="prev" @if(currentpage == 1) {class="disabled" }><a href="@location@(currentpage - 1)">&laquo;</a></li>
+    
+    @for(index <- 1 to (Math.ceil(results/10.0).toInt)) {
+        <li @if(index == currentpage) {class="active"}><a href="@location@index">@index <span class="sr-only">(current)</span></a></li>    
+    }
+    @if(results > 10) {
+        <li id="next" @if(currentpage == ((persons.size/10))) {class="disabled" }><a href="@location@(currentpage + 1)">&raquo;</a></li>    
+    }
+ </ul>
+ 
+ 
   
 }
