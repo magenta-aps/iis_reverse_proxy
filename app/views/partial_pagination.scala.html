@@ -1,0 +1,19 @@
+@(results: Int, currentpage: Int, location: String)
+
+@if(results > 0) {
+     <ul class="pagination">
+        
+        @if(currentpage == 1) {
+            <li class="disabled"><span>&laquo;</span></li>
+        } else {
+           <li><a href="@location@(currentpage - 1)">&laquo;</a></li>
+        }
+        
+        @for(index <- 1 to (Math.ceil(results/10.0).toInt)) {
+            <li @if(index == currentpage) {class="active"}><a href="@location@index">@index <span class="sr-only">(current)</span></a></li>    
+        }
+        @if(results > 10 && results > (currentpage * 10)) {
+            <li id="next"><a href="@location@(currentpage + 1)">&raquo;</a></li>    
+        }
+     </ul>
+}
