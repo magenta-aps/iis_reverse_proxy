@@ -21,6 +21,8 @@ nav.quicksearch_submit = Søg
 
 nav.logout_button = Log ud
 
+results.list.amountOfResults = Der er {0} resultater på søgningen: 
+
 #---RESULTATSIDE
 resultat.egenskaber = Egenskaber
 resultat.tilstande = Tilstande
