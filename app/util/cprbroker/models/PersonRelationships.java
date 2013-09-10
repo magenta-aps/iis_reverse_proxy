@@ -1,6 +1,5 @@
 package util.cprbroker.models;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import util.cprbroker.IPersonRelationships;

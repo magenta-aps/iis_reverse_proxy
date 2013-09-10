@@ -34,6 +34,7 @@ public class Person implements IPerson{
 	
 	// address
 	private final IAddress address;
+	private final IAddress otherAddress;
 	
 	// contact
 	private final IContact contact;
@@ -77,6 +78,7 @@ public class Person implements IPerson{
 		private IRegisterInformation registerInformation = null;
 		
 		private IAddress address = null;
+		private IAddress otherAddress = null;
 		
 		private IContact contact = null;
 		private IContact nextOfKinContact = null;
@@ -112,6 +114,7 @@ public class Person implements IPerson{
 		public Builder birthRegisteringAuthority(final String newBirthRegisteringAuthority) {birthRegisteringAuthority = newBirthRegisteringAuthority; return this;}
 		public Builder registerInformation(final IRegisterInformation newRegInfo) { registerInformation = newRegInfo; return this; }
 		public Builder address(final IAddress newAddress) {address = newAddress; return this;}
+		public Builder otherAddress(final IAddress newAddress) {otherAddress = newAddress; return this;}
 		public Builder contact(final IContact newContact) {contact = newContact; return this;}
 		public Builder nextOfKinContact(final IContact newContact) {nextOfKinContact = newContact; return this;}
 		public Builder effect(final IVirkning newEffect) {effect = newEffect; return this; }
@@ -144,6 +147,7 @@ public class Person implements IPerson{
 		registerInformation = builder.registerInformation;
 		
 		address = builder.address;
+		otherAddress = builder.otherAddress;
 		
 		contact = builder.contact;
 		nextOfKinContact = builder.nextOfKinContact;
@@ -152,6 +156,7 @@ public class Person implements IPerson{
 		tilstand = builder.tilstand;
 		tidspunkt = builder.tidspunkt;
 		relationsWithPerson = builder.relationsWithPerson;
+
 	}
 	
 	
@@ -198,6 +203,9 @@ public class Person implements IPerson{
 
 	@Override
 	public IAddress address() {	return address;}
+
+	@Override
+	public IAddress otherAddress() { return otherAddress;}
 	
 	@Override
 	public IContact contact() { return contact; }

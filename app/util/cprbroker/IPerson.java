@@ -14,6 +14,8 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	
 	IAddress address();
 	
+	IAddress otherAddress();
+	
 	IContact contact();
 	
 	IContact nextOfKinContact();

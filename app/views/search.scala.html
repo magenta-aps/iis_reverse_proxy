@@ -357,10 +357,73 @@
 		                </div>
 		
 		
-		                
-		                <div class="col-md-6">
-		                    <br/>
-		                </div>      
+		                @if(person.otherAddress != null 
+		                    && person.otherAddress.worldAddress != null) {
+		                    
+		                    @if(person.otherAddress.addressType == EAddressType.World) {
+			                <div class="col-md-6">
+			                <br/>
+                            <div class="panel panel-default">
+                            
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">@Messages("resultat.andenaddresse")</h3>
+                                </div>
+                            
+                                <div class="panel-body">
+	                            
+				                    @if(person.otherAddress.worldAddress.locationDescriptionText) {
+		                                        <dl class="dl-horizontal">
+		                                            <dt>@Messages("person.otherAddress.worldAddress.locationDescriptionText")</dt>
+		                                            <dd>@person.otherAddress.worldAddress.locationDescriptionText</dd>
+		                                        </dl>
+		                            }
+	                                @if(person.otherAddress.worldAddress.postalAddressFirstLineText) {
+	                                            <dl class="dl-horizontal">
+	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFirstLineText")</dt>
+	                                                <dd>@person.otherAddress.worldAddress.postalAddressFirstLineText</dd>
+	                                            </dl>
+	                                }
+	                                @if(person.otherAddress.worldAddress.postalAddressSecondLineText) {
+	                                            <dl class="dl-horizontal">
+	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressSecondLineText")</dt>
+	                                                <dd>@person.otherAddress.worldAddress.postalAddressSecondLineText</dd>
+	                                            </dl>
+	                                }
+	                                @if(person.otherAddress.worldAddress.postalAddressThirdLineText) {
+	                                            <dl class="dl-horizontal">
+	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressThirdLineText")</dt>
+	                                                <dd>@person.otherAddress.worldAddress.postalAddressThirdLineText</dd>
+	                                            </dl>
+	                                }
+	                                @if(person.otherAddress.worldAddress.postalAddressFourthLineText) {
+	                                            <dl class="dl-horizontal">
+	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFourthLineText")</dt>
+	                                                <dd>@person.otherAddress.worldAddress.postalAddressFourthLineText</dd>
+	                                            </dl>
+	                                }
+	                                @if(person.otherAddress.worldAddress.postalAddressFifthLineText) {
+	                                            <dl class="dl-horizontal">
+	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFifthLineText")</dt>
+	                                                <dd>@person.otherAddress.worldAddress.postalAddressFifthLineText</dd>
+	                                            </dl>
+	                                }
+	                                @if(person.otherAddress.worldAddress.isUkendtAdresseIndikator) {
+	                                            <dl class="dl-horizontal">
+	                                                <dt>@Messages("person.otherAddress.worldAddress.isUkendtAdresseIndikator")</dt>
+	                                                <dd>@person.otherAddress.worldAddress.isUkendtAdresseIndikator</dd>
+	                                            </dl>
+	                                }
+                                    @if(person.otherAddress.worldAddress.note) {
+                                                <dl class="dl-horizontal">
+                                                    <dt>@Messages("person.otherAddress.worldAddress.note")</dt>
+                                                    <dd>@person.otherAddress.worldAddress.note</dd>
+                                                </dl>
+                                    }
+	                                
+                            </div>
+		                  </div>
+		                  }
+		                }
 		            </div>      
 		        </div>
 

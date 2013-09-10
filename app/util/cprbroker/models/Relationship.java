@@ -1,9 +1,8 @@
 package util.cprbroker.models;
 
 import util.cprbroker.ERelationshipType;
-import util.cprbroker.IPerson;
-import util.cprbroker.IVirkning;
 import util.cprbroker.IRelationship;
+import util.cprbroker.IVirkning;
 
 public class Relationship implements IRelationship {
 

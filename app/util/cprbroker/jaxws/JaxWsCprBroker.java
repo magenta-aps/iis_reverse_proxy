@@ -387,9 +387,25 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			builder.registerInformation(newRegInfo);
 			
 			// Get the address information and add it to the person
-			IAddress newAddress = getAddress(registering);
+			List<RegisterOplysningType> registerList = 
+					registering.getAttributListe().getRegisterOplysning();
+
+			// TODO make a guard check if the list has values
+			RegisterOplysningType register = registerList.get(0);
+			
+			// TODO make a guard check if the register has a cprCitizen
+			CprBorgerType citizenData = register.getCprBorger();
+
+			AdresseType address = citizenData.getFolkeregisterAdresse();
+			
+			IAddress newAddress;
+			newAddress = getAddress(address);
 			builder.address(newAddress);
 			
+			// TODO make a guard check
+			AdresseType otherAddress = registering.getAttributListe().getEgenskab().get(0).getAndreAdresser();
+			newAddress = getAddress(otherAddress);
+			builder.otherAddress(newAddress);
 		}
 
 		return builder.build();
@@ -498,19 +514,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @return IDanishAddress, IGreenlandicAddress, IWorldAddress or null
 	 * 	
 	 */
-	private IAddress getAddress(RegistreringType registering) {
-		
-		List<RegisterOplysningType> registerList = 
-				registering.getAttributListe().getRegisterOplysning();
-
-		// TODO make a guard check if the list has values
-		RegisterOplysningType register = registerList.get(0);
-		
-		// TODO make a guard check if the register has a cprCitizen
-		CprBorgerType citizenData = register.getCprBorger();
-
-		AdresseType address = citizenData.getFolkeregisterAdresse();
-		
+	private IAddress getAddress(AdresseType address) {
+				
 		if(address != null) {
 			DanskAdresseType danishAddress = address.getDanskAdresse();
 			GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
@@ -520,11 +525,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			// Is there a danish address or maybe a Greenlandic or maybe a world?!?
 			if(danishAddress != null) {
-				newAddress = getDanishAddress(citizenData);
+				newAddress = getDanishAddress(address);
 			} else if (greenlandicAddress != null) {
-				newAddress = getGreenlandicAddress(citizenData);
+				newAddress = getGreenlandicAddress(address);
 			} else if (worldAddress != null) {
-				newAddress = getWorldAddress(citizenData);
+				newAddress = getWorldAddress(address);
 			}
 			
 			return newAddress;
@@ -538,19 +543,19 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @param citizenData CprBorgerType with the address information 
 	 * @return IWorldAddress
 	 */
-	private IAddress getWorldAddress(CprBorgerType citizenData) {
+	private IAddress getWorldAddress(AdresseType address) {
 	
 		// get the address
-		VerdenAdresseType worldAddress = citizenData.getFolkeregisterAdresse().getVerdenAdresse();
+		VerdenAdresseType worldAddress = address.getVerdenAdresse();
 		
 		// null guard
 		if(worldAddress.getForeignAddressStructure() != null) {
 
-			// Let build a bear.. err greenlandic address!
+			// Let build a bear.. err world address!
 			WorldAddress.Builder addressBuilder = new WorldAddress.Builder();
 
 			// Add any adress notes
-			addressBuilder.note(citizenData.getAdresseNoteTekst());
+			addressBuilder.note(worldAddress.getNoteTekst());
 			
 			// reference pointer for less spam
 			ForeignAddressStructureType addressPostal = worldAddress.getForeignAddressStructure();
@@ -581,9 +586,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @param citizenData CprBorgerType with the address information 
 	 * @return IGreenladicAddress
 	 */
-	private IAddress getGreenlandicAddress(CprBorgerType citizenData) {
+	private IAddress getGreenlandicAddress(AdresseType address) {
 		
-		GroenlandAdresseType greenlandicAddress= citizenData.getFolkeregisterAdresse().getGroenlandAdresse();
+		GroenlandAdresseType greenlandicAddress= address.getGroenlandAdresse();
 
 		// null guard
 		if(greenlandicAddress.getAddressCompleteGreenland() != null) {
@@ -592,7 +597,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			GreenlandicAddress.Builder addressBuilder = new GreenlandicAddress.Builder();
 
 			// Add any adress notes
-			addressBuilder.note(citizenData.getAdresseNoteTekst());
+			addressBuilder.note(greenlandicAddress.getNoteTekst());
 			
 			// reference pointer for less spam
 			AddressCompleteGreenlandType addressPostal = greenlandicAddress.getAddressCompleteGreenland();
@@ -630,9 +635,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @param citizenData CprBorgerType with the address information 
 	 * @return IDanishAddress
 	 */
-	private IDanishAddress getDanishAddress(CprBorgerType citizenData) {
+	private IDanishAddress getDanishAddress(AdresseType address) {
 
-		DanskAdresseType danishAddress = citizenData.getFolkeregisterAdresse().getDanskAdresse();
+		DanskAdresseType danishAddress = address.getDanskAdresse();
 		// null guard
 		if(danishAddress.getAddressComplete() != null &&
 				danishAddress.getAddressComplete().getAddressPostal() != null) {
@@ -641,7 +646,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			DanishAddress.Builder addressBuilder = new DanishAddress.Builder();
 
 			// Add any adress notes
-			addressBuilder.note(citizenData.getAdresseNoteTekst());
+			//addressBuilder.note(citizenData.getAdresseNoteTekst());
 			
 			// reference pointer for less spam
 			AddressAccessType addressAccess = danishAddress.getAddressComplete().getAddressAccess();
