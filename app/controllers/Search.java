@@ -1,7 +1,5 @@
 package controllers;
 
-import java.awt.image.renderable.RenderableImage;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,7 +9,6 @@ import org.codehaus.jackson.JsonNode;
 
 import play.data.Form;
 import play.data.validation.Constraints.Required;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import util.cprbroker.ESourceUsageOrder;
@@ -27,29 +24,18 @@ import views.html.search;
 public class Search extends Controller {
 
 	private static ICprBrokerAccessor cprBroker;
-	
+
 	@Inject
 	public Search(ICprBrokerAccessor newCprBroker) {
 		cprBroker = newCprBroker;
 	}
 
-	// route for searching cpr numbers
-	// will replace the current search!
-	public Result searchCpr(String cpr) {
-		
-		//Input type == cprnumber
-		IUuid uuid = cprBroker.getUuid(cpr);
-		
-		if (uuid.code() == 200) {		
-			return redirect(controllers.routes.Search.show(uuid.uuid()));
-		} else {
-			return ok(search.render(Form.form(SearchInput.class), null));	
-		}	
-	}
-	
+
 	/**
 	 * helper controller passing its request to searchLastMiddleFirstname
-	 * @param lastname String containing a lastname
+	 * 
+	 * @param lastname
+	 *            String containing a lastname
 	 * @return Result with the response from the cprBroker
 	 */
 	public Result searchLastname(String lastname, int page) {
@@ -59,90 +45,115 @@ public class Search extends Controller {
 	/**
 	 * 
 	 * helper controller passing its request to searchLastMiddleFirstname
-	 * @param lastname String containing a lastname
-	 * @param firstname String containing a firstname
+	 * 
+	 * @param lastname
+	 *            String containing a lastname
+	 * @param firstname
+	 *            String containing a firstname
 	 * @return Result with the response from the cprBroker
 	 */
-	public Result searchLastFirstname(String lastname, String firstname, int page) {
+	public Result searchLastFirstname(String lastname, String firstname,
+			int page) {
 		return searchLastMiddleFirstname(lastname, null, firstname, page);
 	}
-	
-	
+
 	/**
 	 * 
-	 * @param lastname String containing a lastname
-	 * @param middlename String containing a middlename(s)
-	 * @param firstname String containing a firstname
+	 * @param lastname
+	 *            String containing a lastname
+	 * @param middlename
+	 *            String containing a middlename(s)
+	 * @param firstname
+	 *            String containing a firstname
 	 * @return Result with the response from the cprBroker
 	 */
-	public Result searchLastMiddleFirstname(String lastname, String middlename, String firstname, int page) {
+	public Result searchLastMiddleFirstname(String lastname, String middlename,
+			String firstname, int page) {
 		play.Logger.info(lastname + ", " + middlename + ", " + firstname);
-				
-		// search for the results
-    	IUuids uuids = cprBroker.search(firstname, middlename, lastname, -1, -1);
-		
-		if(uuids.code() == 200) {
-		
-			// calculate the searchIndex, which is the starting point of the search
-			int fromIndex = ((page-1)*10);
-			int toIndex = ((page)*10);
-			
-			if(uuids.uuids().size() < fromIndex) return badRequest();
-			
-			if(uuids.uuids().size() < toIndex) toIndex = uuids.uuids().size();
-			IUuids subUuuids = new Uuids(uuids.code(), uuids.message(), uuids.uuids().subList(fromIndex, toIndex));  
 
-			List<IPerson> persons = cprBroker.list(subUuuids, ESourceUsageOrder.LocalOnly);
-			
+		// search for the results
+		IUuids uuids = cprBroker
+				.search(firstname, middlename, lastname, -1, -1);
+
+		if (uuids.code() == 200) {
+
+			// calculate the searchIndex, which is the starting point of the
+			// search
+			int fromIndex = ((page - 1) * 10);
+			int toIndex = ((page) * 10);
+
+			if (uuids.uuids().size() < fromIndex)
+				return badRequest();
+
+			if (uuids.uuids().size() < toIndex)
+				toIndex = uuids.uuids().size();
+			IUuids subUuuids = new Uuids(uuids.code(), uuids.message(), uuids
+					.uuids().subList(fromIndex, toIndex));
+
+			List<IPerson> persons = cprBroker.list(subUuuids,
+					ESourceUsageOrder.LocalOnly);
+
 			String path = request().path();
-			path = path.substring(0, path.indexOf("page") + 5 );
-			
-			String query = (lastname != null) ? 
-							((firstname != null) ?
-									((middlename != null) ? lastname + ", " + middlename + ", " + firstname  : lastname + ", " + firstname)
-										: lastname) : "";
-			
-			
-			return ok(list.render(persons, uuids.uuids().size(), page, path, query));
+			path = path.substring(0, path.indexOf("page") + 5);
+
+			String query = (lastname != null) ? ((firstname != null) ? ((middlename != null) ? lastname
+					+ ", " + middlename + ", " + firstname
+					: lastname + ", " + firstname)
+					: lastname)
+					: "";
+
+			return ok(list.render(persons, uuids.uuids().size(), page, path,
+					query));
 		}
-		
-		//TODO Make a decent error! bad request
+
+		// TODO Make a decent error! bad request
 		return ok();
 	}
-	
-			
+
 	/**
 	 * 
-	 * @param uuid String with the uuid of a person
+	 * @param uuid
+	 *            String with the uuid of a person
 	 * @return Result containing the response from teh cprBroker
 	 */
 	public Result show(String uuid) {
 		play.Logger.info(uuid);
-		
-		IPerson person = cprBroker.read(uuid, ESourceUsageOrder.LocalOnly, true);
-		
-		return ok(search.render(Form.form(SearchInput.class), person));
-		
-	}	
-	
-	//@Security.Authenticated(Secured.class)
-	public Result search() {
 
-		Form<SearchInput> searchForm = Form.form(SearchInput.class).bindFromRequest();
-
-		// Check if there is errors (empty strings)
-		if (searchForm.hasErrors()) {
-			return badRequest(search.render(Form.form(SearchInput.class), null));
+		IPerson person = cprBroker
+				.read(uuid, ESourceUsageOrder.LocalOnly, true);
+		play.Logger.info("READ code: " + person.code() + "");
+		if(person.code() == 200) {
+			return ok(search.render(Form.form(SearchInput.class), person));	
+		} else {
+			//TODO - If Person isn't found local ask if user wants to look external
+			return ok();
 		}
 		
-		//Input type == cprnumber
-		IUuid uuid = cprBroker.getUuid(searchForm.get().query);
+
+	}
+
+	// @Security.Authenticated(Secured.class)
+	public Result searchCpr() {
+
+		Form<SearchInput> searchForm = Form.form(SearchInput.class)
+				.bindFromRequest();
+
+		play.Logger.info(searchForm.get().query);
 		
-		if (uuid.code() == 200) {		
-			return redirect(controllers.routes.Search.show(uuid.uuid()));
+		// Check if there is errors (empty strings)
+		if (searchForm.hasErrors()) {		
+			return badRequest("Form had errors");
+		}
+
+		// Input type == cprnumber
+		IUuid uuid = cprBroker.getUuid(searchForm.get().query);
+
+		if (uuid.code() == 200) {
+			return ok(uuid.uuid());
 		} else {
-			return ok(search.render(Form.form(SearchInput.class), null));	
-		}	
+			play.Logger.info("search form has errors");
+			return badRequest("CPR not found in local");
+		}
 	}
 
 	public static class SearchInput {
@@ -150,9 +161,13 @@ public class Search extends Controller {
 		@Required
 		public String query;
 
-		public String getQuery() { return query; }
+		public String getQuery() {
+			return query;
+		}
 
-		public void setQuery(String query) { this.query = query; }
+		public void setQuery(String query) {
+			this.query = query;
+		}
 
 	}
 
