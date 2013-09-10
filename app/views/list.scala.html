@@ -19,6 +19,10 @@
       @if(person.lastname) { @person.lastname}
       @if(person.address != null) {
         <span class="text-muted">
+        @if(person.address.danishAddress.postCode) { @person.address.danishAddress.streetName}
+        @if(person.address.danishAddress.postCode) { @person.address.danishAddress.streetBuilding}
+        @if(person.address.danishAddress.postCode) { @person.address.danishAddress.floor}
+        @if(person.address.danishAddress.postCode) { @person.address.danishAddress.suite}
         @if(person.address.danishAddress.postCode) { @person.address.danishAddress.postCode}
         @if(person.address.danishAddress.districtName) { @person.address.danishAddress.districtName}
         </span>    
