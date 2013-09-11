@@ -13,7 +13,7 @@ import util.cprbroker.IVirkning;
 
 import static org.mockito.Mockito.*;
 
-public class TestRelationshipWithPerson {
+public class RelationshipWithPersonTest {
 	
 	private IRelationshipWithIPerson testRelationshipWithPerson;
 	private IPerson mockedPerson;
