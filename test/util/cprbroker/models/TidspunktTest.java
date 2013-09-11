@@ -64,6 +64,7 @@ public class TidspunktTest {
 		assertEquals(expected, testTidspunkt.tidspunkt().getMillis());
 	}
 	
+	// TODO Make generic test of all the names appering in settings
 	@Test
 	public void testSourceNames() {
 

@@ -29,6 +29,7 @@ public class Tidspunkt implements ITidspunkt {
 		public ITidspunkt build() { return new Tidspunkt(this); }
 		
 		public Builder aktoerRefUrn(String newUrn) { aktoerRefUrn = newUrn; return this; }
+		//TODO Check for valid uuid?
 		public Builder aktoerRefUuid(String newUuid) { aktoerRefUuid = newUuid; return this; }
 		public Builder kommentar(String newKommentar) { kommentar = newKommentar; return this; }
 		public Builder livscyklusKode(String newKode) { livscyklusKode = newKode; return this; }
@@ -69,7 +70,8 @@ public class Tidspunkt implements ITidspunkt {
 
 	@Override
 	public Boolean isTidspunktGraenseIndikator() { return isTidspunktGraenseIndikator;	}
-
+	
+	//TODO Check for valid uuid? Catch all to return Ukendt string? Make into Enum? Load from settings?
 	@Override
 	public String sourceName() { return sourceUuidMap.get(aktoerRefUuid.toUpperCase()); }
 

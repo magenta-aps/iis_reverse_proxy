@@ -31,6 +31,7 @@ public class Virkning implements IVirkning {
 		public IVirkning build() { return new Virkning(this); }
 		
 		public Builder actorUrn(String newUrn) { actorUrn = newUrn; return this; }
+		//TODO Test for valid Uuid?
 		public Builder actorUuid(String newUuid) { actorUuid = newUuid; return this; }
 		public Builder comment(String newComment) { comment = newComment; return this; }
 		public Builder effectiveFromDate(GregorianCalendar newDate) { effectiveFromDate = new DateTime(newDate); return this; }
