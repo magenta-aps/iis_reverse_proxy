@@ -18,8 +18,8 @@ public class UuidsTest {
 	@Before
 	public void setUp() {
 		List<String> newUuids = new LinkedList<String>();
-		newUuids.add("A1234567890123456789012345678901234567");
-		newUuids.add("B1234567890123456789012345678901234567");
+		newUuids.add("12345678-1234-1234-1234-123456789abc");
+		newUuids.add("12345678-1234-1234-1234-123456789def");
 		values = newUuids;
 		
 		testUuids = new Uuids(200, "OK", newUuids);
@@ -44,14 +44,14 @@ public class UuidsTest {
 		
 		int expected = testUuids.values().size();
 		
-		values.add("C1234567890123456789012345678901234567");
+		values.add("12345678-1234-1234-1234-123456789ghi");
 		
 		assertEquals(expected, testUuids.values().size());
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
 	public void testUuidsNewValuesCanNotBeAdded() {
-		testUuids.values().add("C1234567890123456789012345678901234567");
+		testUuids.values().add("12345678-1234-1234-1234-123456789ghi");
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
