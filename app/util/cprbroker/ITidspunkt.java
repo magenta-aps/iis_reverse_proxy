@@ -1,6 +1,6 @@
 package util.cprbroker;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import org.joda.time.DateTime;
 
 public interface ITidspunkt {
 /*
@@ -16,7 +16,7 @@ public interface ITidspunkt {
 	String aktoerRefUuid();
 	String kommentar();
 	String livscyklusKode();
-	XMLGregorianCalendar tidspunkt();
+	DateTime tidspunkt();
 	Boolean isTidspunktGraenseIndikator();
 	String sourceName();
 }

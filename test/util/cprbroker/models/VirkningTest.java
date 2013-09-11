@@ -21,11 +21,11 @@ public class VirkningTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		gregorianCalenderFromTime = new GregorianCalendar(1978, 11, 26, 12, 13, 14);
-		jodaDateTimeFromTime = new DateTime(1978, 12, 26, 12, 13, 14);
+		gregorianCalenderFromTime = new GregorianCalendar(1978, 11, 26, 13, 37, 00);
+		jodaDateTimeFromTime = new DateTime(1978, 12, 26, 13, 37, 00);
 
-		gregorianCalenderToTime = new GregorianCalendar(1982, 2, 12, 12, 13, 14);
-		jodaDateTimeToTime = new DateTime(1982, 3, 12, 12, 13, 14);
+		gregorianCalenderToTime = new GregorianCalendar(1982, 2, 12, 13, 37, 00);
+		jodaDateTimeToTime = new DateTime(1982, 3, 12, 13, 37, 00);
 
 		Virkning.Builder builder = new Virkning.Builder();
 		

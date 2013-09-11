@@ -709,8 +709,10 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 								.aktoerRefUuid(registering.getAktoerRef().getUUID());
 			}
 			if(registering.getTidspunkt() != null) {
-				tidspunktBuilder.tidspunkt(registering.getTidspunkt().getTidsstempelDatoTid())
-				.isTidspunktGraenseIndikator(registering.getTidspunkt().isGraenseIndikator());					
+				tidspunktBuilder.isTidspunktGraenseIndikator(registering.getTidspunkt().isGraenseIndikator());
+				if(registering.getTidspunkt().getTidsstempelDatoTid() != null) {
+					tidspunktBuilder.tidspunkt(registering.getTidspunkt().getTidsstempelDatoTid().toGregorianCalendar());
+				}
 			}
 			if(registering.getLivscyklusKode() != null) {
 				tidspunktBuilder.livscyklusKode(registering.getLivscyklusKode().name());
