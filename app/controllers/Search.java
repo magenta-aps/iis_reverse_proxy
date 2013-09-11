@@ -82,14 +82,16 @@ public class Search extends Controller {
 			int fromIndex = ((page - 1) * 10);
 			int toIndex = ((page) * 10);
 
-			if (uuids.uuids().size() < fromIndex)
+			if (uuids.values().size() < fromIndex)
 				return badRequest();
 
-			if (uuids.uuids().size() < toIndex)
-				toIndex = uuids.uuids().size();
+			if (uuids.values().size() < toIndex)
+				toIndex = uuids.values().size();
+			
 			IUuids subUuuids = new Uuids(uuids.code(), uuids.message(), uuids
-					.uuids().subList(fromIndex, toIndex));
-
+					.values().subList(fromIndex, toIndex));
+			
+			
 			List<IPerson> persons = cprBroker.list(subUuuids,
 					ESourceUsageOrder.LocalOnly);
 
@@ -102,7 +104,7 @@ public class Search extends Controller {
 					: lastname)
 					: "";
 
-			return ok(list.render(persons, uuids.uuids().size(), page, path,
+			return ok(list.render(persons, uuids.values().size(), page, path,
 					query));
 		}
 
@@ -149,7 +151,7 @@ public class Search extends Controller {
 		IUuid uuid = cprBroker.getUuid(searchForm.get().query);
 
 		if (uuid.code() == 200) {
-			return ok(uuid.uuid());
+			return ok(uuid.value());
 		} else {
 			play.Logger.info("search form has errors");
 			return badRequest("CPR not found in local");

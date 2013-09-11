@@ -190,7 +190,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		ListInputType listInput = new ListInputType();
 		
 		List<String> list = listInput.getUUID();
-		list.addAll(uuids.uuids());
+		list.addAll(uuids.values());
 		
 		long request = System.currentTimeMillis();
 		// Access CPR broker
@@ -204,7 +204,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		IPerson tmpPerson;
 
 		int size = laesResultatTypeList.size();
-		List<String> uuidList = uuids.uuids();
+		List<String> uuidList = uuids.values();
 		
 		for(int i=0;i<size;i++) {
 			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur(), false);

@@ -8,7 +8,7 @@ public class Uuid implements IUuid {
 	private final String message;
 	private final int code;
 	
-	
+	//TODO Implement throwing a IllegalArgumentException for non-valid Uuid construction
 	public Uuid(final String newUuid, final int newCode, final String newMessage) {
 		uuid = newUuid;
 		message = newMessage;
@@ -26,7 +26,7 @@ public class Uuid implements IUuid {
 	}
 
 	@Override
-	public String uuid() {
+	public String value() {
 		return uuid;
 	}
 
