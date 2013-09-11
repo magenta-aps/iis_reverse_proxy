@@ -869,8 +869,11 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			}
 			
 			if(virkningType.getFraTidspunkt() != null) {
-				effectBuilder.effectiveFromDate(virkningType.getFraTidspunkt().getTidsstempelDatoTid())
-							 .isEffectiveFromLimit(virkningType.getFraTidspunkt().isGraenseIndikator());
+				effectBuilder.isEffectiveFromLimit(virkningType.getFraTidspunkt().isGraenseIndikator());
+				
+				if(virkningType.getFraTidspunkt().getTidsstempelDatoTid() != null) {
+					effectBuilder.effectiveFromDate(virkningType.getFraTidspunkt().getTidsstempelDatoTid().toGregorianCalendar());
+				}
 			}
 			
 			effectBuilder.comment(virkningType.getCommentText());
@@ -896,13 +899,21 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			}
 			
 			if(virkningType.getFraTidspunkt() != null) {
-				effectBuilder.effectiveFromDate(virkningType.getFraTidspunkt().getTidsstempelDatoTid())
-							 .isEffectiveFromLimit(virkningType.getFraTidspunkt().isGraenseIndikator());
+				effectBuilder.isEffectiveFromLimit(virkningType.getFraTidspunkt().isGraenseIndikator());
+				
+				if(virkningType.getFraTidspunkt().getTidsstempelDatoTid() != null) {
+					effectBuilder.effectiveFromDate(virkningType.getFraTidspunkt().getTidsstempelDatoTid().toGregorianCalendar());
+				}
+
 			}
 			
 			if(virkningType.getTilTidspunkt() != null) {
-				effectBuilder.effectiveToDate(virkningType.getTilTidspunkt().getTidsstempelDatoTid())
-							 .isEffectiveToLimit(virkningType.getTilTidspunkt().isGraenseIndikator());
+				effectBuilder.isEffectiveToLimit(virkningType.getTilTidspunkt().isGraenseIndikator());
+				
+				if(virkningType.getTilTidspunkt().getTidsstempelDatoTid() != null) {
+					effectBuilder.effectiveToDate(virkningType.getTilTidspunkt().getTidsstempelDatoTid().toGregorianCalendar());
+				}
+
 			}
 			
 			effectBuilder.comment(virkningType.getCommentText());

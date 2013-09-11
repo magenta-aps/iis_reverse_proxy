@@ -1,7 +1,11 @@
 package util.cprbroker;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
+import org.joda.time.DateTime;
+/**
+ * Wrapper for a CPR Broker Virkning response
+ * @author Søren Kirkegård
+ *
+ */
 public interface IVirkning {
 	/**************************************************************************************
 	// TODO implement these
@@ -18,8 +22,8 @@ public interface IVirkning {
 	String aktoerRefUrn();
 	String aktoerRefUuid();
 	String kommentar();
-	XMLGregorianCalendar fraTidspunkt();
+	DateTime fraTidspunkt();
 	Boolean isFraTidspunktGraenseIndikator();
-	XMLGregorianCalendar tilTidspunkt();
+	DateTime tilTidspunkt();
 	Boolean isTilTidspunktGraenseIndikator();
 }

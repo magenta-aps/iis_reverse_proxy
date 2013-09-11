@@ -9,7 +9,8 @@ public class Tilstand implements ITilstand {
 	private final IVirkning civilTilstandsVirkning;
 	private final String livStatusKode;
 	private final IVirkning livTilstandsVirkning;
-	
+
+	//TODO Look at ITilstand - isGraeseIndikator? Implement it!
 	public static class Builder {
 		private String civilStatusKode;
 		private IVirkning civilTilstandsVirkning;

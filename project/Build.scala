@@ -16,6 +16,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
+    "joda-time" % "joda-time" % "2.3",
     "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
     "org.webjars" %% "webjars-play" % "2.1.0-3",
     "org.webjars" % "bootstrap" % "3.0.0-rc.2",

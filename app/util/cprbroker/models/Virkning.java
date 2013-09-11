@@ -1,6 +1,8 @@
 package util.cprbroker.models;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.GregorianCalendar;
+
+import org.joda.time.DateTime;
 
 import util.cprbroker.IVirkning;
 
@@ -9,9 +11,9 @@ public class Virkning implements IVirkning {
 	private final String actorUrn;
 	private final String actorUuid;
 	private final String comment;
-	private final XMLGregorianCalendar effectiveFromDate;
+	private final DateTime effectiveFromDate;
 	private final Boolean isEffectiveFromLimit;
-	private final XMLGregorianCalendar effectiveToDate;
+	private final DateTime effectiveToDate;
 	private final Boolean isEffectiveToLimit;
 
 	public static class Builder {
@@ -21,9 +23,9 @@ public class Virkning implements IVirkning {
 		private String actorUrn;
 		private String actorUuid;
 		private String comment;
-		private XMLGregorianCalendar effectiveFromDate;
+		private DateTime effectiveFromDate;
 		private Boolean isEffectiveFromLimit;
-		private XMLGregorianCalendar effectiveToDate;
+		private DateTime effectiveToDate;
 		private Boolean isEffectiveToLimit;
 		
 		public IVirkning build() { return new Virkning(this); }
@@ -31,9 +33,9 @@ public class Virkning implements IVirkning {
 		public Builder actorUrn(String newUrn) { actorUrn = newUrn; return this; }
 		public Builder actorUuid(String newUuid) { actorUuid = newUuid; return this; }
 		public Builder comment(String newComment) { comment = newComment; return this; }
-		public Builder effectiveFromDate(XMLGregorianCalendar newDate) { effectiveFromDate = newDate; return this; }
+		public Builder effectiveFromDate(GregorianCalendar newDate) { effectiveFromDate = new DateTime(newDate); return this; }
 		public Builder isEffectiveFromLimit(Boolean isLimit) { isEffectiveFromLimit = isLimit; return this; }
-		public Builder effectiveToDate(XMLGregorianCalendar newDate) { effectiveToDate = newDate; return this; }
+		public Builder effectiveToDate(GregorianCalendar newDate) { effectiveToDate = new DateTime(newDate); return this; }
 		public Builder isEffectiveToLimit(Boolean isLimit) { isEffectiveToLimit = isLimit; return this; }
 		
 	}
@@ -59,13 +61,13 @@ public class Virkning implements IVirkning {
 	public String kommentar() { return comment; }
 
 	@Override
-	public XMLGregorianCalendar fraTidspunkt() { return effectiveFromDate; }
+	public DateTime fraTidspunkt() { return effectiveFromDate; }
 
 	@Override
-	public Boolean isFraTidspunktGraenseIndikator() {	return isEffectiveFromLimit; }
+	public Boolean isFraTidspunktGraenseIndikator() { return isEffectiveFromLimit; }
 
 	@Override
-	public XMLGregorianCalendar tilTidspunkt() {	return effectiveToDate; }
+	public DateTime tilTidspunkt() { return effectiveToDate; }
 
 	@Override
 	public Boolean isTilTidspunktGraenseIndikator() { return isEffectiveToLimit; }
