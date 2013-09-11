@@ -1,5 +1,12 @@
 package util.cprbroker;
-
+/**
+ * Interface for wrapping the KontaktKanal CPR Broker-response
+ * 
+ * CAVEAT! Currently CPR Broker NEVER returns these information.
+ * 
+ * @author Søren Kirkegård
+ *
+ */
 public interface IContact {
 
 	/**
