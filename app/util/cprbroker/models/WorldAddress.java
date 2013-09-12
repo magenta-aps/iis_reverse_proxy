@@ -61,10 +61,10 @@ public class WorldAddress implements IWorldAddress {
 	public EAddressType addressType() {	return EAddressType.World; }
 
 	@Override
-	public IDanishAddress danishAddress() {	return null; }
+	public IDanishAddress danishAddress() {	throw new UnsupportedOperationException(); }
 
 	@Override
-	public IGreenlandicAddress greenlandicAddress() { return null; }
+	public IGreenlandicAddress greenlandicAddress() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public IWorldAddress worldAddress() { return this; }
