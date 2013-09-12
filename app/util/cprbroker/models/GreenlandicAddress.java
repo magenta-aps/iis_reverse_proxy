@@ -90,13 +90,13 @@ public class GreenlandicAddress implements IGreenlandicAddress {
 	public EAddressType addressType() {	return EAddressType.Greenlandic;}
 
 	@Override
-	public IDanishAddress danishAddress() {	return null; }
+	public IDanishAddress danishAddress() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public IGreenlandicAddress greenlandicAddress() { return this; }
 
 	@Override
-	public IWorldAddress worldAddress() { return null; }
+	public IWorldAddress worldAddress() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public String note() { return note;	}
