@@ -36,7 +36,9 @@ public class CprCitizenData implements ICprCitizenRegisterInformation {
 		public Builder isSocialSecurityNumberValid(final boolean newBoolean) { isSocialSecurityNumberValid = newBoolean; return this; }
 		public Builder isNameAdressProtected(final boolean newBoolean) { isNameAdressProtected = newBoolean; return this; }
 		public Builder isPhoneNumberProtected(final boolean newBoolean) { isPhoneNumberProtected = newBoolean; return this; }
+		//TODO This is a 4 digit number not a string..
 		public Builder personNationalityCode(final String newNationalityCode) { personNationalityCode = newNationalityCode; return this; }
+		//TODO This is a 10 digitnumber, where the 6 first digits are a valid date - not a string!
 		public Builder socialSecurityNumber(final String newSocialSecurity) { socialSecurityNumber = newSocialSecurity; return this; }
 		public Builder virkning(final IVirkning newVirkning) { virkning = newVirkning; return this; }
 
