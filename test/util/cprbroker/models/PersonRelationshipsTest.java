@@ -200,9 +200,22 @@ public class PersonRelationshipsTest {
 		IPersonRelationships testPersonRelationship = builder.build();
 		
 		assertEquals(null, testPersonRelationship.aegtefaelle());
-		
-
 	}
+	
+	@Test
+	public void testSelectTheRightRelationshipWithEmptyList() {
+		// make builder
+		PersonRelationships.Builder builder = new PersonRelationships.Builder();
+		
+		// play pretend that we put a null AegtefalleList in the builder
+		List<IRelationship> newAegtefaelleList = new ArrayList<IRelationship>();		
+		builder.selectTheRightRelationship(newAegtefaelleList);
+		
+		IPersonRelationships testPersonRelationship = builder.build();
+		
+		assertEquals(null, testPersonRelationship.aegtefaelle());
+	}
+
 
 	@Test
 	public void testNumberOfRelationships() {

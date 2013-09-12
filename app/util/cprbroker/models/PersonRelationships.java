@@ -43,7 +43,8 @@ public class PersonRelationships implements IPersonRelationships {
 
 		public Builder selectTheRightRelationship(List<IRelationship> newRelationship) {
 			
-			if(newRelationship == null) {
+			// guard check
+			if(newRelationship == null || newRelationship.isEmpty()) {
 				return null;
 			}
 			
