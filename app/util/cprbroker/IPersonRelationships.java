@@ -32,5 +32,7 @@ public interface IPersonRelationships {
 	List<IRelationship> registreretPartner();
 	List<IRelationship> retligHandleevneVaergeForPersonen();
 	List<IRelationship> retligHandleevneVaergemaalsindehaver();
+	List<IRelationship> getRelationshipsOfType(ERelationshipType relationshipType);
+
 
 }

@@ -34,6 +34,7 @@ public class Uuids implements IUuids {
 	 * @return Collections.unmodifiableList of a copy of the referencedValues
 	 */
 	private List<String> defensiveCopyOfValues(List<String> referencedValues) {
+		
 		List<String> copy = new LinkedList<String>();
 		
 		for(String uuid : referencedValues) {
@@ -42,4 +43,5 @@ public class Uuids implements IUuids {
 		
 		return Collections.unmodifiableList(copy);
 	}
+	
 }

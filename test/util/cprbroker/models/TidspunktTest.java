@@ -1,9 +1,9 @@
 package util.cprbroker.models;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
