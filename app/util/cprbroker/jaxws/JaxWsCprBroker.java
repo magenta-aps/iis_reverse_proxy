@@ -72,6 +72,7 @@ import util.cprbroker.models.Uuids;
 import util.cprbroker.models.Virkning;
 import util.cprbroker.models.WorldAddress;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
+import dk.magenta.cprbrokersoapfactory.ICPRBrokerSOAPFactory;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.ForeignAddressStructureType;
 import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
@@ -84,15 +85,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final String endpoint;
 	private final String applicationToken;
 	private final String userToken;
-	private final CPRBrokerSOAPFactory factory;
+	private final ICPRBrokerSOAPFactory factory;
 	
 	public JaxWsCprBroker(final String newEndpoint,
 							final String newApplicationToken,
-							final String newUserToken) {
+							final String newUserToken,
+							final ICPRBrokerSOAPFactory newFactory) {
 		endpoint = newEndpoint;
 		applicationToken = newApplicationToken;
 		userToken = newUserToken;
-		factory = new CPRBrokerSOAPFactory();
+		factory = newFactory;
 	}
 	
 	private PartSoap12 getService(final ESourceUsageOrder sourceUsageOrderHeader) {
@@ -100,7 +102,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		factory.setEndpoint(endpoint);
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
-		//TODO - figure out how to seperate this, so it can be set dynamically
 		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
 
 		try {

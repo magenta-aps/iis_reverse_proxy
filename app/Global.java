@@ -1,6 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
-
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthStrategy;
@@ -12,6 +9,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+
+import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 
 /**
  * Global is the place to hook into the application lifecycle, which makes it
@@ -64,7 +63,7 @@ public class Global extends GlobalSettings {
 			    		String appToken  = conf.getString("cprbroker.applicationtoken");
 			    		String userToken = conf.getString("cprbroker.usertoken");
 			            
-	            		return new JaxWsCprBroker(endpoint, appToken, userToken);
+	            		return new JaxWsCprBroker(endpoint, appToken, userToken, new CPRBrokerSOAPFactory());
 					}	
             	});	            
 	            
