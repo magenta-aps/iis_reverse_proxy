@@ -207,13 +207,18 @@ public class PersonRelationshipsTest {
 		// make builder
 		PersonRelationships.Builder builder = new PersonRelationships.Builder();
 		
-		// play pretend that we put a null AegtefalleList in the builder
+		// play pretend that we put a empty AegtefalleList in the builder
 		List<IRelationship> newAegtefaelleList = new ArrayList<IRelationship>();		
 		builder.selectTheRightRelationship(newAegtefaelleList);
 		
 		IPersonRelationships testPersonRelationship = builder.build();
 		
 		assertEquals(null, testPersonRelationship.aegtefaelle());
+	}
+
+	@Test
+	public void selectTheRightRelationshipWithUnsupportedEnumType() {
+		//TODO Hack enum class : http://www.javaspecialists.eu/archive/Issue161.html
 	}
 
 
@@ -275,5 +280,6 @@ public class PersonRelationshipsTest {
 		assertEquals(null, localPersonRelationships.aegtefaelle());
 
 	}
+	
 	
 }
