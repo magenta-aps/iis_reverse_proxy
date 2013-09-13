@@ -351,7 +351,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			
 			// Get the birthdate
 			XMLGregorianCalendar birthdate = attributes.getBirthDate();
-			if(birthdate != null) { builder.birthdate(birthdate); }
+			if(birthdate != null) { builder.birthdate(birthdate.toGregorianCalendar()); }
 			
 			// Get the birthplace
 			String birthplace = attributes.getFoedestedNavn();

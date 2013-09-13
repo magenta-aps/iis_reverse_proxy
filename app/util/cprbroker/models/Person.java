@@ -1,6 +1,10 @@
 package util.cprbroker.models;
 
+import java.util.GregorianCalendar;
+
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.joda.time.DateTime;
 
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
@@ -23,9 +27,9 @@ public class Person implements IPerson{
 	private final String middelname;
 	private final String lastname;
 	private final String callname;
-	private final String nameForAdressing;
+	private final String nameForAddressing;
 	private final String gender;
-	private final XMLGregorianCalendar birthdate;
+	private final DateTime birthdate;
 	private final String birthplace;
 	private final String birthRegisteringAuthority;
 	
@@ -69,9 +73,9 @@ public class Person implements IPerson{
 		private String middelname = null;
 		private String lastname = null;
 		private String callname = null;
-		private String nameForAdressing = null;
+		private String nameForAddressing = null;
 		private String gender = null;
-		private XMLGregorianCalendar birthdate = null;
+		private DateTime birthdate = null;
 		private String birthplace = null;
 		private String birthRegisteringAuthority = null;
 		
@@ -107,9 +111,9 @@ public class Person implements IPerson{
 		public Builder middelname(final String newName) { middelname = newName; return this; }
 		public Builder lastname(final String newName) { lastname = newName; return this; }
 		public Builder callname(final String newName) { callname = newName; return this; }
-		public Builder nameForAdressing(final String newName) { nameForAdressing = newName; return this; }
+		public Builder nameForAdressing(final String newName) { nameForAddressing = newName; return this; }
 		public Builder gender(final String newGender) {gender = newGender; return this;}
-		public Builder birthdate(final XMLGregorianCalendar newBirthdate) {birthdate = newBirthdate; return this;}
+		public Builder birthdate(final GregorianCalendar newBirthdate) {birthdate = new DateTime(newBirthdate); return this;}
 		public Builder birthplace(final String newBirthplace) {birthplace = newBirthplace; return this;}
 		public Builder birthRegisteringAuthority(final String newBirthRegisteringAuthority) {birthRegisteringAuthority = newBirthRegisteringAuthority; return this;}
 		public Builder registerInformation(final IRegisterInformation newRegInfo) { registerInformation = newRegInfo; return this; }
@@ -137,7 +141,7 @@ public class Person implements IPerson{
 		middelname = builder.middelname;
 		lastname = builder.lastname;
 		callname = builder.callname;
-		nameForAdressing = builder.nameForAdressing;
+		nameForAddressing = builder.nameForAddressing;
 		
 		gender = builder.gender;
 		birthdate = builder.birthdate;
@@ -184,13 +188,13 @@ public class Person implements IPerson{
 	public String callname() { return callname;	}
 	
 	@Override
-	public String nameForAdressing() { return nameForAdressing; }
+	public String nameForAddressing() { return nameForAddressing; }
 	
 	@Override
 	public String gender() { return gender;	}
 
 	@Override
-	public XMLGregorianCalendar birthdate() { return birthdate;	}
+	public DateTime birthdate() { return birthdate;	}
 
 	@Override
 	public String birthplace() { return birthplace;	}

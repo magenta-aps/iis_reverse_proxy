@@ -1,6 +1,6 @@
 package util.cprbroker;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import org.joda.time.DateTime;
 
 public interface IPersonAttributes {
 
@@ -13,12 +13,12 @@ public interface IPersonAttributes {
 	
 	String callname();
 	
-	String nameForAdressing();
+	String nameForAddressing();
 	
 	//TODO make enum of genders
 	String gender();
 	
-	XMLGregorianCalendar birthdate();
+	DateTime birthdate();
 		
 	String birthplace();
 	
