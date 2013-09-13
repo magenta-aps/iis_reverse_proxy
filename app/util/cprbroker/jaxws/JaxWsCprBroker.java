@@ -71,7 +71,6 @@ import util.cprbroker.models.Uuid;
 import util.cprbroker.models.Uuids;
 import util.cprbroker.models.Virkning;
 import util.cprbroker.models.WorldAddress;
-import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 import dk.magenta.cprbrokersoapfactory.ICPRBrokerSOAPFactory;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
 import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.ForeignAddressStructureType;
@@ -97,24 +96,34 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		factory = newFactory;
 	}
 	
-	private PartSoap12 getService(final ESourceUsageOrder sourceUsageOrderHeader) {
+	/**
+	 * Helper method for getting a PartSoap12 service
+	 * @param sourceUsageOrderHeader
+	 * @return
+	 * @throws InstantiationException 
+	 */
+	private PartSoap12 getService(final ESourceUsageOrder sourceUsageOrderHeader) throws InstantiationException {
 		PartSoap12 tmpService = null;
 		factory.setEndpoint(endpoint);
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
 		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
 
-		try {
-			tmpService = factory.getInstance();
-		} catch (InstantiationException e) {
-			play.Logger.error(e.getMessage());
-		}
+		tmpService = factory.getInstance();
+		
 		return tmpService;
 	}
 			
 	@Override
 	public IUuid getUuid(final String cprNumber) {
-		PartSoap12 service = getService(ESourceUsageOrder.LocalOnly);
+		PartSoap12 service;
+		try {
+			service = getService(ESourceUsageOrder.LocalOnly);
+		} catch (InstantiationException e) {
+			play.Logger.error(e.getMessage());
+			return null;
+		}
+		
 		GetUuidOutputType uuid = service.getUuid(cprNumber);
 		
 		return new Uuid(uuid.getUUID(),
@@ -161,8 +170,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		input.setSoegObjekt(soegObjekt);
 		long request = System.currentTimeMillis();
+
 		// Access CPR broker
-		PartSoap12 service = getService(ESourceUsageOrder.LocalOnly);
+		PartSoap12 service;
+		try {
+			service = getService(ESourceUsageOrder.LocalOnly);
+		} catch (InstantiationException e) {
+			play.Logger.error(e.getMessage());
+			return null;
+		}
+		
 		SoegOutputType soegOutput =  service.search(input);
 		long response = System.currentTimeMillis();
 		
@@ -195,7 +212,14 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		long request = System.currentTimeMillis();
 		// Access CPR broker
-		PartSoap12 service = getService(sourceUsageOrder);
+		PartSoap12 service;
+		try {
+			service = getService(sourceUsageOrder);
+		} catch (InstantiationException e) {
+			play.Logger.error(e.getMessage());
+			return null;
+		}
+		
 		ListOutputType listOutput =  service.list(listInput);
 		long response = System.currentTimeMillis();
 						
@@ -230,7 +254,14 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// laesInput.setRegistreringTilFilter(value) Registrations reported before this date
 		
 		// Access CPR broker
-		PartSoap12 service = getService(sourceUsageOrder);
+		PartSoap12 service;
+		try {
+			service = getService(sourceUsageOrder);
+		} catch (InstantiationException e) {
+			play.Logger.error(e.getMessage());
+			return null;
+		}
+		
 		LaesOutputType laesOutput =  service.read(laesInput);
 		long parse = System.currentTimeMillis();		
 		// Building a person from the result
