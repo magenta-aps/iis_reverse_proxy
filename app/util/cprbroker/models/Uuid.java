@@ -8,6 +8,9 @@ public class Uuid implements IUuid {
 	private final String message;
 	private final int code;
 	
+	// Lazy initialized, cached hashCode
+	private volatile int hashCode;
+	
 	/**
 	 * 
 	 * @param newUuid String representation of a hyphenated Guid with a length of 36
@@ -42,5 +45,27 @@ public class Uuid implements IUuid {
 	public String toString() {
 		return uuid;
 	}
+	
+	@Override
+	public int hashCode() {
+		int result = hashCode;
+		if (result == 0) {
+			result = 5;
+			result = result + message.hashCode();
+			result = result + code;
+			result = result + uuid.hashCode();
+		}
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!( obj instanceof Uuid))
+			return false;
+		Uuid u = (Uuid) obj;
+		return code == u.code() && message == u.message() && uuid == u.value();
+		
+	}
+
 
 }
