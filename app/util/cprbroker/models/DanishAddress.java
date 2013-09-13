@@ -132,8 +132,8 @@ public class DanishAddress implements IDanishAddress {
 	@Override
 	public EAddressType addressType() {	return EAddressType.Danish; }
 	@Override public IDanishAddress danishAddress() { return this; }
-	@Override public IGreenlandicAddress greenlandicAddress() { return null; }
-	@Override public IWorldAddress worldAddress() { return null; }
+	@Override public IGreenlandicAddress greenlandicAddress() { throw new UnsupportedOperationException(); }
+	@Override public IWorldAddress worldAddress() { throw new UnsupportedOperationException(); }
 
 	@Override
 	public String countryIdentificationCode() {	return countryIdentificationCode; }
@@ -148,7 +148,7 @@ public class DanishAddress implements IDanishAddress {
 	public String floor() {	return floor;}
 
 	@Override
-	public String mailSubLocaltion() { return mailSubLocaltion;	}
+	public String mailSublocation() { return mailSubLocaltion;	}
 
 	@Override
 	public String postCode() { return postCode;	}

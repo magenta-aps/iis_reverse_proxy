@@ -52,7 +52,7 @@ public interface IDanishAddress extends IAddress {
 	String districtName();
 	String districtSubdivision();
 	String floor();
-	String mailSubLocaltion();
+	String mailSublocation();
 	String postCode();
 	String postOfficeBox();
 	String streetBuilding();
