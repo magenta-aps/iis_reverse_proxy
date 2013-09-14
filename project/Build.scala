@@ -22,9 +22,8 @@ object ApplicationBuild extends Build {
     "org.webjars" % "bootstrap" % "3.0.0-rc.2",
     "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",
     "com.google.inject" % "guice" % "3.0",
-    "org.mockito" % "mockito-all" % "1.9.5"
-    //"org.codehaus.plexus" % "plexus-utils" % "1.2",
-    //"org.pitest" % "pitest-maven" % "0.30"
+    "org.mockito" % "mockito-all" % "1.9.5",
+    "org.pitest" % "pitest" % "0.31"
     
   )
   
