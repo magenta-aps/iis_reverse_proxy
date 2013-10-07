@@ -21,17 +21,26 @@ import util.auth.Secured;
 import views.html.index;
 import views.html.login;
 
+/**
+ * 
+ * @author Søren Kirkegård
+ *
+ */
 @Singleton
 public class Application extends Controller {
 	
 	private static IAuthStrategy authenticationStrategy;
 	
+	/**
+	 * 
+	 * @param newAuthenticationStrategy
+	 */
 	@Inject
 	public Application(IAuthStrategy newAuthenticationStrategy) {
 		authenticationStrategy = newAuthenticationStrategy;
 	}
 		
-	//@Security.Authenticated(Secured.class)
+	@Security.Authenticated(Secured.class)
     public static Result index() {
         return ok(index.render(Form.form(SearchInput.class), request().username()));
     }
@@ -77,10 +86,13 @@ public class Application extends Controller {
     	IAuthResponse authResponse = authenticationStrategy.authentication(
 						loginForm.get().username,
 						loginForm.get().password);
-
+    	   	
 		if (authResponse.type().equals(AuthResponseType.SUCCESS)) {
 			session().clear();
 	    	session("username", loginForm.get().username);
+	    	
+	    	play.Logger.info(session("username") + " has succesfully logged in.");
+	    	
 	    	return redirect(
 	    			routes.Application.index()
 	    	);
@@ -92,11 +104,19 @@ public class Application extends Controller {
 							play.i18n.Messages.get(authResponse.message()));
 			errors.add(error);
 			loginForm.errors().put("error", errors);
+
+			// logging the login attempt
+			play.Logger.info("Login attempt with bad credientials.");
+			
 			return badRequest(login.render(loginForm));
 		}
     }
 
     public static Result logout() {
+
+    	// logging that a user has logged out
+    	play.Logger.info(session("username") + " has succesfully logged out.");
+    	
     	session().clear();
     	flash("success", play.i18n.Messages.get("logout.succesful"));
     	return redirect(

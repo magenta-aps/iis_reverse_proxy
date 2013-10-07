@@ -69,19 +69,43 @@ public class Search extends Controller {
 	 */
 	public Result searchLastMiddleFirstname(String lastname, String middlename,
 			String firstname, int page) {
-		play.Logger.info(lastname + ", " + middlename + ", " + firstname);
+		
+		// Logging the search
+		play.Logger.info(session("username") + " searched for: " + 
+				lastname + ", " +
+				middlename + ", " +
+				firstname);
 
 		// search for the results
 		IUuids uuids = cprBroker
 				.search(firstname, middlename, lastname, -1, -1);
 
+		// logging the returned resultcode
+		play.Logger.info(session("username") +
+				"'s search request to CPRBroker responded, " +
+				uuids.code() +
+				" - " +
+				uuids.message() +
+				", results: " +
+				uuids.values().size());
+		
 		if (uuids.code() == 200) {
-
+			
 			// calculate the searchIndex, which is the starting point of the
 			// search
 			int fromIndex = ((page - 1) * 10);
 			int toIndex = ((page) * 10);
 
+			// log what page the user requested
+			play.Logger.info(session("username") + 
+					" requested page " + 
+					page + 
+					", showing " +
+					fromIndex +
+					"-" +
+					toIndex);
+
+			
 			if (uuids.values().size() < fromIndex)
 				return badRequest();
 
@@ -116,14 +140,24 @@ public class Search extends Controller {
 	 * 
 	 * @param uuid
 	 *            String with the uuid of a person
-	 * @return Result containing the response from teh cprBroker
+	 * @return Result containing the response from the cprBroker
 	 */
 	public Result show(String uuid) {
-		play.Logger.info(uuid);
+		// Logging the show request
+		play.Logger.info(session("username") +
+				" requested to see uuid " +
+				uuid);
 
 		IPerson person = cprBroker
 				.read(uuid, ESourceUsageOrder.LocalOnly, true);
-		play.Logger.info("READ code: " + person.code() + "");
+
+		// Logging the show request
+		play.Logger.info(session("username") +
+				"'s request to CPRBroker responded, " +
+				person.code() +
+				" - " +
+				person.message());
+
 		if(person.code() == 200) {
 			return ok(search.render(Form.form(SearchInput.class), person));	
 		} else {
@@ -134,13 +168,15 @@ public class Search extends Controller {
 
 	}
 
-	// @Security.Authenticated(Secured.class)
+	//@Security.Authenticated(Secured.class)
 	public Result searchCpr() {
 
 		Form<SearchInput> searchForm = Form.form(SearchInput.class)
 				.bindFromRequest();
 
-		play.Logger.info(searchForm.get().query);
+		// Logging the search
+		play.Logger.info(session("username") + " searched for: " + 
+				searchForm.get().query);
 		
 		// Check if there is errors (empty strings)
 		if (searchForm.hasErrors()) {		
@@ -150,6 +186,13 @@ public class Search extends Controller {
 		// Input type == cprnumber
 		IUuid uuid = cprBroker.getUuid(searchForm.get().query);
 
+		// logging the returned resultcode
+		play.Logger.info(session("username") +
+				"'s search request to CPRBroker responded, " +
+				uuid.code() +
+				" - " +
+				uuid.message());
+		
 		if (uuid.code() == 200) {
 			return ok(uuid.value());
 		} else {

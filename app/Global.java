@@ -34,7 +34,6 @@ public class Global extends GlobalSettings {
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
 	        protected void configure() {
-	            play.Logger.info("Global constructor ran");
 
 	            bind(IAuthStrategy.class)
             	.toProvider(new Provider<IAuthStrategy>() {
@@ -73,7 +72,6 @@ public class Global extends GlobalSettings {
 		
 	@Override
     public <A> A getControllerInstance(Class<A> controllerClass) throws Exception {
-		play.Logger.info("getControllerInstance ran - called by " + controllerClass.getName());
         return injector.getInstance(controllerClass);
     }
 }
