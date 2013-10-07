@@ -1,12 +1,16 @@
 package util.cprbroker.jaxws;
 
+import itst.dk.PartSoap12;
+
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import itst.dk.PartSoap12;
+import org.perf4j.LoggingStopWatch;
+import org.perf4j.StopWatch;
+
 import oio.dkal._1_0.ArrayOfString;
 import oio.sagdok._2_0.LaesInputType;
 import oio.sagdok._2_0.ListInputType;
@@ -46,16 +50,16 @@ import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IDanishAddress;
+import util.cprbroker.IPerson;
 import util.cprbroker.IPersonRelationships;
 import util.cprbroker.IRegisterInformation;
+import util.cprbroker.IRelationship;
 import util.cprbroker.IRelationshipWithIPerson;
 import util.cprbroker.ITidspunkt;
 import util.cprbroker.ITilstand;
+import util.cprbroker.IUuid;
 import util.cprbroker.IUuids;
 import util.cprbroker.IVirkning;
-import util.cprbroker.IPerson;
-import util.cprbroker.IRelationship;
-import util.cprbroker.IUuid;
 import util.cprbroker.models.Contact;
 import util.cprbroker.models.CprCitizenData;
 import util.cprbroker.models.DanishAddress;
@@ -85,6 +89,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final String applicationToken;
 	private final String userToken;
 	private final ICPRBrokerSOAPFactory factory;
+	private PartSoap12 localService;
+	private PartSoap12 localThenExternalService;
+	private PartSoap12 externallService;
 	
 	public JaxWsCprBroker(final String newEndpoint,
 							final String newApplicationToken,
@@ -94,6 +101,13 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		applicationToken = newApplicationToken;
 		userToken = newUserToken;
 		factory = newFactory;
+		
+		try {
+			localService = getService(ESourceUsageOrder.LocalOnly);
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -103,6 +117,13 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @throws InstantiationException 
 	 */
 	private PartSoap12 getService(final ESourceUsageOrder sourceUsageOrderHeader) throws InstantiationException {
+		// start the performance logging
+		StopWatch stopWatch = new LoggingStopWatch("JaxWsCprBroker.getService");
+		
+		if(localService != null) {
+			stopWatch.stop();
+			return localService;
+		}
 		PartSoap12 tmpService = null;
 		factory.setEndpoint(endpoint);
 		factory.setApplicationToken(applicationToken);
@@ -110,22 +131,31 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
 
 		tmpService = factory.getInstance();
+		stopWatch.stop();
 		
 		return tmpService;
 	}
 			
 	@Override
 	public IUuid getUuid(final String cprNumber) {
+		// start the performance logging
+		StopWatch stopWatch = new LoggingStopWatch("JaxWsCprBroker.getUuid");
+
 		PartSoap12 service;
+		// start the performance logging
 		try {
 			service = getService(ESourceUsageOrder.LocalOnly);
 		} catch (InstantiationException e) {
 			play.Logger.error(e.getMessage());
 			return null;
 		}
-		
+		// start performance measurement on cprbroker
+		StopWatch stopWatchCprBroker = new LoggingStopWatch("JaxWsCprBroker.getUuid.CprBroker");
 		GetUuidOutputType uuid = service.getUuid(cprNumber);
-		
+		// stop measurement on cprbroker
+		stopWatchCprBroker.stop();
+		// stop the performance logging
+		stopWatch.stop();
 		return new Uuid(uuid.getUUID(),
 						uuid.getStandardRetur().getStatusKode().intValue(),
 						uuid.getStandardRetur().getFejlbeskedTekst()); 
@@ -133,8 +163,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	@Override
 	public IUuids search(String firstname, String middlename, String lastname, int maxResults, int startIndex) {
+		//start the performance logging
+		StopWatch stopWatch = new LoggingStopWatch("JaxWsCprBroker.search");
 		
-		long start = System.currentTimeMillis();
 		// Setup the input parameters
 		SoegInputType input = new SoegInputType();
 		
@@ -169,7 +200,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		soegObjekt.setSoegAttributListe(soegAttributListeType);
 		
 		input.setSoegObjekt(soegObjekt);
-		long request = System.currentTimeMillis();
+		
 
 		// Access CPR broker
 		PartSoap12 service;
@@ -179,10 +210,12 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			play.Logger.error(e.getMessage());
 			return null;
 		}
+		// start performance measurement on cprbroker
+		StopWatch stopWatchCprBroker = new LoggingStopWatch("JaxWsCprBroker.search.CprBroker");
 		
 		SoegOutputType soegOutput =  service.search(input);
-		long response = System.currentTimeMillis();
-		
+		// stop performance measurement on cprbroker
+		stopWatchCprBroker.stop();
 		// Add the Uuids
 		ArrayOfString idList = soegOutput.getIdliste();
 		List<String> newUuids = null;
@@ -195,22 +228,25 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		IUuids uuids = new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
 				soegOutput.getStandardRetur().getFejlbeskedTekst(),
 				newUuids);
-		long done = System.currentTimeMillis();
-		play.Logger.info("SEARCH: Time: " + (done - start) + "ms, before request: " + (request - start) + "ms, request: " + (response - request) + " parsing: " + (done - response) +"ms");
+		
+		// stop the performance log
+		stopWatch.stop();
 		return uuids;
 		
 	}
 
 	@Override
 	public List<IPerson> list(final IUuids uuids, final ESourceUsageOrder sourceUsageOrder) {
-		long start = System.currentTimeMillis();
+
+		// start the performance logging
+		StopWatch stopWatch = new LoggingStopWatch("JaxWsCprBroker.list");
 		
 		ListInputType listInput = new ListInputType();
 		
 		List<String> list = listInput.getUUID();
 		list.addAll(uuids.values());
 		
-		long request = System.currentTimeMillis();
+
 		// Access CPR broker
 		PartSoap12 service;
 		try {
@@ -219,9 +255,14 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			play.Logger.error(e.getMessage());
 			return null;
 		}
+
+		// start performance measurement on cprbroker
+		StopWatch stopWatchCprBroker = new LoggingStopWatch("JaxWsCprBroker.list.CprBroker");
 		
 		ListOutputType listOutput =  service.list(listInput);
-		long response = System.currentTimeMillis();
+		// stop performance measurement on cprbroker
+		stopWatchCprBroker.stop();
+
 						
 		List<LaesResultatType> laesResultatTypeList = listOutput.getLaesResultat();
 		
@@ -235,9 +276,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur(), false);
 			persons.add(tmpPerson);
 		}
-				
-		long done = System.currentTimeMillis();
-		play.Logger.info("LIST: Time: " + (done - start) + "ms, before request: " + (request - start) + "ms, request: " + (response - request) + " parsing: " + (done - response) +"ms");
+		// stop performance logging
+		stopWatch.stop();
 		
 		return persons;
 				
@@ -245,7 +285,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	@Override
 	public IPerson read(final String uuid, ESourceUsageOrder sourceUsageOrder, boolean isGettingRelations) {
-		long start = System.currentTimeMillis();
+		//start the performance logging
+		StopWatch stopWatch = new LoggingStopWatch("JaxWsCprBroker.read");
+		
 		// Setup the input parameters
 		LaesInputType laesInput = new LaesInputType();
 		laesInput.setUUID(uuid);
@@ -261,23 +303,31 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			play.Logger.error(e.getMessage());
 			return null;
 		}
-		
+
+		// start performance measurement on cprbroker
+		StopWatch stopWatchCprBroker = new LoggingStopWatch("JaxWsCprBroker.read.CprBroker");
+
 		LaesOutputType laesOutput =  service.read(laesInput);
-		long parse = System.currentTimeMillis();		
+		// stop performance measurement on cprbroker
+		stopWatchCprBroker.stop();
 		// Building a person from the result
 		//// Getting the standardReturType 
 		StandardReturType standardReturType = laesOutput.getStandardRetur();
 
 		IPerson person = getPerson(uuid, laesOutput.getLaesResultat(), standardReturType, isGettingRelations);
-		long done = System.currentTimeMillis();
-		
-		play.Logger.info("READ: Time: " + (done - start) + "ms, request: " + (parse - start) + " parsing: " + (done - parse) +"ms" + " isGettingRelations: "+ isGettingRelations);
+
+		// stop performance logging
+		stopWatch.stop();
 		
 		return person;
 	}
 
 	private IPerson getPerson(final String uuid, LaesResultatType laesResultatType,
 			StandardReturType standardReturType, boolean isGettingRelations) {
+
+		//start the performance logging
+		StopWatch stopWatch = new LoggingStopWatch("JaxWsCprBroker.getPerson");
+
 		//// Start building with the required parameters
 		Person.Builder builder =
 				new Person.Builder(standardReturType.getStatusKode().intValue(),
@@ -440,6 +490,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			builder.otherAddress(newAddress);
 		}
 
+		// stop performance logging
+		stopWatch.stop();
+		
 		return builder.build();
 	}
 

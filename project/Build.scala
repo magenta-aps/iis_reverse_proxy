@@ -23,7 +23,9 @@ object ApplicationBuild extends Build {
     "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",
     "com.google.inject" % "guice" % "3.0",
     "org.mockito" % "mockito-all" % "1.9.5",
-    "org.pitest" % "pitest" % "0.31"
+    "org.pitest" % "pitest" % "0.31",
+    "org.perf4j" % "perf4j" % "0.9.16"
+    
     
   )
   
@@ -61,6 +63,7 @@ object ApplicationBuild extends Build {
     jacoco.outputDirectory in jacoco.Config := file("target/jacoco"),
     jacoco.reportFormats   in jacoco.Config := Seq(XMLReport("utf-8"), HTMLReport("utf-8")),
     jacoco.excludes        in jacoco.Config := Seq("views*", "*Routes*", "controllers*routes*", "controllers*Reverse*", "controllers*javascript*", "controller*ref*")
+    
   )
 
 }
