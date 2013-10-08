@@ -2,6 +2,9 @@ package util.auth.ldap;
 
 import javax.inject.Inject;
 
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
+
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
@@ -40,6 +43,7 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 	}
 
 	private final LDAPConnection getConnection() {
+		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.getConnection");
 		LDAPConnection ldapConnection = null;
 		try {
 			//TODO Figure out this SSL connection
@@ -50,19 +54,24 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 			play.Logger.error("failed to connect to " + hostname + " "
 					+ lex.getMessage());
 
-		} 
-			return ldapConnection;
+		} finally {
+			stopWatch.stop();
+		}
+		
+		return ldapConnection;
 	}
 
 	// TODO make some sort of better report than a boolean report type
 	@Override
 	public final IAuthResponse authentication(final String samAccountName,
 			final String password) {
+		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.authentication");
 
 		// Try to get a connection
 		LDAPConnection ldapConnection = getConnection();
 
 		if (ldapConnection == null) {
+			stopWatch.stop();
 			return new LdapAuthResponse(AuthResponseType.ERROR,
 					"Connection error");
 		}
@@ -93,8 +102,8 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 				} catch (LDAPSearchException lse) {
 					play.Logger.warn("The search failed.");
 					play.Logger.warn(lse.getMessage());
-
-				}
+					stopWatch.stop();
+				} 
 
 				// search and check if the user is member of the predefined group
 				SearchRequest searchRequest = new SearchRequest(groupdn,
@@ -104,14 +113,17 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 				SearchResult sr = ldapConnection.search(searchRequest);
 
 				if (sr.getEntryCount() == 1) {
+					stopWatch.stop();
 					// found one entry, so must be okay
 					return new LdapAuthResponse(AuthResponseType.SUCCESS,
 							"login.succesful");
 				} else if (sr.getEntryCount() == 0) {
+					stopWatch.stop();
 					// didn't return any, so user isn't authorized
 					return new LdapAuthResponse(AuthResponseType.INFO,
 							"login.not_authorized");
 				} else {
+					stopWatch.stop();
 					// something went wrong!
 					play.Logger
 							.error(this.getClass().getName()
@@ -120,6 +132,7 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 							"login.unexpected_error");
 				}
 			} else {
+				stopWatch.stop();
 				// ResultCode != success
 				return new LdapAuthResponse(AuthResponseType.INFO,
 						"login.invalid_credientials");
@@ -134,6 +147,7 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 		} finally {
 			// always close the connection afterwards
 			ldapConnection.close();
+			stopWatch.stop();
 		}
 	}
 }
