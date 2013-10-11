@@ -2,7 +2,14 @@ package util.cprbroker.jaxws;
 
 import itst.dk.PartSoap12;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,7 +98,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final String userToken;
 	private final ICPRBrokerSOAPFactory factory;
 	private PartSoap12 localService;
-	//TODO Make a better solution for this
 	private PartSoap12 localThenExternalService;
 	private PartSoap12 externallService;
 	
@@ -155,7 +161,13 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		factory.setUserToken(userToken);
 		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
 
-		tmpService = factory.getInstance();
+		try {
+			tmpService = factory.getInstance();
+		} catch (KeyManagementException | UnrecoverableKeyException
+				| NoSuchAlgorithmException | KeyStoreException
+				| CertificateException | IOException e) {
+			play.Logger.error( e.getMessage());
+		}
 		stopWatch.stop();
 		
 		return tmpService;
