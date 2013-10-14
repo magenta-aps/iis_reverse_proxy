@@ -1,5 +1,10 @@
 package util.auth.ldap;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 
 import javax.inject.Inject;
@@ -27,49 +32,69 @@ import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustAllTrustManager;
 import com.unboundid.util.ssl.TrustStoreTrustManager;
 
-public class LdapAuthenticationStrategy implements IAuthStrategy {
+public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 
 	private final String hostname;
 	private final int port;
 	private final String basedn;
-	private final String groupdn;
-	private final String groupfield;
-
+	private final String userattribute;
+	private final String usergrouprdn;
+	private final String authorizedgrouprdn;
+	private final String authorizedgroupmemberattribute;
+	
 	@Inject
-	public LdapAuthenticationStrategy(final String newHostname,
-			final int newPort, final String newBasedn, final String newGroupdn,
-			final String newGroupfield) {
+	public GenericLdapAuthenticationStrategy(String newHostname,
+											 int newPort,
+											 String newBasedn,
+											 String newUserattribute,
+											 String newUsergrouprdn,
+											 String newAuthorizedgrouprdn,
+											 String newAuthorizedgroupmemberattribute) {
 
 		hostname = newHostname;
 		port = newPort;
 		basedn = newBasedn;
-		groupdn = newGroupdn;
-		groupfield = newGroupfield;
+		userattribute = newUserattribute;
+		usergrouprdn = newUsergrouprdn;
+		authorizedgrouprdn = newAuthorizedgrouprdn;
+		authorizedgroupmemberattribute = newAuthorizedgroupmemberattribute;
+
 	}
 
 	private final LDAPConnection getConnection() {
 		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.getConnection");
+		
 		LDAPConnection ldapConnection = null;
 		try {
-			String trustStoreFile  = "/etc/java/security/jssecacerts";
+			// get the path to the truststore from the application.conf
+			String trustStoreString  = "/etc/java/security/jssecacerts";
+			
+			// make a path and check that the file exists
+			Path path = Paths.get(trustStoreString);
+			if(Files.notExists(path)) throw new FileNotFoundException();
+
+			// convert path to file and use it to configure the TrustStoreTrustManager
+			File trustStoreFile = path.toFile();
 			SSLUtil sslUtil = new SSLUtil(new TrustStoreTrustManager(trustStoreFile));
-			//TODO Figure out this SSL connection
+
 			//SSLUtil sslUtil = new SSLUtil(new TrustAllTrustManager());
 		    ldapConnection = new LDAPConnection(sslUtil.createSSLSocketFactory(), hostname, port);
-			//ldapConnection = new LDAPConnection(hostname, port);
-		} catch (final LDAPException | GeneralSecurityException lex) {
-			play.Logger.error("failed to connect to " + hostname + " "
-					+ lex.getMessage());
-			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", lex.getMessage());
+
+		} catch (LDAPException | GeneralSecurityException e) {
+			play.Logger.error(e.getMessage());
+			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
+			
+		} catch (FileNotFoundException e) {
+			play.Logger.error("Truststore file does not exist. Check trustStoreFile path in application.conf.");
+			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
 		} 
 		
 		stopWatch.stop();
 		return ldapConnection;
 	}
 
-	// TODO make some sort of better report than a boolean report type
 	@Override
-	public final IAuthResponse authentication(final String samAccountName,
+	public final IAuthResponse authentication(final String username,
 			final String password) {
 		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.authentication");
 
@@ -83,46 +108,34 @@ public class LdapAuthenticationStrategy implements IAuthStrategy {
 		}
 
 		try {
-			final BindRequest bindRequest = new SimpleBindRequest(samAccountName,password);
+			final String binddn = userattribute + "=" +
+								  username + "," +
+								  usergrouprdn + "," +
+								  basedn;
+			play.Logger.debug("Created binddn: " + binddn);
+					
+			final BindRequest bindRequest = new SimpleBindRequest(binddn ,password);
+			
 			BindResult bindResult = ldapConnection.bind(bindRequest);
 
 			if (bindResult.getResultCode() == ResultCode.SUCCESS) {
-
-				//TODO Change this filter to something better
-				Filter filter = Filter.create("(&(objectCategory=User)(samAccountName="+ samAccountName +"))");
-
-				SearchRequest searchRequest3 = new SearchRequest(
-						basedn, SearchScope.SUB, filter);
-				String distinguishedName = "";
-				
-				try {
-					SearchResult searchResult = ldapConnection
-							.search(searchRequest3);
-
-					for (SearchResultEntry entry : searchResult
-							.getSearchEntries()) {
-						
-						distinguishedName = entry.getAttribute("distinguishedName").getValue();
-					}
-				} catch (LDAPSearchException lse) {
-					play.Logger.warn("The search failed.");
-					play.Logger.warn(lse.getMessage());
-					stopWatch.stop("LdapAuthenticationStrategy.authentication.searchFailed", lse.getMessage());
-				} 
+				play.Logger.debug("ResultCode.SUCCESS");
 
 				// search and check if the user is member of the predefined group
-				SearchRequest searchRequest = new SearchRequest(groupdn,
+				SearchRequest searchRequest = new SearchRequest(authorizedgrouprdn + ", " + basedn,
 						SearchScope.SUB, Filter.createEqualityFilter(
-								groupfield, distinguishedName));
+								authorizedgroupmemberattribute, binddn));
 
 				SearchResult sr = ldapConnection.search(searchRequest);
-
+				
 				if (sr.getEntryCount() == 1) {
+					play.Logger.debug("Got 1 result");
 					stopWatch.stop("LdapAuthenticationStrategy.authentication.succesful");
 					// found one entry, so must be okay
 					return new LdapAuthResponse(AuthResponseType.SUCCESS,
 							"login.succesful");
 				} else if (sr.getEntryCount() == 0) {
+					play.Logger.debug("Got 0 results");
 					stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful");
 					// didn't return any, so user isn't authorized
 					return new LdapAuthResponse(AuthResponseType.INFO,

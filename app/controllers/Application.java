@@ -91,7 +91,10 @@ public class Application extends Controller {
 			session().clear();
 	    	session("username", loginForm.get().username);
 	    	
-	    	play.Logger.info(session("username") + " has succesfully logged in.");
+	    	play.Logger.info("[" + request().remoteAddress() + "] " +
+	    			session("username") +  
+	    			" has succesfully logged in.");
+
 	    	
 	    	return redirect(
 	    			routes.Application.index()
@@ -106,7 +109,8 @@ public class Application extends Controller {
 			loginForm.errors().put("error", errors);
 
 			// logging the login attempt
-			play.Logger.info("Login attempt with bad credientials.");
+			play.Logger.info("[" + request().remoteAddress() + "] " +
+							 "Login attempt with bad credientials.");
 			
 			return badRequest(login.render(loginForm));
 		}
@@ -115,7 +119,9 @@ public class Application extends Controller {
     public static Result logout() {
 
     	// logging that a user has logged out
-    	play.Logger.info(session("username") + " has succesfully logged out.");
+    	play.Logger.info("[" + request().remoteAddress() + "] " +
+    			session("username") + 
+    			" has succesfully logged out.");
     	
     	session().clear();
     	flash("success", play.i18n.Messages.get("logout.succesful"));

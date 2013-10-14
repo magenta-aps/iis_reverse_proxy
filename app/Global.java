@@ -1,6 +1,7 @@
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthStrategy;
+import util.auth.ldap.GenericLdapAuthenticationStrategy;
 import util.auth.ldap.LdapAuthenticationStrategy;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
@@ -44,10 +45,19 @@ public class Global extends GlobalSettings {
 			    		String hostname = conf.getString("ldap.hostname");
 			    		int port = conf.getInt("ldap.port");
 			    		String basedn  = conf.getString("ldap.basedn");
-			    		String groupdn = conf.getString("ldap.groupdn");
-			    		String groupfield = conf.getString("ldap.groupfield");
+			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
+			    		String userattribute = conf.getString("ldap.userattribute");
+			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
+			    		String authorizedgroupmemberattribute = conf.getString("ldap.authorizedgroupmemberattribute");
+			    		
 			            
-	            		return new LdapAuthenticationStrategy(hostname, port, basedn, groupdn, groupfield);
+	            		return new GenericLdapAuthenticationStrategy(hostname,
+	            													 port,
+	            													 basedn,
+	            													 userattribute,
+	            													 usergrouprdn,
+	            													 authorizedgrouprdn,
+	            													 authorizedgroupmemberattribute);
 					}	
             	});
 	            
