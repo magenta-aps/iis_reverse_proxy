@@ -46,7 +46,7 @@
                     @if(form.field("username").value()) {
                         value="@form.field("username").value()"
                     }
-                autofocus>
+                autofocus autocomplete="off">
                 <input type="password" name="password" class="form-control" placeholder="@Messages("password")">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">@Messages("login.submit")</button>
 

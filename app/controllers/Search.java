@@ -53,6 +53,7 @@ public class Search extends Controller {
 	 *            String containing a firstname
 	 * @return Result with the response from the cprBroker
 	 */
+	@Security.Authenticated(Secured.class)
 	public Result searchLastFirstname(String lastname, String firstname,
 			int page) {
 		return searchLastMiddleFirstname(lastname, null, firstname, page);
