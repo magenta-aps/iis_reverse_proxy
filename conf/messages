@@ -1,5 +1,5 @@
 # route /login
-login.pagetitle = CPR Broker Web Interface - Log på
+login.pagetitle = CPReader - Log på
 login.title = Indtast venligst dine oplysninger
 login.submit = Log på
 
@@ -15,7 +15,7 @@ password = Adgangskode
 error.required = Feltet {0} skal udfyldes
 
 # navbar
-nav.title = CPR Broker Web Interface
+nav.title = CPReader
 nav.quicksearch_placeholder = CPR eller navn
 nav.quicksearch_submit = Søg
 
@@ -64,16 +64,12 @@ person.address.danishAddress.postCode = postnummer
 person.address.danishAddress.postOfficeBox = postboks
 person.address.danishAddress.streetName = gadenavn
 person.address.danishAddress.streetBuilding = gadenummer
-
 person.address.danishAddress.streetNameForAddressing = adresseforaddresering
 person.address.danishAddress.suite = suite
 person.address.danishAddress.note = note
-   
 person.address.danishAddress.municipalityCode = kommunekode
 person.address.danishAddress.streetCode = vejkode
 person.address.danishAddress.streetBuildingIdentifier = gadenummer
-
-   
 person.address.danishAddress.danishNote = ekstranote
 person.address.danishAddress.politiDistrikt = politidistrikt
 person.address.danishAddress.postDistrikt = postdistrikt
@@ -85,7 +81,6 @@ person.address.danishAddress.isSpecielVejkode = specielvejkode
 person.address.danishAddress.isUkendtAdresse = ukendt addresse
 
 #------ ANDEN ADDRESSE
-
 person.otherAddress.worldAddress.locationDescriptionText = beskrivelse
 person.otherAddress.worldAddress.postalAddressFirstLineText = addresse
 person.otherAddress.worldAddress.postalAddressSecondLineText =

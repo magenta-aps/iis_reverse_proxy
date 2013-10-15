@@ -5,12 +5,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.codehaus.jackson.JsonNode;
-
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
+import util.auth.Secured;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.IPerson;
@@ -38,6 +38,7 @@ public class Search extends Controller {
 	 *            String containing a lastname
 	 * @return Result with the response from the cprBroker
 	 */
+	@Security.Authenticated(Secured.class)
 	public Result searchLastname(String lastname, int page) {
 		return searchLastMiddleFirstname(lastname, null, null, page);
 	}
@@ -67,6 +68,7 @@ public class Search extends Controller {
 	 *            String containing a firstname
 	 * @return Result with the response from the cprBroker
 	 */
+	@Security.Authenticated(Secured.class)
 	public Result searchLastMiddleFirstname(String lastname, String middlename,
 			String firstname, int page) {
 		
@@ -142,6 +144,7 @@ public class Search extends Controller {
 	 *            String with the uuid of a person
 	 * @return Result containing the response from the cprBroker
 	 */
+	@Security.Authenticated(Secured.class)
 	public Result show(String uuid) {
 		// Logging the show request
 		play.Logger.info(session("username") +
@@ -168,7 +171,7 @@ public class Search extends Controller {
 
 	}
 
-	//@Security.Authenticated(Secured.class)
+	@Security.Authenticated(Secured.class)
 	public Result searchCpr() {
 
 		Form<SearchInput> searchForm = Form.form(SearchInput.class)
