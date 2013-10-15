@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
+import play.Play;
+
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
@@ -67,7 +69,8 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 		LDAPConnection ldapConnection = null;
 		try {
 			// get the path to the truststore from the application.conf
-			String trustStoreString  = "/etc/java/security/jssecacerts";
+			String trustStoreString  = Play.application().configuration().getString("keystorefile");
+			if(trustStoreString.length() == 0) throw new IllegalArgumentException();
 			
 			// make a path and check that the file exists
 			Path path = Paths.get(trustStoreString);
