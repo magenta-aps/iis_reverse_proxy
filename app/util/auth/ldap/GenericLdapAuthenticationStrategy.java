@@ -40,7 +40,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 	private final String userattribute;
 	private final String usergrouprdn;
 	private final String authorizedgrouprdn;
-	private final String authorizedgroupmemberattribute;
+	private final String authorizedattribute;
 	
 	@Inject
 	public GenericLdapAuthenticationStrategy(String newHostname,
@@ -49,7 +49,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 											 String newUserattribute,
 											 String newUsergrouprdn,
 											 String newAuthorizedgrouprdn,
-											 String newAuthorizedgroupmemberattribute) {
+											 String newAuthorizedattribute) {
 
 		hostname = newHostname;
 		port = newPort;
@@ -57,7 +57,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 		userattribute = newUserattribute;
 		usergrouprdn = newUsergrouprdn;
 		authorizedgrouprdn = newAuthorizedgrouprdn;
-		authorizedgroupmemberattribute = newAuthorizedgroupmemberattribute;
+		authorizedattribute = newAuthorizedattribute;
 
 	}
 
@@ -124,7 +124,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 				// search and check if the user is member of the predefined group
 				SearchRequest searchRequest = new SearchRequest(authorizedgrouprdn + ", " + basedn,
 						SearchScope.SUB, Filter.createEqualityFilter(
-								authorizedgroupmemberattribute, binddn));
+								authorizedattribute, binddn));
 
 				SearchResult sr = ldapConnection.search(searchRequest);
 				

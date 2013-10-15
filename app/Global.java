@@ -48,7 +48,7 @@ public class Global extends GlobalSettings {
 			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
 			    		String userattribute = conf.getString("ldap.userattribute");
 			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
-			    		String authorizedgroupmemberattribute = conf.getString("ldap.authorizedgroupmemberattribute");
+			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");
 			    		
 			            
 	            		return new GenericLdapAuthenticationStrategy(hostname,
@@ -57,7 +57,7 @@ public class Global extends GlobalSettings {
 	            													 userattribute,
 	            													 usergrouprdn,
 	            													 authorizedgrouprdn,
-	            													 authorizedgroupmemberattribute);
+	            													 authorizedattribute);
 					}	
             	});
 	            
