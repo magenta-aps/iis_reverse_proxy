@@ -96,6 +96,9 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final String endpoint;
 	private final String applicationToken;
 	private final String userToken;
+	private final String keystore;
+	private final String keystorePassword;
+	
 	private final ICPRBrokerSOAPFactory factory;
 	private PartSoap12 localService;
 	private PartSoap12 localThenExternalService;
@@ -104,10 +107,14 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	public JaxWsCprBroker(final String newEndpoint,
 							final String newApplicationToken,
 							final String newUserToken,
+							final String newKeystore,
+							final String newKeystorePassword,
 							final ICPRBrokerSOAPFactory newFactory) {
 		endpoint = newEndpoint;
 		applicationToken = newApplicationToken;
 		userToken = newUserToken;
+		keystore = newKeystore;
+		keystorePassword = newKeystorePassword;
 		factory = newFactory;
 	}
 	
@@ -160,6 +167,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
 		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
+		factory.setKeyStore(keystore);
+		factory.setKeyStorePassword(keystorePassword);
 
 		try {
 			tmpService = factory.getInstance();

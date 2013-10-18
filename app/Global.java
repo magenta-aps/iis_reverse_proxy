@@ -71,8 +71,15 @@ public class Global extends GlobalSettings {
 			    		String endpoint = conf.getString("cprbroker.endpoint");
 			    		String appToken  = conf.getString("cprbroker.applicationtoken");
 			    		String userToken = conf.getString("cprbroker.usertoken");
+			            String keystore = conf.getString("keystorefile");
+			            String keystorePassword = conf.getString("keystorepassword");
 			            
-	            		return new JaxWsCprBroker(endpoint, appToken, userToken, new CPRBrokerSOAPFactory());
+	            		return new JaxWsCprBroker(endpoint,
+	            									appToken,
+	            									userToken,
+	            									keystore,
+	            									keystorePassword,
+	            									new CPRBrokerSOAPFactory());
 					}	
             	});	            
 	            

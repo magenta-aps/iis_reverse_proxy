@@ -6,8 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import controllers.Search.SearchInput;
-
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
@@ -20,6 +18,7 @@ import util.auth.IAuthStrategy;
 import util.auth.Secured;
 import views.html.index;
 import views.html.login;
+import controllers.Search.SearchInput;
 
 /**
  * 
