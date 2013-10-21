@@ -48,8 +48,7 @@ public class Global extends GlobalSettings {
 			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
 			    		String userattribute = conf.getString("ldap.userattribute");
 			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
-			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");
-			    		
+			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");		    		
 			            
 	            		return new GenericLdapAuthenticationStrategy(hostname,
 	            													 port,
@@ -71,14 +70,17 @@ public class Global extends GlobalSettings {
 			    		String endpoint = conf.getString("cprbroker.endpoint");
 			    		String appToken  = conf.getString("cprbroker.applicationtoken");
 			    		String userToken = conf.getString("cprbroker.usertoken");
+			    		int allowedSourceUsageOrderHeader = conf.getInt("cprbroker.accesslevel");
 			            String keystore = conf.getString("keystorefile");
 			            String keystorePassword = conf.getString("keystorepassword");
+			    		
 			            
 	            		return new JaxWsCprBroker(endpoint,
 	            									appToken,
 	            									userToken,
 	            									keystore,
 	            									keystorePassword,
+	            									allowedSourceUsageOrderHeader,
 	            									new CPRBrokerSOAPFactory());
 					}	
             	});	            

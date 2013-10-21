@@ -153,7 +153,7 @@ public class Search extends Controller {
 				uuid);
 
 		IPerson person = cprBroker
-				.read(uuid, ESourceUsageOrder.LocalOnly, true);
+				.read(uuid, true);
 
 		// Logging the show request
 		play.Logger.info(session("username") +
@@ -165,7 +165,7 @@ public class Search extends Controller {
 		if(person.code() == 200) {
 			return ok(search.render(Form.form(SearchInput.class), person));	
 		} else {
-			//TODO - If Person isn't found local ask if user wants to look external
+			//TODO - A person wasn't found
 			return ok();
 		}
 		

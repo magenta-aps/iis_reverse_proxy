@@ -2,7 +2,6 @@ package util.cprbroker.jaxws;
 
 import itst.dk.PartSoap12;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyManagementException;
@@ -52,6 +51,8 @@ import oio.sagdok.person._1_0.VerdenAdresseType;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
+import play.Play;
+
 import util.cprbroker.ERelationshipType;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.IAddress;
@@ -98,6 +99,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final String userToken;
 	private final String keystore;
 	private final String keystorePassword;
+	private final int allowedSourceUsageOrderHeader;
 	
 	private final ICPRBrokerSOAPFactory factory;
 	private PartSoap12 localService;
@@ -109,13 +111,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 							final String newUserToken,
 							final String newKeystore,
 							final String newKeystorePassword,
+							final int newAllowedSourceUsageOrderHeader,
 							final ICPRBrokerSOAPFactory newFactory) {
 		endpoint = newEndpoint;
 		applicationToken = newApplicationToken;
 		userToken = newUserToken;
 		keystore = newKeystore;
 		keystorePassword = newKeystorePassword;
+		allowedSourceUsageOrderHeader = newAllowedSourceUsageOrderHeader;
 		factory = newFactory;
+		
 	}
 	
 	/**
@@ -124,11 +129,20 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * @return
 	 * @throws InstantiationException 
 	 */
-	private PartSoap12 getService(final ESourceUsageOrder sourceUsageOrderHeader) throws InstantiationException {
+	private PartSoap12 getService(ESourceUsageOrder sourceUsageOrderHeader) throws InstantiationException {
 
 		// start the performance logging
-		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.getService");
-
+		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.getService");	
+		
+		if(sourceUsageOrderHeader.ordinal() > allowedSourceUsageOrderHeader) {
+			play.Logger.debug("JaxWsCprBroker.getService: sourceUsageOrderHeader value(" +
+								sourceUsageOrderHeader.ordinal() +
+								") larger than allowed(" + 
+								allowedSourceUsageOrderHeader + "). Value set to allowed level.");
+			// set the sourceUsageOrderHeader to the maxium allowed level
+			sourceUsageOrderHeader = ESourceUsageOrder.values()[allowedSourceUsageOrderHeader];
+		}
+		
 		// lazy initializing of the needed service
 		switch(sourceUsageOrderHeader){
 			case LocalOnly:
@@ -136,20 +150,25 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 					localService =  createService(sourceUsageOrderHeader);
 				}
 				stopWatch.stop();
+				play.Logger.debug("JaxWsCprBroker.getService: Returned a localService.");
 				return localService;
 				
 			case LocalThenExternal:
+				// check that this level is allowed
 				if (localThenExternalService == null) {
 					localThenExternalService = createService(sourceUsageOrderHeader);
 				}
 				stopWatch.stop();
+				play.Logger.debug("JaxWsCprBroker.getService: Returned a localThenExternalService.");
 				return localThenExternalService;
 				
 			case ExternalOnly:
+				// check that this level is allowed
 				if (externallService == null) {
 					externallService = createService(sourceUsageOrderHeader);
 				}
 				stopWatch.stop();
+				play.Logger.debug("JaxWsCprBroker.getService: Returned an ExternalService.");
 				return externallService;
 		}
 		
@@ -191,7 +210,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		PartSoap12 service;
 		// start the performance logging
 		try {
-			service = getService(ESourceUsageOrder.LocalOnly);
+			service = getService(ESourceUsageOrder.LocalThenExternal);
 		} catch (InstantiationException e) {
 			play.Logger.error(e.getMessage());
 			return null;
@@ -331,7 +350,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 	
 	@Override
-	public IPerson read(final String uuid, ESourceUsageOrder sourceUsageOrder, boolean isGettingRelations) {
+	public IPerson read(final String uuid, boolean isGettingRelations) {
 		//start the performance logging
 		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.read");
 		
@@ -345,7 +364,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// Access CPR broker
 		PartSoap12 service;
 		try {
-			service = getService(sourceUsageOrder);
+			service = getService(ESourceUsageOrder.LocalThenExternal);
 		} catch (InstantiationException e) {
 			play.Logger.error(e.getMessage());
 			return null;
