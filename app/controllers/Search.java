@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.List;
+import scala.collection.JavaConversions.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

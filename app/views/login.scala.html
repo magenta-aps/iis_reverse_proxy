@@ -1,4 +1,5 @@
-@(form: Form[Application.Login])
+@(form: play.data.Form[Application.Login])
+@import scala.collection.JavaConversions._
 
 <html>
     <head>
@@ -17,34 +18,26 @@
 
             @if(form.hasErrors) {
                 @if(form.errors.size > 0) {
-                    @for((key, value) <- form.errors) {
-                        @for(err <- value) {
+                    @for(err <- form.errors) {
                             <div class="alert alert-error alert-dismissable">
                                 @{
-                                    val msg = err.message()
-                                    val key = Messages(err.key()).toLowerCase();
+                                    val msg = err._1
+                                    val key = Messages(err._1).toLowerCase();
                                     Messages(msg, key)                                    
                                 }
                             </div>
-                        }
                     }
                 }
            }
 
-            @if(flash.contains("success")) {
-                <div class="alert alert-success alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        @flash.get("success")
-                </div>
-            }
 
             @helper.form(routes.Application.authenticate, 'class -> "form-signin") {
 
                 <h2 class="form-signin-heading">@Messages("login.title")</h2>
 
                 <input type="text" name="username" class="form-control" placeholder="@Messages("username")"
-                    @if(form.field("username").value()) {
-                        value="@form.field("username").value()"
+                    @if(form("username").value) {
+                        value="@form("username")"
                     }
                 autofocus autocomplete="off">
                 <input type="password" name="password" class="form-control" placeholder="@Messages("password")">

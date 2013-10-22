@@ -18,7 +18,7 @@ object ApplicationBuild extends Build {
     javaEbean,
     "joda-time" % "joda-time" % "2.3",
     "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
-    "org.webjars" %% "webjars-play" % "2.1.0-3",
+    "org.webjars" %% "webjars-play" % "2.2.0",
     "org.webjars" % "bootstrap" % "3.0.0-rc.2",
     "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",
     "com.google.inject" % "guice" % "3.0",
@@ -30,7 +30,7 @@ object ApplicationBuild extends Build {
   )
   
   // Update settings for findbugs and jacoco SBT plugins.
-  lazy val s = Defaults.defaultSettings ++ findbugsSettings ++ Seq(jacoco.settings:_*)
+  lazy val s = playScalaSettings ++ findbugsSettings ++ Seq(jacoco.settings:_*)
 
   val main = play.Project(appName, appVersion, appDependencies, settings = s).settings(
 
@@ -52,10 +52,10 @@ object ApplicationBuild extends Build {
     // Configuration file: project/findbugs-excludefilter.xml
     // Output file: target/findbugs/findbugs.xml
     // You want the report name file extension to match the report type. 
-    findbugsReportType := de.johoop.findbugs4sbt.ReportType.Xml,
-    findbugsReportName := "findbugs.xml",
-    findbugsTargetPath <<= target (_ / "findbugs"),
-    findbugsExcludeFilters <<= baseDirectory { base => Some(scala.xml.XML.loadFile(BuildPaths.projectStandard(base) / "findbugs-excludefilter.xml")) },
+    findbugsReportType := Some(de.johoop.findbugs4sbt.ReportType.Xml),
+    findbugsReportName := Some("findbugs.xml"),
+    //findbugsTargetPath <<= target (_ / "findbugs"),
+    //findbugsExcludeFilters <<= baseDirectory { base => Some(scala.xml.XML.loadFile(BuildPaths.projectStandard(base) / "findbugs-excludefilter.xml")) },
 
     // Add the 'jacoco:cover' command to Play console. 
     // Output file: target/jacoco/html/index.html

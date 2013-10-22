@@ -123,7 +123,7 @@ public class Application extends Controller {
     			" has succesfully logged out.");
     	
     	session().clear();
-    	flash("success", play.i18n.Messages.get("logout.succesful"));
+    	//flash("success", play.i18n.Messages.get("logout.succesful"));
     	return redirect(
     			routes.Application.login()
     	);
