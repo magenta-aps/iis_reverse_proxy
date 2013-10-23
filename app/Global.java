@@ -3,6 +3,7 @@ import play.Play;
 import util.auth.IAuthStrategy;
 import util.auth.ldap.GenericLdapAuthenticationStrategy;
 import util.auth.ldap.LdapAuthenticationStrategy;
+import util.auth.ldap.TestAuthenticationService;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
 
@@ -40,23 +41,32 @@ public class Global extends GlobalSettings {
             	.toProvider(new Provider<IAuthStrategy>() {
 
 					@Override
-					public IAuthStrategy get() {			            
-			        	play.Configuration conf = Play.application().configuration();
-			    		String hostname = conf.getString("ldap.hostname");
-			    		int port = conf.getInt("ldap.port");
-			    		String basedn  = conf.getString("ldap.basedn");
-			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
-			    		String userattribute = conf.getString("ldap.userattribute");
-			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
-			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");		    		
-			            
-	            		return new GenericLdapAuthenticationStrategy(hostname,
-	            													 port,
-	            													 basedn,
-	            													 userattribute,
-	            													 usergrouprdn,
-	            													 authorizedgrouprdn,
-	            													 authorizedattribute);
+					public IAuthStrategy get() {		
+						return new TestAuthenticationService();
+//			        	play.Configuration conf = Play.application().configuration();
+//			    		String hostname = conf.getString("ldap.hostname");
+//			    		int port = conf.getInt("ldap.port");
+//			    		String basedn  = conf.getString("ldap.basedn");
+//			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
+//			    		String userattribute = conf.getString("ldap.userattribute");
+//			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
+//			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");
+//			    		
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), hostname: " + hostname);
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), port: " + port);
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), basedn: " + basedn);
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), usergrouprdn: " + usergrouprdn);
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), userattribute: " + userattribute);
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedgrouprdn: " + authorizedgrouprdn);
+//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedattribute: " + authorizedattribute);
+//			            
+//	            		return new GenericLdapAuthenticationStrategy(hostname,
+//	            													 port,
+//	            													 basedn,
+//	            													 userattribute,
+//	            													 usergrouprdn,
+//	            													 authorizedgrouprdn,
+//	            													 authorizedattribute);
 					}	
             	});
 	            
@@ -74,6 +84,12 @@ public class Global extends GlobalSettings {
 			            String keystore = conf.getString("keystorefile");
 			            String keystorePassword = conf.getString("keystorepassword");
 			    		
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), endpoint: " + endpoint);
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), appToken: " + appToken);
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), userToken: " + userToken);
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), allowedSourceUsageOrderHeader: " + allowedSourceUsageOrderHeader);
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystore: " + keystore);
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystorePassword: " + keystorePassword);
 			            
 	            		return new JaxWsCprBroker(endpoint,
 	            									appToken,

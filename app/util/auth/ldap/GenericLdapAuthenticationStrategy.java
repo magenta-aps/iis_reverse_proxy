@@ -88,7 +88,8 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
 			
 		} catch (FileNotFoundException e) {
-			play.Logger.error("Truststore file does not exist. Check trustStoreFile path in application.conf.");
+			String trustStoreString  = Play.application().configuration().getString("keystorefile");
+			play.Logger.error("Truststore file does not exist at :'" + trustStoreString + "'. Check trustStoreFile path in your configuration.");
 			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
 		} 
 		
