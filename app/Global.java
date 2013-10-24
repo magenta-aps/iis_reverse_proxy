@@ -42,7 +42,7 @@ public class Global extends GlobalSettings {
 
 					@Override
 					public IAuthStrategy get() {		
-
+					
 			        	play.Configuration conf = Play.application().configuration();
 			    		String hostname = conf.getString("ldap.hostname");
 			    		int port = conf.getInt("ldap.port");

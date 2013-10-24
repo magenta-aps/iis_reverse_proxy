@@ -3,6 +3,10 @@ login.pagetitle = CPReader - Log på
 login.title = Indtast venligst dine oplysninger
 login.submit = Log på
 
+#error
+error.503 = Der findes ingen informationer om den pågældende person lokalt i CPR Brokeren.
+
+
 # /login feedback messages
 # implement the different error messages here
 logout.succesful = Du er nu logget ud
