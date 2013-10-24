@@ -20,6 +20,7 @@ import util.cprbroker.IUuids;
 import util.cprbroker.models.Uuids;
 import views.html.list;
 import views.html.search;
+import views.html.show_error;
 
 @Singleton
 public class Search extends Controller {
@@ -167,10 +168,8 @@ public class Search extends Controller {
 			return ok(search.render(Form.form(SearchInput.class), person));	
 		} else {
 			//TODO - A person wasn't found
-			return ok();
+			return ok(show_error.render(person.code()));
 		}
-		
-
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -201,6 +200,8 @@ public class Search extends Controller {
 		if (uuid.code() == 200) {
 			return ok(uuid.value());
 		} else {
+			// this should never happen as person master will just assign
+			// a new uuid if it doesn't exist
 			play.Logger.info("search form has errors");
 			return badRequest("CPR not found in local");
 		}
