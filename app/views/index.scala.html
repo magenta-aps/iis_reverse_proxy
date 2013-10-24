@@ -4,8 +4,25 @@
          
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
-        <h1>Welcome, @user!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl dui, faucibus sed pellentesque at, pharetra quis magna. Integer ornare augue nec nisi sollicitudin, vitae mollis eros tristique. Duis blandit, massa et elementum laoreet, sem nulla porttitor leo, et vehicula velit ligula tristique nisl. Quisque ante enim, elementum sit amet luctus id, commodo ac magna. Sed suscipit massa sit amet ante ultricies, ac aliquet enim interdum. Nunc ut ipsum vulputate nisi tempor cursus quis quis metus. Proin scelerisque eget lorem non congue. Morbi consectetur feugiat velit, sed congue justo eleifend sed. Curabitur ac mauris ac mauris ullamcorper malesuada. Sed at purus vel tortor pulvinar facilisis nec et mi. Nullam quis felis egestas lectus suscipit convallis eget nec odio. Suspendisse ut congue lacus. </p>
+        <h1>CPReader</h1>
+        <p> En webbaseret grænseflade, som giver brugere adgang til at slå CPR numre op i CPR Brokeren og søge på navn.</p>
+
+		<h2>Om demonstrationen</h2>
+		<p>Denne demonstration indeholder ingen ægte CPR-oplysninger, idet vi har brugt testdata, leveret af CSC. I demonstrationen er ikke alle sikkerhedsfaktorer aktiveret.</p>
+		
+		<h2>Vejledning:</h2>
+		<p>Indtast et komplet CPR nummer i feltet eller søg på navnet på formen "Efternavn", "Fornavn". Prøv f.eks. at søge på "Hansen" og klik dig videre fra resultatlisten.</p>
+		
+		<p>Igennem en letanvendelig browserbaseret brugergrænseflade, kan brugeren indtaste et CPR nummer eller søge på navnet, og få de pågældende personoplysninger fra CPR Brokeren præsenteret på skærmen.</p>
+		
+		<h2>Om sikkerhed</h2>
+		<p>Kommunikation mellem CPR Brokeren, CPReader og browseren sker altid krypteret.</p>
+		<p>Adgang til løsningen forudsætter authentikering med LDAP (f.eks. via AD), og adgang styres vha. en gruppe i LDAP. Det er ikke muligt at benytte løsningen uden at være logget på systemet. Kommunikation mellem CPReader og LDAP vil altid foregå krypteret, hvorimod kommunikation mellem CPReader og den lokale browser kan sættes op til at foregå krypteret.</p>
+		
+		<p>Alle forespørgsler logges på brugerniveau, og der er desuden udviklet en performance log.</p>
+		
+		<h2>Baggrund</h2>
+		<p>Løsningen er udviklet af Søren Kirkegård, bachelor studerende KEA Medie/IT, som igennem et 10 ugers praktikophold hos Magenta, et i gang med at implementere løsningen.</p>
       </div>
 
 }
