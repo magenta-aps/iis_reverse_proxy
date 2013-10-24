@@ -21,9 +21,9 @@
                     @for(err <- form.errors) {
                             <div class="alert alert-error alert-dismissable">
                                 @{
-                                    val msg = err._1
-                                    val key = Messages(err._1).toLowerCase();
-                                    Messages(msg, key)                                    
+                                    val msg = err._2.get(0).message()
+                                    val key = Messages("").toLowerCase();
+                                    Messages(msg, key)                  
                                 }
                             </div>
                     }
@@ -37,7 +37,7 @@
 
                 <input type="text" name="username" class="form-control" placeholder="@Messages("username")"
                     @if(form("username").value) {
-                        value="@form("username")"
+                        value="@form("username").value"
                     }
                 autofocus autocomplete="off">
                 <input type="password" name="password" class="form-control" placeholder="@Messages("password")">

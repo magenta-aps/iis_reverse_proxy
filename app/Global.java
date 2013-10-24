@@ -42,31 +42,31 @@ public class Global extends GlobalSettings {
 
 					@Override
 					public IAuthStrategy get() {		
-						return new TestAuthenticationService();
-//			        	play.Configuration conf = Play.application().configuration();
-//			    		String hostname = conf.getString("ldap.hostname");
-//			    		int port = conf.getInt("ldap.port");
-//			    		String basedn  = conf.getString("ldap.basedn");
-//			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
-//			    		String userattribute = conf.getString("ldap.userattribute");
-//			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
-//			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");
-//			    		
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), hostname: " + hostname);
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), port: " + port);
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), basedn: " + basedn);
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), usergrouprdn: " + usergrouprdn);
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), userattribute: " + userattribute);
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedgrouprdn: " + authorizedgrouprdn);
-//			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedattribute: " + authorizedattribute);
-//			            
-//	            		return new GenericLdapAuthenticationStrategy(hostname,
-//	            													 port,
-//	            													 basedn,
-//	            													 userattribute,
-//	            													 usergrouprdn,
-//	            													 authorizedgrouprdn,
-//	            													 authorizedattribute);
+
+			        	play.Configuration conf = Play.application().configuration();
+			    		String hostname = conf.getString("ldap.hostname");
+			    		int port = conf.getInt("ldap.port");
+			    		String basedn  = conf.getString("ldap.basedn");
+			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
+			    		String userattribute = conf.getString("ldap.userattribute");
+			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
+			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");
+			    		
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), hostname: " + hostname);
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), port: " + port);
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), basedn: " + basedn);
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), usergrouprdn: " + usergrouprdn);
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), userattribute: " + userattribute);
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedgrouprdn: " + authorizedgrouprdn);
+			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedattribute: " + authorizedattribute);
+			            
+	            		return new GenericLdapAuthenticationStrategy(hostname,
+	            													 port,
+	            													 basedn,
+	            													 userattribute,
+	            													 usergrouprdn,
+	            													 authorizedgrouprdn,
+	            													 authorizedattribute);
 					}	
             	});
 	            
