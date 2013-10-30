@@ -22,7 +22,7 @@
                             <div class="alert alert-error alert-dismissable">
                                 @{
                                     val msg = err._2.get(0).message()
-                                    val key = Messages("").toLowerCase();
+                                    val key = Messages(err._1).toLowerCase();
                                     Messages(msg, key)                  
                                 }
                             </div>
