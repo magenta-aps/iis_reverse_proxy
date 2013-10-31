@@ -47,6 +47,7 @@ $(document).ready(function(){
     var containsspecialcharacters = /\½|\§|\!|\"|\@|\#|\£|\¤|\$|\%|\&|\/|\{|\(|\[|\)|\]|\=|\}|\?|\+|\'|\`|\||\^|\~|\*|\_|\;|\:|\.|\+/;
     var containsnumbers = /[0-9]/;
     var containsletters = /[a-zA-Z]/;
+    var cprpattern = /[0-9]{6}-[0-9]/;
 
     //reset the color
     querygroup.removeClass('has-success');
@@ -73,7 +74,7 @@ $(document).ready(function(){
     }
 
     //if the query has only numbers
-    else if(containsnumbers.test(query) & !containsletters.test(query)) {
+    else if(containsnumbers.test(query) & !containsletters.test(query) & !containsspecialcharacters.test(query)) {
       //if there is less than 6 numbers
       if(query.length < 6) {
         querygroup.addClass('has-warning');   
@@ -82,11 +83,17 @@ $(document).ready(function(){
       //if there is more than 5 numbers, but less than 10
       else if(query.length > 5 & query.length < 10) {
         // validate that the first 6 numbers is a valid date
-        querygroup.addClass('has-warning');   
+        querygroup.addClass('has-warning');
+      }
+      
+      else if(query.length > 5 & query.length < 11 & cprpattern.test(query)) {
+        // validate that the first 6 numbers is a valid date    	  
+        querygroup.addClass('has-warning');
       }
 
       //if there is more than 10 numbers
-      else if(query.length > 10) {
+      else if((query.length > 10 & !cprpattern.test(query)) |
+    		  (query.length > 11 & cprpattern.test(query))) {
         querygroup.addClass('has-error');
         queryfield.attr('data-original-title', 'Bemærk');
         queryfield.attr('data-content', 'Din søgning indeholder over 10 tal. Et CPR nummer indeholder kun 10.')
@@ -95,14 +102,17 @@ $(document).ready(function(){
       }
 
       //if there is 10 numbers
-      else if(query.length == 10) {
+      else if((query.length == 10 & !cprpattern.test(query)) |
+    		  (query.length == 11 & cprpattern.test(query))) {
         // is the date 010165 or 010166
         if(query.substring(0,6) == '010165' | query.substring(0,6) == '010166') {
           querygroup.addClass('has-success');  
         } 
-        else if(modolus11(query)) {
-          console.log("modolus11");
+        else if(!cprpattern.test(query) & modolus11(query)) {
           querygroup.addClass('has-success');
+        }
+        else if(cprpattern.test(query) & modolus11(query.replace("-", ""))) {
+            querygroup.addClass('has-success');
         }
         else {
           querygroup.addClass('has-error');
@@ -122,6 +132,7 @@ $(document).ready(function(){
 
        var query = $('#query').val(); //get the content of the input field
        var cpr = /\b[0-9]{10}$/; // a cpr consists of exactly 10 numbers
+       var cprpattern = /[0-9]{6}-[0-9]{4}/; // or 10 numbers with a - between 6th and 7th char 
        var lastname = /.*$/; // no commas 
        var lastfirstname = /.*,\s*.*$/; // one comma 
        var lastmiddlefirstname = /.*,\s*.*,\s.*$/; // two commas
@@ -130,13 +141,24 @@ $(document).ready(function(){
        		$.post('/search/cpr/', {"query": query}, function(data) {
        			window.location = '/show/uuid/' + data + '/';
        		});
-       } else if (lastmiddlefirstname.test(query) || lastfirstname.test(query)) {
+       } 
+       else if (cprpattern.test(query)) {
+      		$.post('/search/cpr/', {"query": query.replace("-", "")}, function(data) {
+       			window.location = '/show/uuid/' + data + '/';
+       		});    	   
+       }
+       
+       else if (lastmiddlefirstname.test(query) || lastfirstname.test(query)) {
        	window.location = '/search/name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/') + '/page/1';
-       } else if(lastname.test(query)) {
+       } 
+       
+       else if(lastname.test(query)) {
     	   if(query.length > 0) {
     		   window.location = '/search/name/' + query + '/page/1';
     	   }
-       } else {
+       } 
+       
+       else {
            alert('error');
        }
    }
