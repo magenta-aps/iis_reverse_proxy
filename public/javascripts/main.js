@@ -132,7 +132,7 @@ $(document).ready(function(){
 
        var query = $('#query').val(); //get the content of the input field
        var cpr = /\b[0-9]{10}$/; // a cpr consists of exactly 10 numbers
-       var cprpattern = /[0-9]{6}-[0-9]{4}/; // or 10 numbers with a - between 6th and 7th char 
+       var cprpattern = /[0-9]{6}-[0-9]{4}$/; // or 10 numbers with a - between 6th and 7th char 
        var lastname = /.*$/; // no commas 
        var lastfirstname = /.*,\s*.*$/; // one comma 
        var lastmiddlefirstname = /.*,\s*.*,\s.*$/; // two commas
