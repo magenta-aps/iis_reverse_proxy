@@ -34,40 +34,38 @@
 @(relation: util.cprbroker.IRelationshipWithIPerson)
 
 @import util.cprbroker.ERelationshipType;
+@import play.Play;
 <div class="col-md-6">
  <div class="panel panel-default">
-    <a href="/show/uuid/@relation.person.uuid/">           
+    @if(relation.person.code == 200 || Play.application().configuration().getInt("cprbroker.accesslevel") > 0) {
+    <a href="/show/uuid/@relation.person.uuid/">
+    }           
 	    <div class="panel-heading">
 		     
 	         <h3 class="panel-title">
 	             <span class="glyphicon glyphicon-user"></span> @relation.relationshipType
-	             
 	             @if(relation.person.code == 200) {
 	                 @relation.person.registerInformation.cprCitizen.socialSecurityNumber
 		                 @if(relation.person.firstname) { @relation.person.firstname}
 		                 @if(relation.person.middelname) { @relation.person.middelname}
 		                 @if(relation.person.lastname) { @relation.person.lastname}
-	             }
-	             
-	             @if(relation.person.code != 200) {                    
-	                 <span class="pull-right">
-	                     <span class="glyphicon glyphicon-refresh"></span>
-	                 </span>
-	             }
+	             }	             
 	         </h3>
-	
-	         @if(relation.person.code != 200 && relation.effect != null) {
-	             <p class="text-right">
-	                 <br/>
-	                 @virkning(relation.effect, true)
-	             </p>
-	         }
-	     </div>
+		 </div>
+		 @if(relation.person.code == 200 || Play.application().configuration().getInt("cprbroker.accesslevel") > 0) {
      </a>
-     @if(relation.person.code == 200) {
-      <div class="panel-body">
-         @tilstande(relation.person.tilstand)
-      </div>
      }
+      <div class="panel-body">
+         @if(relation.person.code != 200) {
+               @if(Play.application().configuration().getInt("cprbroker.accesslevel") > 0) {
+                   <p>Der findes ingen lokale informationer om denne relation, men du kan slå den op i en ekstern kilde. Bemærk at dette medfører en omkostning for opslaget. <p/>
+               } else {
+                   <p>Der findes ingen lokale informationer om denne relation, og din installation giver ikke tilladelse til at lave opslag i eksterne kilder.</p>
+               }
+          }
+      
+         @tilstande(relation.person.tilstand)
+         @virkning(relation.effect, true)
+      </div>
  </div>
 </div>

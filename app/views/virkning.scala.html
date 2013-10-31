@@ -34,9 +34,11 @@
 @(virkning: util.cprbroker.IVirkning, isVirkning : Boolean)
 
 @if(virkning != null) {
+    @if(virkning.fraTidspunkt != null && virkning.tilTidspunkt != null) {
     <span class="glyphicon glyphicon-time"></span>
+    }
     @if(virkning.fraTidspunkt != null) {@virkning.fraTidspunkt}
-    @if(isVirkning) {
+    @if(isVirkning && virkning.tilTidspunkt != null) {
         <span class="glyphicon glyphicon-arrow-right"></span>
         @if(virkning.tilTidspunkt != null) {@virkning.tilTidspunkt}
         @if(virkning.kommentar) {<br/>@virkning.kommentar</}
