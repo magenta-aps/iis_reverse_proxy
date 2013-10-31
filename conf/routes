@@ -16,8 +16,8 @@ GET     /logout						controllers.Application.logout()
 # Search
 POST    /search/cpr/                                                @controllers.Search.searchCpr()
 GET     /search/name/:lastname/page/:page                           @controllers.Search.searchLastname(lastname: String, page: Int)
-GET     /search/name/:lastname/:firstname/page/:page                @controllers.Search.searchLastFirstname(lastname: String, firstname : String, page : Int)
-GET     /search/name/:lastname/:middlename/:firstname/page/:page    @controllers.Search.searchLastMiddleFirstname(lastname: String, middlename: String , firstname : String, page : Int)
+GET     /search/name/:firstname/:lastname/page/:page                @controllers.Search.searchLastFirstname(lastname: String, firstname : String, page : Int)
+GET     /search/name/:firstname/:middlename/:lastname/page/:page    @controllers.Search.searchLastMiddleFirstname(lastname: String, middlename: String , firstname : String, page : Int)
 GET     /show/uuid/:uuid/                                           @controllers.Search.show(uuid : String)
 
 # Map static resources from the /public folder to the /assets URL path

@@ -159,10 +159,10 @@ public class Search extends Controller {
 
 			String path = request().path();
 			path = path.substring(0, path.indexOf("page") + 5);
-
-			String query = (lastname != null) ? ((firstname != null) ? ((middlename != null) ? lastname
-					+ ", " + middlename + ", " + firstname
-					: lastname + ", " + firstname)
+			
+			String query = (lastname != null) ? ((firstname != null) ? ((middlename != null) ? firstname
+					+ ", " + middlename + ", " + lastname
+					: firstname + ", " + lastname)
 					: lastname)
 					: "";
 
