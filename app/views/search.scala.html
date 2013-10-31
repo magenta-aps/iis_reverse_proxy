@@ -389,9 +389,17 @@
 		                    </div>
 		                </div>
 		
-		
-		                @if(person.otherAddress != null 
-		                    && person.otherAddress.worldAddress != null) {
+		                @* Have to do some silly check here, because a worldAddress ALWAYS has two fields..*@
+		                @if(person.otherAddress != null &&
+		                     person.otherAddress.worldAddress != null &&
+		                     (person.otherAddress.worldAddress.locationDescriptionText ||
+		                         person.otherAddress.worldAddress.postalAddressFirstLineText ||
+		                         person.otherAddress.worldAddress.postalAddressSecondLineText ||
+		                         person.otherAddress.worldAddress.postalAddressThirdLineText ||
+		                         person.otherAddress.worldAddress.postalAddressFourthLineText ||
+		                         person.otherAddress.worldAddress.postalAddressFifthLineText)
+		                         
+		                 ) {
 		                    
 		                    @if(person.otherAddress.addressType == EAddressType.World) {
 			                <div class="col-md-6">
