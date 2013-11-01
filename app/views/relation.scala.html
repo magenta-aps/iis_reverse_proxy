@@ -37,10 +37,10 @@
 @import play.Play;
 <div class="col-md-6">
  <div class="panel panel-default">
+	    <div class="panel-heading">
     @if(relation.person.code == 200 || Play.application().configuration().getInt("cprbroker.accesslevel") > 0) {
     <a href="/show/uuid/@relation.person.uuid/">
     }           
-	    <div class="panel-heading">
 		     
 	         <h3 class="panel-title">
 	             <span class="glyphicon glyphicon-user"></span> @relation.relationshipType
