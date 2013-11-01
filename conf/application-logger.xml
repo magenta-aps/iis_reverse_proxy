@@ -33,7 +33,7 @@
   </appender>  
   
   <logger name="play" level="INFO" />
-  <logger name="application" level="DEBUG" />
+  <logger name="application" level="INFO" />
   <logger name="org.perf4j.TimingLogger" additivity="false" level="INFO" >
     <appender-ref ref="perf4jFileAppender"/>
   </logger>
