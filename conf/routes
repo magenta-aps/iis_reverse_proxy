@@ -5,8 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index()
 
-# Enable webjar based resources to be returned
-GET 	/webjars/*file  			controllers.WebJarAssets.at(file)
+# Enable webjar based resources to be returned - used in development
+#GET 	/webjars/*file  			controllers.WebJarAssets.at(file)
 
 # Login
 GET	    /login						controllers.Application.login()

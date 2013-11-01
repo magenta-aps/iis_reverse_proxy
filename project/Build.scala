@@ -52,11 +52,11 @@ object ApplicationBuild extends Build {
     "com.google.inject" % "guice" % "3.0",					// dependency injection
     "org.perf4j" % "perf4j" % "0.9.16",						// performance logging
     
-    // webjars
-    "org.webjars" %% "webjars-play" % "2.2.0",				// dependency for using webjars with play
-    "org.webjars" % "jquery" % "1.9.0",						// jquery
-    "org.webjars" % "bootstrap" % "3.0.1",					// bootstrap						
-    "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",	// glyphicons
+    // webjars - used in development
+//    "org.webjars" %% "webjars-play" % "2.2.0",				// dependency for using webjars with play
+//    "org.webjars" % "jquery" % "1.9.0",						// jquery
+//    "org.webjars" % "bootstrap" % "3.0.1",					// bootstrap						
+//    "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",	// glyphicons
     
     // testing frameworks
     "org.mockito" % "mockito-all" % "1.9.5"	% "test"		// mocking for testing
@@ -68,7 +68,8 @@ object ApplicationBuild extends Build {
   
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-    
+    requireJs += "main.js",
+    requireJsShim += "main.js"
   )
 
 }

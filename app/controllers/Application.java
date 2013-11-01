@@ -139,7 +139,7 @@ public class Application extends Controller {
 							play.i18n.Messages.get(authResponse.message()));
 			errors.add(error);
 			loginForm.errors().put("error", errors);
-
+			play.Logger.debug(error.toString());
 			// logging the login attempt
 			play.Logger.info("[" + request().remoteAddress() + "] " +
 							 "Login attempt with bad credientials.");
