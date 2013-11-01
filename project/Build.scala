@@ -34,9 +34,6 @@
 import sbt._
 import Keys._
 import play.Project._
-import de.johoop.findbugs4sbt.FindBugs._
-import de.johoop.jacoco4sbt._
-import JacocoPlugin._
 import java.io.File
 
 object ApplicationBuild extends Build {
@@ -47,55 +44,30 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     javaCore,
-    javaJdbc,
     javaEbean,
-    "joda-time" % "joda-time" % "2.3",
-    "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
-    "org.webjars" %% "webjars-play" % "2.2.0",
-    "org.webjars" % "bootstrap" % "3.0.0-rc.2",
-    "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",
-    "com.google.inject" % "guice" % "3.0",
-    "org.mockito" % "mockito-all" % "1.9.5",
-    "org.pitest" % "pitest" % "0.31",
-    "org.perf4j" % "perf4j" % "0.9.16"
+    
+    // custom dependencies
+    "joda-time" % "joda-time" % "2.3",						// better datetime
+    "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",		// ldap
+    "com.google.inject" % "guice" % "3.0",					// dependency injection
+    "org.perf4j" % "perf4j" % "0.9.16",						// performance logging
+    
+    // webjars
+    "org.webjars" %% "webjars-play" % "2.2.0",				// dependency for using webjars with play
+    "org.webjars" % "jquery" % "1.9.0",						// jquery
+    "org.webjars" % "bootstrap" % "3.0.1",					// bootstrap						
+    "org.webjars" % "bootstrap-glyphicons" % "bdd2cbfba0",	// glyphicons
+    
+    // testing frameworks
+    "org.mockito" % "mockito-all" % "1.9.5"	% "test"		// mocking for testing
+    //"org.pitest" % "pitest" % "0.31" % "test",			// mutation testing - future use
+    
     
     
   )
   
-  // Update settings for findbugs and jacoco SBT plugins.
-  lazy val s = playScalaSettings ++ findbugsSettings ++ Seq(jacoco.settings:_*)
 
-  val main = play.Project(appName, appVersion, appDependencies, settings = s).settings(
-
-    // Add 'pmd' command to Play console. 
-    // Configuration file: project/pmd-ruleset.xml
-    // Output file: target/pmd/pmd-report.txt
-    PmdSettings.pmdTask,
-
-    // Add 'checkstyle' command to Play console. 
-    // Configuration file: project/checkstyle-config.xml
-    // Output file: target/checkstyle/checkstyle-report.txt
-    CheckstyleSettings.checkstyleTask,
-
-    // Add 'api-doc' command (JavaDoc + ScalaDoc) to Play console. 
-    // Output directory: target/doc/api
-    ApiDocSettings.apiDocTask,
-
-    // Add the 'findbugs' command to Play console.
-    // Configuration file: project/findbugs-excludefilter.xml
-    // Output file: target/findbugs/findbugs.xml
-    // You want the report name file extension to match the report type. 
-    findbugsReportType := Some(de.johoop.findbugs4sbt.ReportType.Xml),
-    findbugsReportName := Some("findbugs.xml"),
-    //findbugsTargetPath <<= target (_ / "findbugs"),
-    //findbugsExcludeFilters <<= baseDirectory { base => Some(scala.xml.XML.loadFile(BuildPaths.projectStandard(base) / "findbugs-excludefilter.xml")) },
-
-    // Add the 'jacoco:cover' command to Play console. 
-    // Output file: target/jacoco/html/index.html
-    parallelExecution      in jacoco.Config := false,
-    jacoco.outputDirectory in jacoco.Config := file("target/jacoco"),
-    jacoco.reportFormats   in jacoco.Config := Seq(XMLReport("utf-8"), HTMLReport("utf-8")),
-    jacoco.excludes        in jacoco.Config := Seq("views*", "*Routes*", "controllers*routes*", "controllers*Reverse*", "controllers*javascript*", "controller*ref*")
+  val main = play.Project(appName, appVersion, appDependencies).settings(
     
   )
 
