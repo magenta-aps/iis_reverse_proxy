@@ -20,7 +20,7 @@ error.required = Feltet {0} skal udfyldes
 
 # navbar
 nav.title = CPReader
-nav.quicksearch_placeholder = CPR eller navn
+nav.quicksearch_placeholder = CPR eller efternavn
 nav.quicksearch_submit = Søg
 
 nav.logout_button = Log ud
@@ -31,65 +31,65 @@ results.list.amountOfResults = Der er {0} resultater på søgningen:
 resultat.egenskaber = Egenskaber
 resultat.tilstande = Tilstande
 resultat.registeroplysninger = Registeroplysninger
-resultat.postaddresse = Post addresse
-resultat.andenaddresse = Anden addresse
+resultat.postaddresse = Postadresse
+resultat.andenaddresse = Anden adresse
 
 #------ EGENSKABER
-person.firstname = fornavn
-person.middelname = mellemnavn
-person.lastname = efternavn
-person.callname = kaldenavn
-person.nameForAdressing = addresseringsnavn
-person.gender = køn
-person.birthdate = fødselsdato
-person.birthplace = fødested
-person.birthRegisteringAuthority = fødereg. myndighed
+person.firstname = Fornavn
+person.middelname = Mellemnavn
+person.lastname = Efternavn
+person.callname = Kaldenavn
+person.nameForAddressing = Addresseringsnavn
+person.gender = Køn
+person.birthdate = Fødselsdato
+person.birthplace = Fødested
+person.birthRegisteringAuthority = Fødereg. myndighed
 
 #------ TILSTANDE
-person.tilstand.civilStatusKode = civilstatus
-person.tilstand.livStatusKode = livstatus 
+person.tilstand.civilStatusKode = Civilstatus
+person.tilstand.livStatusKode = Livsstatus 
 
 
 #------ REGISTER OPLYSNINGER
 person.registerInformation.cprCitizen.socialSecurityNumber = CPR-nummer
-person.registerInformation.cprCitizen.personNationalityCode = nationalitetskode
+person.registerInformation.cprCitizen.personNationalityCode = Nationalitetskode
 person.registerInformation.cprCitizen.isMemberOfTheChurch = Folkekirkemedlem
 person.registerInformation.cprCitizen.isResearcherProtected = Forskerbeskyttelse
 person.registerInformation.cprCitizen.isNameAddressProtected = Navn- og Addressebeskyttelse
 person.registerInformation.cprCitizen.isPhoneNumberProtected = Telefonnummerbeskyttelse
 
 #------ ADDRESSE
-person.address.danishAddress.countryIdentificationCode = landekode
-person.address.danishAddress.districtName = by
-person.address.danishAddress.districtSubdivision = forstad
-person.address.danishAddress.floor = etage
-person.address.danishAddress.mailSubLocaltion = postunderlokalition
-person.address.danishAddress.postCode = postnummer
-person.address.danishAddress.postOfficeBox = postboks
-person.address.danishAddress.streetName = gadenavn
-person.address.danishAddress.streetBuilding = gadenummer
-person.address.danishAddress.streetNameForAddressing = adresseforaddresering
-person.address.danishAddress.suite = suite
-person.address.danishAddress.note = note
-person.address.danishAddress.municipalityCode = kommunekode
-person.address.danishAddress.streetCode = vejkode
-person.address.danishAddress.streetBuildingIdentifier = gadenummer
-person.address.danishAddress.danishNote = ekstranote
-person.address.danishAddress.politiDistrikt = politidistrikt
-person.address.danishAddress.postDistrikt = postdistrikt
-person.address.danishAddress.skoleDistrikt = skoledistrikt
-person.address.danishAddress.socialDistrikt = socialdistrikt
-person.address.danishAddress.sogneDistrikt = sognedistrikt
-person.address.danishAddress.valgkredsDistrikt = valgdistrikt
-person.address.danishAddress.isSpecielVejkode = specielvejkode
-person.address.danishAddress.isUkendtAdresse = ukendt addresse
+person.address.danishAddress.countryIdentificationCode = Landekode
+person.address.danishAddress.districtName = By
+person.address.danishAddress.districtSubdivision = Forstad
+person.address.danishAddress.floor = Etage
+person.address.danishAddress.mailSubLocaltion = Postunderlokalition
+person.address.danishAddress.postCode = Postnummer
+person.address.danishAddress.postOfficeBox = Postboks
+person.address.danishAddress.streetName = Gadenavn
+person.address.danishAddress.streetBuilding = Gadenummer
+person.address.danishAddress.streetNameForAddressing = Adresseforaddresering
+person.address.danishAddress.suite = Suite
+person.address.danishAddress.note = Note
+person.address.danishAddress.municipalityCode = Kommunekode
+person.address.danishAddress.streetCode = Vejkode
+person.address.danishAddress.streetBuildingIdentifier = Gadenummer
+person.address.danishAddress.danishNote = Ekstranote
+person.address.danishAddress.politiDistrikt = Politidistrikt
+person.address.danishAddress.postDistrikt = Postdistrikt
+person.address.danishAddress.skoleDistrikt = Skoledistrikt
+person.address.danishAddress.socialDistrikt = Socialdistrikt
+person.address.danishAddress.sogneDistrikt = Sognedistrikt
+person.address.danishAddress.valgkredsDistrikt = Valgdistrikt
+person.address.danishAddress.isSpecielVejkode = Specielvejkode
+person.address.danishAddress.isUkendtAdresse = Ukendt addresse
 
 #------ ANDEN ADDRESSE
-person.otherAddress.worldAddress.locationDescriptionText = beskrivelse
-person.otherAddress.worldAddress.postalAddressFirstLineText = addresse
+person.otherAddress.worldAddress.locationDescriptionText = Beskrivelse
+person.otherAddress.worldAddress.postalAddressFirstLineText = Addresse
 person.otherAddress.worldAddress.postalAddressSecondLineText =
 person.otherAddress.worldAddress.postalAddressThirdLineText =
 person.otherAddress.worldAddress.postalAddressFourthLineText =
 person.otherAddress.worldAddress.postalAddressFifthLineText =
 person.otherAddress.worldAddress.isUkendtAdresseIndikator =
-person.otherAddress.worldAddress.note = note
+person.otherAddress.worldAddress.note = Note
