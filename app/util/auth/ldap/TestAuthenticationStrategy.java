@@ -46,8 +46,6 @@ public class TestAuthenticationStrategy implements IAuthStrategy {
 
 	/**
 	 * Constructor taking a configuration-object and validating it.
- 	 * Note this SHOULD throw an IllegalStateException, if the state of the
- 	 * configuration-object isn't valid.
 	 * @param config
 	 */
 	public TestAuthenticationStrategy(final play.Configuration config) {
@@ -57,18 +55,17 @@ public class TestAuthenticationStrategy implements IAuthStrategy {
 
 	/**
 	 * Helper method to validate an IAuthStrategy.
-	 * Note this should handle error logging, if the state of the
-	 * configuration-object isn't valid.
+	 * Note this SHOULD handle error logging, if the state of the
+	 * configuration-object isn't valid and throw an IllegalStateException.
 	 * @param config
 	 * @return
 	 */
-	private static boolean validate(final Configuration config) {
+	private static void validate(final Configuration config) {
 		
 		// Validate the configuration object here
 		// String importantConfigurationString = conf.getString("important.configuration");
-		// if (importantConfigurationString == null) return false;
+		// if (importantConfigurationString == null) throw new IllegalStateException();
 		
-		return true;
 	}
 
 	@Override
@@ -78,7 +75,7 @@ public class TestAuthenticationStrategy implements IAuthStrategy {
 			play.Logger.info("Returning AuthResponse with SUCCESS");
 			return new LdapAuthResponse(AuthResponseType.SUCCESS, "OK");
 		} else {
-			return new LdapAuthResponse(AuthResponseType.ERROR, "Bad credientials");
+			return new LdapAuthResponse(AuthResponseType.ERROR, "Forkert brugernavn eller kodeord");
 		}
 	}	
 }

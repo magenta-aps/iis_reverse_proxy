@@ -32,6 +32,13 @@ public interface ICPRBrokerSOAPFactory {
 	public PartSoap12 getInstance() throws InstantiationException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException;
 	
 	/**
+	 * Set if SSL is being used for the CPR Broker
+	 * @param boolean value representing the usage of ssl
+	 */
+	public void setUsingSsl(boolean usingSsl);
+	
+	
+	/**
 	 * Set the endpoint for the CPR Broker
 	 * @param endpoint a valid URL for endpoint
 	 */

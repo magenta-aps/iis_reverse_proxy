@@ -40,6 +40,8 @@ public class CPRBrokerSOAPFactory implements ICPRBrokerSOAPFactory {
 	
 	private static String keystore;
 	private static String keystorepassword;
+	
+	private static boolean usingSsl;
 
 	public PartSoap12 getInstance() throws InstantiationException,
 											NoSuchAlgorithmException,
@@ -66,48 +68,28 @@ public class CPRBrokerSOAPFactory implements ICPRBrokerSOAPFactory {
 		});
 
 		PartSoap12 port = service.getPartSoap12();
-		
-		
-		// Now for some SSL magic	
-//		String certPath = "/etc/java/security/jssecacerts";
-//		String certPasswd = "changeit";
-		
-		SSLContext sc = null;
-		KeyManagerFactory kmf = null;
+		if(usingSsl) {
+			SSLContext sc = null;
+			KeyManagerFactory kmf = null;
 
-		sc = SSLContext.getInstance("SSLv3");
-		kmf = KeyManagerFactory.getInstance( KeyManagerFactory.getDefaultAlgorithm() );
-			
-		KeyStore ks = null;
-		ks = KeyStore.getInstance( KeyStore.getDefaultType() );
-		ks.load(new FileInputStream( keystore ), keystorepassword.toCharArray() );
-		kmf.init( ks, keystorepassword.toCharArray() );
-		sc.init( kmf.getKeyManagers(), null, null );
-
-		// Create a trust manager that does not validate certificate chains
-//		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-//		    public java.security.cert.X509Certificate[] getAcceptedIssuers(){return null;}
-//			@Override
-//			public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-//					throws CertificateException {}
-//			@Override
-//			public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-//					throws CertificateException {}
-//		}};
-//
-//		// Install the all-trusting trust manager
-//		SSLContext sc = SSLContext.getInstance("TLS");
-//		try {
-//		    sc.init(null, trustAllCerts, new SecureRandom());		 
-//		} catch (Exception e) {
-//		    ;
-//		}
+			sc = SSLContext.getInstance("SSLv3");
+			kmf = KeyManagerFactory.getInstance( KeyManagerFactory.getDefaultAlgorithm() );
+				
+			KeyStore ks = null;
+			ks = KeyStore.getInstance( KeyStore.getDefaultType() );
+			ks.load(new FileInputStream( keystore ), keystorepassword.toCharArray() );
+			kmf.init( ks, keystorepassword.toCharArray() );
+			sc.init( kmf.getKeyManagers(), null, null );
 		
-		BindingProvider bp = (BindingProvider) port;
-		// set the endpoint of the service
-		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);		
-		// make use of ssl
-		bp.getRequestContext().put("com.sun.xml.internal.ws.transport.https.client.SSLSocketFactory", sc.getSocketFactory());
+			BindingProvider bp = (BindingProvider) port;
+			// set the endpoint of the service
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);		
+			// make use of ssl
+			bp.getRequestContext().put("com.sun.xml.internal.ws.transport.https.client.SSLSocketFactory", sc.getSocketFactory());			
+		} else {
+			BindingProvider bp = (BindingProvider) port;
+	 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);			
+		}
 		
 		return port;
 	}
@@ -135,6 +117,10 @@ public class CPRBrokerSOAPFactory implements ICPRBrokerSOAPFactory {
 		
 	}
 	
+	@Override
+	public void setUsingSsl(final boolean usingSsl) {
+		CPRBrokerSOAPFactory.usingSsl = usingSsl;
+	}
 	
 	@Override
 	public void setEndpoint(final String endpointUrl) {
