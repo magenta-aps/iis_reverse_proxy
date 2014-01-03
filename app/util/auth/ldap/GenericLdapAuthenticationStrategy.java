@@ -45,8 +45,8 @@ import javax.inject.Inject;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
+import play.Configuration;
 import play.Play;
-
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
@@ -95,7 +95,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 		authorizedattribute = newAuthorizedattribute;
 
 	}
-
+	
 	private final LDAPConnection getConnection() {
 		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.getConnection");
 		

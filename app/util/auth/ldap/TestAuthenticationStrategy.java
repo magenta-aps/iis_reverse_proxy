@@ -33,14 +33,46 @@
 
 package util.auth.ldap;
 
+import play.Configuration;
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
+/**
+ * Example implementation of the IAuthStrategy
+ * @author Søren Kirkegård
+ *
+ */
+public class TestAuthenticationStrategy implements IAuthStrategy {
 
-public class TestAuthenticationService implements IAuthStrategy {
+	/**
+	 * Constructor taking a configuration-object and validating it.
+ 	 * Note this SHOULD throw an IllegalStateException, if the state of the
+ 	 * configuration-object isn't valid.
+	 * @param config
+	 */
+	public TestAuthenticationStrategy(final play.Configuration config) {
+		//Use the importantConfigurationString
+		validate(config);
+	}
+
+	/**
+	 * Helper method to validate an IAuthStrategy.
+	 * Note this should handle error logging, if the state of the
+	 * configuration-object isn't valid.
+	 * @param config
+	 * @return
+	 */
+	private static boolean validate(final Configuration config) {
+		
+		// Validate the configuration object here
+		// String importantConfigurationString = conf.getString("important.configuration");
+		// if (importantConfigurationString == null) return false;
+		
+		return true;
+	}
 
 	@Override
-	public IAuthResponse authentication(String username, String password) {
+	public IAuthResponse authentication(final String username, final String password) {
 		play.Logger.info("User tried to login with: " + username + ", " + password);
 		if(username.equals("test") && password.equals("test")) {
 			play.Logger.info("Returning AuthResponse with SUCCESS");
@@ -48,6 +80,5 @@ public class TestAuthenticationService implements IAuthStrategy {
 		} else {
 			return new LdapAuthResponse(AuthResponseType.ERROR, "Bad credientials");
 		}
-	}
-
+	}	
 }
