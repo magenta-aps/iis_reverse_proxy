@@ -33,21 +33,49 @@
 
 package util.auth.ldap;
 
+import play.Configuration;
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
+/**
+ * Example implementation of the IAuthStrategy
+ * @author Søren Kirkegård
+ *
+ */
+public class TestAuthenticationStrategy implements IAuthStrategy {
 
-public class TestAuthenticationService implements IAuthStrategy {
+	/**
+	 * Constructor taking a configuration-object and validating it.
+	 * @param config
+	 */
+	public TestAuthenticationStrategy(final play.Configuration config) {
+		//Use the importantConfigurationString
+		validate(config);
+	}
+
+	/**
+	 * Helper method to validate an IAuthStrategy.
+	 * Note this SHOULD handle error logging, if the state of the
+	 * configuration-object isn't valid and throw an IllegalStateException.
+	 * @param config
+	 * @return
+	 */
+	private static void validate(final Configuration config) {
+		
+		// Validate the configuration object here
+		// String importantConfigurationString = conf.getString("important.configuration");
+		// if (importantConfigurationString == null) throw new IllegalStateException();
+		
+	}
 
 	@Override
-	public IAuthResponse authentication(String username, String password) {
+	public IAuthResponse authentication(final String username, final String password) {
 		play.Logger.info("User tried to login with: " + username + ", " + password);
 		if(username.equals("test") && password.equals("test")) {
 			play.Logger.info("Returning AuthResponse with SUCCESS");
 			return new LdapAuthResponse(AuthResponseType.SUCCESS, "OK");
 		} else {
-			return new LdapAuthResponse(AuthResponseType.ERROR, "Bad credientials");
+			return new LdapAuthResponse(AuthResponseType.ERROR, "Forkert brugernavn eller kodeord");
 		}
-	}
-
+	}	
 }

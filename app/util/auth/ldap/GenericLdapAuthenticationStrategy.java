@@ -45,8 +45,8 @@ import javax.inject.Inject;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
+import play.Configuration;
 import play.Play;
-
 import util.auth.AuthResponseType;
 import util.auth.IAuthResponse;
 import util.auth.IAuthStrategy;
@@ -56,21 +56,19 @@ import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.Filter;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
-import com.unboundid.ldap.sdk.LDAPSearchException;
 import com.unboundid.ldap.sdk.ResultCode;
 import com.unboundid.ldap.sdk.SearchRequest;
 import com.unboundid.ldap.sdk.SearchResult;
-import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.SimpleBindRequest;
 import com.unboundid.util.ssl.SSLUtil;
-import com.unboundid.util.ssl.TrustAllTrustManager;
 import com.unboundid.util.ssl.TrustStoreTrustManager;
 
 public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 
 	private final String hostname;
 	private final int port;
+	private final boolean usingSsl;
 	private final String basedn;
 	private final String userattribute;
 	private final String usergrouprdn;
@@ -78,53 +76,105 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 	private final String authorizedattribute;
 	
 	@Inject
-	public GenericLdapAuthenticationStrategy(String newHostname,
-											 int newPort,
-											 String newBasedn,
-											 String newUserattribute,
-											 String newUsergrouprdn,
-											 String newAuthorizedgrouprdn,
-											 String newAuthorizedattribute) {
-
-		hostname = newHostname;
-		port = newPort;
-		basedn = newBasedn;
-		userattribute = newUserattribute;
-		usergrouprdn = newUsergrouprdn;
-		authorizedgrouprdn = newAuthorizedgrouprdn;
-		authorizedattribute = newAuthorizedattribute;
+	public GenericLdapAuthenticationStrategy(final play.Configuration config) {	
+		validate(config);
+		
+		hostname = config.getString("ldap.hostname");
+		port = config.getInt("ldap.port");
+		usingSsl = config.getBoolean("ldap.ssl");
+		basedn  = config.getString("ldap.basedn");
+		usergrouprdn = config.getString("ldap.usergrouprdn");
+		userattribute = config.getString("ldap.userattribute");
+		authorizedgrouprdn = config.getString("ldap.authorizedgrouprdn");
+		authorizedattribute = config.getString("ldap.authorizedattribute");
+		
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, hostname: " + hostname);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, port: " + port);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, usingSsl: " + usingSsl);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, basedn: " + basedn);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, usergrouprdn: " + usergrouprdn);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, userattribute: " + userattribute);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, authorizedgrouprdn: " + authorizedgrouprdn);
+		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, authorizedattribute: " + authorizedattribute);
 
 	}
-
+	
+	/**
+	 * Helper method to validate an IAuthStrategy.
+	 * Note this should handle error logging, if the state of the
+	 * configuration-object isn't valid.
+	 * @param config
+	 * @return
+	 */
+	private static void validate(final Configuration config) {
+		String[] stringValues = {"ldap.hostname", "ldap.basedn",
+				"ldap.usergrouprdn", "ldap.userattribute",
+				"ldap.authorizedgrouprdn", "ldap.authorizedattribute",
+				"keystorefile", "keystorepassword"};
+		String[] integerValues = {"ldap.port"};
+		
+		for(String value : stringValues) {
+			if(config.getString(value) == null) {
+				play.Logger.error("GenericLdapAutenticationStrategy lacking configuration string: " + value);
+				throw new IllegalStateException("Configuration returns null for " + value);
+			}
+		}
+		
+		for(String value : integerValues) {
+			if(config.getString(value) == null) {
+				play.Logger.error("GenericLdapAutenticationStrategy lacking configuration string: " + value);
+				throw new IllegalStateException("Configuration returns null for " + value);
+			}
+		}
+		// Validate the configuration object here
+		// String importantConfigurationString = conf.getString("important.configuration");
+		// if (importantConfigurationString == null) return false;
+		
+	}
+	
+	/**
+	 * Helper method to get a connection to the ldap
+	 * @return
+	 */
 	private final LDAPConnection getConnection() {
 		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.getConnection");
 		
 		LDAPConnection ldapConnection = null;
-		try {
-			// get the path to the truststore from the application.conf
-			String trustStoreString  = Play.application().configuration().getString("keystorefile");
-			if(trustStoreString.length() == 0) throw new IllegalArgumentException();
-			
-			// make a path and check that the file exists
-			Path path = Paths.get(trustStoreString);
-			if(Files.notExists(path)) throw new FileNotFoundException();
+		
+		// check if it is using ssl or not
+		if(usingSsl) {
+			try {
+				// get the path to the truststore from the application.conf
+				String trustStoreString  = Play.application().configuration().getString("keystorefile");
+				if(trustStoreString.length() == 0) throw new IllegalArgumentException();
+				
+				// make a path and check that the file exists
+				Path path = Paths.get(trustStoreString);
+				if(Files.notExists(path)) throw new FileNotFoundException();
 
-			// convert path to file and use it to configure the TrustStoreTrustManager
-			File trustStoreFile = path.toFile();
-			SSLUtil sslUtil = new SSLUtil(new TrustStoreTrustManager(trustStoreFile));
+				// convert path to file and use it to configure the TrustStoreTrustManager
+				File trustStoreFile = path.toFile();
+				SSLUtil sslUtil = new SSLUtil(new TrustStoreTrustManager(trustStoreFile));
 
-			//SSLUtil sslUtil = new SSLUtil(new TrustAllTrustManager());
-		    ldapConnection = new LDAPConnection(sslUtil.createSSLSocketFactory(), hostname, port);
+				//SSLUtil sslUtil = new SSLUtil(new TrustAllTrustManager());
+			    ldapConnection = new LDAPConnection(sslUtil.createSSLSocketFactory(), hostname, port);
 
-		} catch (LDAPException | GeneralSecurityException e) {
-			play.Logger.error(e.getMessage());
-			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
-			
-		} catch (FileNotFoundException e) {
-			String trustStoreString  = Play.application().configuration().getString("keystorefile");
-			play.Logger.error("Truststore file does not exist at :'" + trustStoreString + "'. Check trustStoreFile path in your configuration.");
-			stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
-		} 
+			} catch (LDAPException | GeneralSecurityException e) {
+				play.Logger.error(e.getMessage());
+				stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
+				
+			} catch (FileNotFoundException e) {
+				String trustStoreString  = Play.application().configuration().getString("keystorefile");
+				play.Logger.error("Truststore file does not exist at :'" + trustStoreString + "'. Check trustStoreFile path in your configuration.");
+				stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
+			} 			
+		} else {
+			try {
+				ldapConnection = new LDAPConnection(hostname, port);
+			} catch (LDAPException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		stopWatch.stop();
 		return ldapConnection;

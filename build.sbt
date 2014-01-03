@@ -2,7 +2,7 @@ import play.Project._
 
 name := "play-cpreader"
 
-version := "1.0-SNAPSHOT"
+version := "1.0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   cache,

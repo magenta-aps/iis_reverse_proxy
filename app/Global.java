@@ -35,8 +35,7 @@ import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthStrategy;
 import util.auth.ldap.GenericLdapAuthenticationStrategy;
-import util.auth.ldap.LdapAuthenticationStrategy;
-import util.auth.ldap.TestAuthenticationService;
+import util.auth.ldap.TestAuthenticationStrategy;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
 
@@ -62,43 +61,24 @@ import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
  */
 public class Global extends GlobalSettings {
 	private final Injector injector;
-	
+
 	public Global() {
 		super();
 
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
-	        protected void configure() {
-
+	        protected void configure() {      	
+	        	
 	            bind(IAuthStrategy.class)
             	.toProvider(new Provider<IAuthStrategy>() {
 
 					@Override
-					public IAuthStrategy get() {		
-			        	play.Configuration conf = Play.application().configuration();
-			    		String hostname = conf.getString("ldap.hostname");
-			    		int port = conf.getInt("ldap.port");
-			    		String basedn  = conf.getString("ldap.basedn");
-			    		String usergrouprdn = conf.getString("ldap.usergrouprdn");
-			    		String userattribute = conf.getString("ldap.userattribute");
-			    		String authorizedgrouprdn = conf.getString("ldap.authorizedgrouprdn");
-			    		String authorizedattribute = conf.getString("ldap.authorizedattribute");
-			    		
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), hostname: " + hostname);
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), port: " + port);
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), basedn: " + basedn);
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), usergrouprdn: " + usergrouprdn);
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), userattribute: " + userattribute);
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedgrouprdn: " + authorizedgrouprdn);
-			    		play.Logger.debug("Global.bind(IAuthStrategy.class).get(), authorizedattribute: " + authorizedattribute);
-			            
-	            		return new GenericLdapAuthenticationStrategy(hostname,
-	            													 port,
-	            													 basedn,
-	            													 userattribute,
-	            													 usergrouprdn,
-	            													 authorizedgrouprdn,
-	            													 authorizedattribute);
+					public IAuthStrategy get() {
+					
+						play.Configuration config = Play.application().configuration();
+						
+//						return new TestAuthenticationStrategy(config);
+	            		return new GenericLdapAuthenticationStrategy(config);
 					}	
             	});
 	            
@@ -109,6 +89,7 @@ public class Global extends GlobalSettings {
 					@Override
 					public ICprBrokerAccessor get() {		            
 			        	play.Configuration conf = Play.application().configuration();
+			        	boolean usingSsl = conf.getBoolean("cprbroker.usingssl");
 			    		String endpoint = conf.getString("cprbroker.endpoint");
 			    		String appToken  = conf.getString("cprbroker.applicationtoken");
 			    		String userToken = conf.getString("cprbroker.usertoken");
@@ -117,6 +98,7 @@ public class Global extends GlobalSettings {
 			            String keystorePassword = conf.getString("keystorepassword");
 			    		
 			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), endpoint: " + endpoint);
+			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), usingSsl: " + usingSsl);
 			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), appToken: " + appToken);
 			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), userToken: " + userToken);
 			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), allowedSourceUsageOrderHeader: " + allowedSourceUsageOrderHeader);
@@ -124,6 +106,7 @@ public class Global extends GlobalSettings {
 			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystorePassword: " + keystorePassword);
 			            
 	            		return new JaxWsCprBroker(endpoint,
+	            									usingSsl,
 	            									appToken,
 	            									userToken,
 	            									keystore,

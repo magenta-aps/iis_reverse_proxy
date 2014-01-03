@@ -128,6 +128,7 @@ import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 	private final String endpoint;
+	private final boolean usingSsl;
 	private final String applicationToken;
 	private final String userToken;
 	private final String keystore;
@@ -140,6 +141,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private PartSoap12 externallService;
 	
 	public JaxWsCprBroker(final String newEndpoint,
+							final boolean newUsingSsl,
 							final String newApplicationToken,
 							final String newUserToken,
 							final String newKeystore,
@@ -147,6 +149,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 							final int newAllowedSourceUsageOrderHeader,
 							final ICPRBrokerSOAPFactory newFactory) {
 		endpoint = newEndpoint;
+		usingSsl = newUsingSsl;
 		applicationToken = newApplicationToken;
 		userToken = newUserToken;
 		keystore = newKeystore;
@@ -216,6 +219,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 		PartSoap12 tmpService = null;
 		factory.setEndpoint(endpoint);
+		factory.setUsingSsl(usingSsl);
 		factory.setApplicationToken(applicationToken);
 		factory.setUserToken(userToken);
 		factory.setSourceUsageOrderHeader(sourceUsageOrderHeader.name());
