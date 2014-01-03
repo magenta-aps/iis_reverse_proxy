@@ -4,10 +4,6 @@ version := "1.0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   cache,
-  "org.webjars" % "angularjs" % "1.2.0",
-  "org.webjars" % "requirejs" % "2.1.8",
-  "org.webjars" % "requirejs-domready" % "2.0.1",
-  "org.webjars" %% "webjars-play" % "2.2.0",
   "joda-time" % "joda-time" % "2.3",      
   "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
   "com.google.inject" % "guice" % "3.0",
