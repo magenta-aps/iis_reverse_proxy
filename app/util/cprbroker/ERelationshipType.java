@@ -34,17 +34,27 @@
 package util.cprbroker;
 
 public enum ERelationshipType {
-	erstatingAf,
-	erstatingFor, 
-	fader,
-	moder,
-	foraeldremyndighedsindehaver,
-	retligHandleevneVaergeForPersonen,		
-	aegtefaelle,
-	registreretPartner,		
-	boern,
-	foraeldremydighedsboern,
-	retligHandleevneVaergemaalsindehaver,
-	bopaelssamling
+	erstatingAf("Erstatning af"),
+	erstatingFor("Erstatning for"), 
+	fader("Fader"),
+	moder("Moder"),
+	foraeldremyndighedsindehaver("Forældremyndighedsindehaver"),
+	retligHandleevneVaergeForPersonen("Retlig handleevne værge for personen"),		
+	aegtefaelle("Ægtefælle"),
+	registreretPartner("Registeret partner"),		
+	boern("Barn"),
+	foraeldremydighedsboern("Forældremyndighedsbarn"),
+	retligHandleevneVaergemaalsindehaver("Retlig handleevne værgemåls indehaver"),
+	bopaelssamling("Bopæls samling");
 
+	private final String prettyName;
+	
+	private ERelationshipType(String prettyName) {
+		this.prettyName = prettyName;
+	}
+	
+	@Override
+	public String toString() {
+		return prettyName;
+	}
 }
