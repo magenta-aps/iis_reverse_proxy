@@ -69,13 +69,11 @@ public class Global extends GlobalSettings {
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
 	        protected void configure() {      	
-	        	
+       	
 	            bind(IAuthStrategy.class)
             	.toProvider(new Provider<IAuthStrategy>() {
-
 					@Override
 					public IAuthStrategy get() {
-					
 						play.Configuration config = Play.application().configuration();
 						
 //						return new TestAuthenticationStrategy(config);
@@ -86,15 +84,13 @@ public class Global extends GlobalSettings {
 	            
 	            bind(ICprBrokerAccessor.class)
             	.toProvider(new Provider<ICprBrokerAccessor>() {
-
 					@Override
 					public ICprBrokerAccessor get() {		            
 			        	play.Configuration config = Play.application().configuration();
 			            
 	            		return new JaxWsCprBroker(config, new CPRBrokerSOAPFactory());
 					}	
-            	});	            
-	            
+            	});	            	            
 	        }
         });
 	}
@@ -102,9 +98,9 @@ public class Global extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
 		super.onStart(app);
-		
+		// validate needed components
 		GenericLdapAuthenticationStrategy.validate(app.configuration());
-		play.Logger.info("CPReader has started");
+		JaxWsCprBroker.validate(app.configuration());
 	}
 	
 	@Override

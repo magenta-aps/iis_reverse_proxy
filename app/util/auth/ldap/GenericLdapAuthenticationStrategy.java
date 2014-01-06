@@ -137,6 +137,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 				play.Logger.error("GenericLdapAutenticationStrategy lacking configuration string: " + value);
 				throw new IllegalStateException("Configuration returns null for " + value);
 			}
+			play.Logger.info(value + " configured with " + config.getString(value));
 		}
 				
 		if(config.getBoolean("ldap.ssl") == null) {
@@ -152,6 +153,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 					play.Logger.error("GenericLdapAutenticationStrategy.validate(): " + value + " was NULL.");
 					throw new IllegalStateException("GenericLdapAutenticationStrategy.validate(): " + value + " was NULL.");
 				}
+				play.Logger.info(value + " configured with " + config.getString(value));
 			}
 			
 			// Check that the path points to a file
@@ -168,6 +170,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 				if(Files.notExists(path)) {
 					throw new FileNotFoundException();
 				}
+				play.Logger.info("keystoresile configured with " + trustStoreString);
 			} catch(FileNotFoundException e) {
 				play.Logger.error("GenericLdapAutenticationStrategy.validate(): " + trustStoreString + " doesn't point to a file.");
 				System.exit(1);
@@ -188,7 +191,10 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 			}
 		}
 		
-		play.Logger.debug("GenericLdapAuthenticationStrategy.validate(): Done");
+		if(config.getInt("ldap.port") != null) {
+			play.Logger.info("ldap.port configured with " + config.getInt("ldap.port"));
+		}
+		
 		play.Logger.info("GenericLdapAuthenticationStrategy validated");
 		
 	}

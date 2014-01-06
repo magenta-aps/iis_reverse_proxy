@@ -127,6 +127,9 @@ import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
 public class JaxWsCprBroker implements ICprBrokerAccessor {
 
+	public static final String HTTP = "http://";
+	public static final String HTTPS = "https://";
+	
 	private final String endpoint;
 	private final boolean usingSsl;
 	private final String applicationToken;
@@ -136,7 +139,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final String keystore;
 	private final String keystorePassword;
 
-	
 	private final ICPRBrokerSOAPFactory factory;
 	private PartSoap12 localService;
 	private PartSoap12 localThenExternalService;
@@ -144,24 +146,78 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	public JaxWsCprBroker(final Configuration config, final ICPRBrokerSOAPFactory newFactory) {
 
-		endpoint = config.getString("cprbroker.endpoint");
-    	usingSsl = config.getBoolean("cprbroker.usingssl");
+    	usingSsl = config.getBoolean("cprbroker.ssl");
+   	
+   		String prefix = (usingSsl) ? HTTPS : HTTP;
+		endpoint = prefix + config.getString("cprbroker.endpoint");
+		
 		applicationToken  = config.getString("cprbroker.applicationtoken");
 		userToken = config.getString("cprbroker.usertoken");
 		allowedSourceUsageOrderHeader = config.getInt("cprbroker.accesslevel");
         keystore = config.getString("keystorefile");
         keystorePassword = config.getString("keystorepassword");
 				
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), endpoint: " + endpoint);
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), usingSsl: " + usingSsl);
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), appToken: " + applicationToken);
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), userToken: " + userToken);
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), allowedSourceUsageOrderHeader: " + allowedSourceUsageOrderHeader);
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystore: " + keystore);
-        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystorePassword: " + keystorePassword);
+        play.Logger.debug("JaxWsCprBroker.constructor, endpoint: " + endpoint);
+        play.Logger.debug("JaxWsCprBroker.constructor, usingSsl: " + usingSsl);
+        play.Logger.debug("JaxWsCprBroker.constructor, appToken: " + applicationToken);
+        play.Logger.debug("JaxWsCprBroker.constructor, userToken: " + userToken);
+        play.Logger.debug("JaxWsCprBroker.constructor, allowedSourceUsageOrderHeader: " + allowedSourceUsageOrderHeader);
+        play.Logger.debug("JaxWsCprBroker.constructor, keystore: " + keystore);
+        play.Logger.debug("JaxWsCprBroker.constructor, keystorePassword: " + keystorePassword);
 
 		factory = newFactory;
 		
+	}
+	
+	/**
+	 * Helper method to validate an ICPRBrokerSOAPFactory configuration
+	 * @param config play.Configuration object
+	 */
+	public static void validate(Configuration config) {
+		/*
+		 	# CPR Broker configuration
+			# accesslevel can be 0/1/2 which represents localOnly/localThenExternal/externalOnly
+			# ~~~~
+			cprbroker.ssl = true
+			cprbroker.endpoint = "cprbroker.magenta-aps.dk/Services/Part.asmx"
+			cprbroker.applicationtoken = "4b8a21cb-3aab-451c-93c8-963142e7db05"
+			cprbroker.usertoken = "CPReader"
+			cprbroker.accesslevel = 0
+		 */
+		
+		String[] stringValues = {"cprbroker.endpoint",
+				"cprbroker.applicationtoken",
+				"cprbroker.usertoken"};
+		
+		// All required String values can't be NULL
+		for(String value : stringValues) {
+			if(config.getString(value) == null) {
+				play.Logger.error("JaxWsCprBroker lacking configuration string: " + value);
+				throw new IllegalStateException("JaxWsCprBroker lacking configuration string " + value);
+			}
+			play.Logger.info(value + " configured with " + config.getString(value));
+		}
+		
+		if(config.getBoolean("cprbroker.ssl") == null) {
+			play.Logger.error("JaxWsCprBroker lacking configuration string: cprbroker.ssl");
+			throw new IllegalStateException("JaxWsCprBroker lacking configuration string: cprbroker.ssl");			
+		} else {
+			play.Logger.info("cprbroker.ssl configured with " + config.getString("cprbroker.ssl"));
+		}
+
+		Integer accesslevel = config.getInt("cprbroker.accesslevel");
+		if(accesslevel == null) {
+			play.Logger.error("JaxWsCprBroker lacking configuration string: cprbroker.accesslevel");
+			throw new IllegalStateException("JaxWsCprBroker lacking configuration string: cprbroker.accesslevel");						
+		} else {
+			if(accesslevel < 0 || accesslevel > 2) {
+				play.Logger.error("cprbroker.accesslevel must be an integer between 0 and 2");
+				throw new IllegalStateException("cprbroker.accesslevel must be an integer between 0 and 2");				
+			}
+			
+			play.Logger.info("cprbroker.accesslevel configured with " + accesslevel
+					+ " [" + ESourceUsageOrder.values()[accesslevel] + "]");
+		}
 	}
 	
 	/**
