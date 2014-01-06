@@ -89,31 +89,9 @@ public class Global extends GlobalSettings {
 
 					@Override
 					public ICprBrokerAccessor get() {		            
-			        	play.Configuration conf = Play.application().configuration();
-			        	boolean usingSsl = conf.getBoolean("cprbroker.usingssl");
-			    		String endpoint = conf.getString("cprbroker.endpoint");
-			    		String appToken  = conf.getString("cprbroker.applicationtoken");
-			    		String userToken = conf.getString("cprbroker.usertoken");
-			    		int allowedSourceUsageOrderHeader = conf.getInt("cprbroker.accesslevel");
-			            String keystore = conf.getString("keystorefile");
-			            String keystorePassword = conf.getString("keystorepassword");
-			    		
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), endpoint: " + endpoint);
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), usingSsl: " + usingSsl);
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), appToken: " + appToken);
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), userToken: " + userToken);
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), allowedSourceUsageOrderHeader: " + allowedSourceUsageOrderHeader);
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystore: " + keystore);
-			            play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystorePassword: " + keystorePassword);
+			        	play.Configuration config = Play.application().configuration();
 			            
-	            		return new JaxWsCprBroker(endpoint,
-	            									usingSsl,
-	            									appToken,
-	            									userToken,
-	            									keystore,
-	            									keystorePassword,
-	            									allowedSourceUsageOrderHeader,
-	            									new CPRBrokerSOAPFactory());
+	            		return new JaxWsCprBroker(config, new CPRBrokerSOAPFactory());
 					}	
             	});	            
 	            

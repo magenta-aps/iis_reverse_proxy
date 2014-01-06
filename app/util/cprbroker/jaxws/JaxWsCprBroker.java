@@ -84,8 +84,8 @@ import oio.sagdok.person._1_0.VerdenAdresseType;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
+import play.Configuration;
 import play.Play;
-
 import util.cprbroker.ERelationshipType;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.IAddress;
@@ -131,30 +131,35 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	private final boolean usingSsl;
 	private final String applicationToken;
 	private final String userToken;
+	private final int allowedSourceUsageOrderHeader;
+	
 	private final String keystore;
 	private final String keystorePassword;
-	private final int allowedSourceUsageOrderHeader;
+
 	
 	private final ICPRBrokerSOAPFactory factory;
 	private PartSoap12 localService;
 	private PartSoap12 localThenExternalService;
 	private PartSoap12 externallService;
 	
-	public JaxWsCprBroker(final String newEndpoint,
-							final boolean newUsingSsl,
-							final String newApplicationToken,
-							final String newUserToken,
-							final String newKeystore,
-							final String newKeystorePassword,
-							final int newAllowedSourceUsageOrderHeader,
-							final ICPRBrokerSOAPFactory newFactory) {
-		endpoint = newEndpoint;
-		usingSsl = newUsingSsl;
-		applicationToken = newApplicationToken;
-		userToken = newUserToken;
-		keystore = newKeystore;
-		keystorePassword = newKeystorePassword;
-		allowedSourceUsageOrderHeader = newAllowedSourceUsageOrderHeader;
+	public JaxWsCprBroker(final Configuration config, final ICPRBrokerSOAPFactory newFactory) {
+
+		endpoint = config.getString("cprbroker.endpoint");
+    	usingSsl = config.getBoolean("cprbroker.usingssl");
+		applicationToken  = config.getString("cprbroker.applicationtoken");
+		userToken = config.getString("cprbroker.usertoken");
+		allowedSourceUsageOrderHeader = config.getInt("cprbroker.accesslevel");
+        keystore = config.getString("keystorefile");
+        keystorePassword = config.getString("keystorepassword");
+				
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), endpoint: " + endpoint);
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), usingSsl: " + usingSsl);
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), appToken: " + applicationToken);
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), userToken: " + userToken);
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), allowedSourceUsageOrderHeader: " + allowedSourceUsageOrderHeader);
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystore: " + keystore);
+        play.Logger.debug("Global.bind(ICprBrokerAccessor.class).get(), keystorePassword: " + keystorePassword);
+
 		factory = newFactory;
 		
 	}
