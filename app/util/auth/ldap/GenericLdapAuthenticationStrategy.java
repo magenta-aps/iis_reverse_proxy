@@ -66,6 +66,9 @@ import com.unboundid.util.ssl.TrustStoreTrustManager;
 
 public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 
+	public static final int DEFAULT_PORT = 389;
+	public static final int DEFAULT_SSL_PORT = 636;
+	
 	private final String hostname;
 	private final int port;
 	private final boolean usingSsl;
@@ -80,8 +83,15 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 		validate(config);
 		
 		hostname = config.getString("ldap.hostname");
-		port = config.getInt("ldap.port");
 		usingSsl = config.getBoolean("ldap.ssl");
+		// is a custom port defined?
+		if (config.getInt("ldap.port") == null) {
+			//if not use defaults
+			port = (usingSsl == true) ? DEFAULT_SSL_PORT : DEFAULT_PORT ;
+		} else {
+			//else use the custom
+			port = config.getInt("ldap.port");
+		}
 		basedn  = config.getString("ldap.basedn");
 		usergrouprdn = config.getString("ldap.usergrouprdn");
 		userattribute = config.getString("ldap.userattribute");
@@ -104,31 +114,82 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 	 * Note this should handle error logging, if the state of the
 	 * configuration-object isn't valid.
 	 * @param config
-	 * @return
 	 */
-	private static void validate(final Configuration config) {
+	public static void validate(final Configuration config) {
+		/*
+		 *  ldap.hostname = "ad.example.com"
+			ldap.port = 389
+			ldap.ssl = false
+			ldap.basedn = "dc=example,dc=com" 
+			ldap.usergrouprdn = "OU=people"
+			ldap.userattribute = "cn"
+			ldap.authorizedgrouprdn = "cn=authorized"
+			ldap.authorizedattribute = "member"
+		 */
 		String[] stringValues = {"ldap.hostname", "ldap.basedn",
 				"ldap.usergrouprdn", "ldap.userattribute",
-				"ldap.authorizedgrouprdn", "ldap.authorizedattribute",
-				"keystorefile", "keystorepassword"};
-		String[] integerValues = {"ldap.port"};
+				"ldap.authorizedgrouprdn", "ldap.authorizedattribute"};
+		String[] stringSslValues = {"keystorefile", "keystorepassword"};
 		
+		// All required String values can't be NULL
 		for(String value : stringValues) {
 			if(config.getString(value) == null) {
 				play.Logger.error("GenericLdapAutenticationStrategy lacking configuration string: " + value);
 				throw new IllegalStateException("Configuration returns null for " + value);
 			}
 		}
+				
+		if(config.getBoolean("ldap.ssl") == null) {
+			play.Logger.error("GenericLdapAutenticationStrategy.validate(): ldap.ssl was NULL.");
+			throw new IllegalStateException("GenericLdapAutenticationStrategy.validate(): ldap.ssl was NULL.");
+		}
 		
-		for(String value : integerValues) {
-			if(config.getString(value) == null) {
-				play.Logger.error("GenericLdapAutenticationStrategy lacking configuration string: " + value);
-				throw new IllegalStateException("Configuration returns null for " + value);
+		if(config.getBoolean("ldap.ssl") == true) {
+		
+			// All required String values can't be NULL
+			for(String value : stringSslValues) {
+				if(config.getString(value) == null) {
+					play.Logger.error("GenericLdapAutenticationStrategy.validate(): " + value + " was NULL.");
+					throw new IllegalStateException("GenericLdapAutenticationStrategy.validate(): " + value + " was NULL.");
+				}
+			}
+			
+			// Check that the path points to a file
+			
+			// get the path to the truststore from the application.conf
+			String trustStoreString  = config.getString("keystorefile");
+			if(trustStoreString.length() == 0) {
+				play.Logger.error("GenericLdapAutenticationStrategy.validate(): " + trustStoreString + " was NULL.");
+				throw new IllegalStateException("GenericLdapAutenticationStrategy.validate(): " + trustStoreString + " was NULL.");
+			}
+			try {
+				// make a path and check that the file exists
+				Path path = Paths.get(trustStoreString);
+				if(Files.notExists(path)) {
+					throw new FileNotFoundException();
+				}
+			} catch(FileNotFoundException e) {
+				play.Logger.error("GenericLdapAutenticationStrategy.validate(): " + trustStoreString + " doesn't point to a file.");
+				System.exit(1);
+			}
+
+			
+			play.Logger.info("GenericLdapAuthenticationStrategy.validate(): Using SSL");
+			
+			if(config.getInt("ldap.port") == null) {
+				play.Logger.info("GenericLdapAuthenticationStrategy.validate(): No port set. Assuming default port: " + DEFAULT_SSL_PORT);
+			}
+			
+		} else {
+			play.Logger.info("GenericLdapAuthenticationStrategy.validate(): Not using SSL");
+			
+			if(config.getInt("ldap.port") == null) {
+				play.Logger.info("GenericLdapAuthenticationStrategy.validate(): No port set. Assuming default port: " + DEFAULT_PORT);
 			}
 		}
-		// Validate the configuration object here
-		// String importantConfigurationString = conf.getString("important.configuration");
-		// if (importantConfigurationString == null) return false;
+		
+		play.Logger.debug("GenericLdapAuthenticationStrategy.validate(): Done");
+		play.Logger.info("GenericLdapAuthenticationStrategy validated");
 		
 	}
 	

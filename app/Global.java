@@ -35,6 +35,7 @@ import play.Application;
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthStrategy;
+import util.auth.ldap.GenericLdapAuthenticationStrategy;
 import util.auth.ldap.TestAuthenticationStrategy;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
@@ -77,8 +78,8 @@ public class Global extends GlobalSettings {
 					
 						play.Configuration config = Play.application().configuration();
 						
-						return new TestAuthenticationStrategy(config);
-//	            		return new GenericLdapAuthenticationStrategy(config);
+//						return new TestAuthenticationStrategy(config);
+	            		return new GenericLdapAuthenticationStrategy(config);
 					}	
             	});
 	            
@@ -124,7 +125,7 @@ public class Global extends GlobalSettings {
 	public void onStart(Application app) {
 		super.onStart(app);
 		
-		TestAuthenticationStrategy.validate(app.configuration());
+		GenericLdapAuthenticationStrategy.validate(app.configuration());
 		play.Logger.info("CPReader has started");
 	}
 	
