@@ -44,7 +44,7 @@
         @if(person.tidspunkt != null) {
         <p class="text-right">
             @if(person.tidspunkt.aktoerRefUuid) { @person.tidspunkt.sourceName }, 
-            @if(person.tidspunkt.tidspunkt != null) {<span class="glyphicon glyphicon-time"></span> @person.tidspunkt.tidspunkt}
+            @if(person.tidspunkt.tidspunkt != null) {<span class="glyphicon glyphicon-time"></span> @person.tidspunkt.tidspunkt.toString("dd.MM.yy HH:mm:ss")}
         </p>
         }
     </div>
@@ -110,7 +110,7 @@
 							 @if(person.birthdate != null) {
 							     <dl class="dl-horizontal">
 							         <dt>@Messages("person.birthdate")</dt>
-							         <dd>@person.birthdate</dd>
+							         <dd>@person.birthdate.toString("dd. MMMM yyyy", new Locale("da"))</dd>
 							     </dl>
 							 }
 							 @if(person.birthplace) {

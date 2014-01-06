@@ -34,13 +34,13 @@
 @(virkning: util.cprbroker.IVirkning, isVirkning : Boolean)
 
 @if(virkning != null) {
-    @if(virkning.fraTidspunkt != null && virkning.tilTidspunkt != null) {
+    @if(virkning.fraTidspunkt != null || virkning.tilTidspunkt != null) {
     <span class="glyphicon glyphicon-time"></span>
     }
-    @if(virkning.fraTidspunkt != null) {@virkning.fraTidspunkt}
+    @if(virkning.fraTidspunkt != null) {@virkning.fraTidspunkt.toString("dd.MM.yy HH:mm")}
     @if(isVirkning && virkning.tilTidspunkt != null) {
         <span class="glyphicon glyphicon-arrow-right"></span>
-        @if(virkning.tilTidspunkt != null) {@virkning.tilTidspunkt}
+        @if(virkning.tilTidspunkt != null) {@virkning.tilTidspunkt.toString("dd.MM.yy HH:mm")}
         @if(virkning.kommentar) {<br/>@virkning.kommentar</}
         @if(virkning.aktoerRefUrn) {<br/>aktoerRefUrn: @virkning.aktoerRefUrn}
         @if(virkning.aktoerRefUuid) {<br/>aktoerRefUuid: @virkning.aktoerRefUuid}
