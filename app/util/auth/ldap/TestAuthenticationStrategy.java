@@ -44,13 +44,19 @@ import util.auth.IAuthStrategy;
  */
 public class TestAuthenticationStrategy implements IAuthStrategy {
 
+	private final String username;
+	private final String password;
+	
 	/**
 	 * Constructor taking a configuration-object and validating it.
 	 * @param config
 	 */
 	public TestAuthenticationStrategy(final play.Configuration config) {
-		//Use the importantConfigurationString
+		// validation of the configuration object at instantiation
 		validate(config);
+		
+		username = config.getString("auth.username");
+		password = config.getString("auth.password");
 	}
 
 	/**
@@ -58,20 +64,35 @@ public class TestAuthenticationStrategy implements IAuthStrategy {
 	 * Note this SHOULD handle error logging, if the state of the
 	 * configuration-object isn't valid and throw an IllegalStateException.
 	 * @param config
-	 * @return
 	 */
-	private static void validate(final Configuration config) {
+	public static void validate(final Configuration config) {
 		
-		// Validate the configuration object here
-		// String importantConfigurationString = conf.getString("important.configuration");
-		// if (importantConfigurationString == null) throw new IllegalStateException();
+		//Validate the configuration object here
+		String username = config.getString("auth.username");
+		String password = config.getString("auth.password");
+
+		if (username == null) {
+			play.Logger.info("TestAuthenticationStrategy.validate(): ERROR auth.username was NULL. Is it correctly setup in config?");
+			throw new IllegalStateException("TestAuthenticationStrategy.validate(): auth.username was NULL.");
+		}
+
+		if (password == null) {
+			play.Logger.info("TestAuthenticationStrategy.validate(): ERROR auth.password was NULL");
+			throw new IllegalStateException("TestAuthenticationStrategy.validate(): auth.password was NULL. Is it correctly setup in config?");
+		}
+		
+		play.Logger.debug("TestAuthenticationStrategy.validate(): Done");
+		play.Logger.info("TestAuthenticationStrategy validated");
 		
 	}
 
+	/**
+	 * Authentication method
+	 */
 	@Override
 	public IAuthResponse authentication(final String username, final String password) {
 		play.Logger.info("User tried to login with: " + username + ", " + password);
-		if(username.equals("test") && password.equals("test")) {
+		if(username.equals(this.username) && password.equals(this.password)) {
 			play.Logger.info("Returning AuthResponse with SUCCESS");
 			return new LdapAuthResponse(AuthResponseType.SUCCESS, "OK");
 		} else {
