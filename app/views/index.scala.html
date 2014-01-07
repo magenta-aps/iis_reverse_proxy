@@ -34,25 +34,18 @@
 @(form: play.data.Form[Search.SearchInput], user: String)
 
 @main("CPReader") {
-         
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>CPReader</h1>
-        <p> En webbaseret grænseflade, som giver brugere adgang til at slå CPR numre op i CPR Brokeren og søge på navn.</p>
-
-		<h2>Om demonstrationen</h2>
-		<p>Denne demonstration indeholder ingen ægte CPR-oplysninger, idet vi har brugt testdata, leveret af CSC. I demonstrationen er ikke alle sikkerhedsfaktorer aktiveret. Der er ingen eksterne datakilder tilkoblet til CPR Brokeren.</p>
-		
-		<h2>Søgevejledning:</h2>
-		<p>Der kan søges på cpr-nummer eller navn. Søgninger på navn ikke case sensitive. En søgning på hansen er dermed det samme som en søgning på Hansen. Bemærk at det ikke er mulig at søge på et fornavn uden et efterfølgende efternavn eller et mellemnavn uden at der er et fornavn og et efternavn angivet. Navnesøgninger skal være kommasepareret til at angive, hvad der er fornavn, mellemnavn og efternavn. Søgeresultatet vil være usorteret.</p>
-		<h3>Mulige søgemønstre</h3>
+      <div class="jumbotron">	
+		<h1>Søgevejledning:</h1>
+		<p>Der kan søges på CPR nummer eller navn. Søgninger på navn er ikke case sensitiv. En søgning på 'hansen' er dermed det samme som en søgning på 'Hansen'. Bemærk, at det ikke er muligt at søge på et fornavn uden at angive et efternavn. Ligeledes er det ikke muligt at søge på et mellemnavn uden at angive et fornavn og et efternavn. Navnesøgninger skal være kommaseparerede til at angive, hvad der er fornavn, mellemnavn og efternavn. Søgeresultatet vil være usorteret.</p>
+		<h2>Mulige søgemønstre</h2>
 		<ul>
 		  <li>efternavn</li>
 		  <li>fornavn, efternavn</li>
 		  <li>fornavn, mellemnavn, efternavn</li>
 		  <li>cpr-nummer med eller uden bindestreg</li>
 		</ul>
-		<h3>Eksempler</h3>
+		<h2>Eksempler</h2>
 		<ul>
 		  <li>Jensen</li>
 		  <li>Jens, Jensen</li>
@@ -60,15 +53,5 @@
 		  <li>0101721337</li>
 		  <li>010172-1337</li>
 		</ul>
-		
-		<h2>Om sikkerhed</h2>
-		<p>Kommunikation mellem CPR Brokeren, CPReader og browseren sker altid krypteret.</p>
-		<p>Adgang til løsningen forudsætter authentikering med LDAP (f.eks. via AD), og adgang styres vha. en gruppe i LDAP. Det er ikke muligt at benytte løsningen uden at være logget på systemet. Kommunikation mellem CPReader og LDAP vil altid foregå krypteret, hvorimod kommunikation mellem CPReader og den lokale browser kan sættes op til at foregå krypteret.</p>
-		
-		<p>Alle forespørgsler logges på brugerniveau, og der er desuden udviklet en performance log.</p>
-		
-		<h2>Baggrund</h2>
-		<p>Løsningen er udviklet af Søren Kirkegård, bachelor studerende KEA Medie/IT, som igennem et 10 ugers praktikophold hos Magenta, et i gang med at implementere løsningen.</p>
       </div>
-
 }
