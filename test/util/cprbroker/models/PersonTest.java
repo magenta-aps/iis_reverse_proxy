@@ -41,6 +41,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import util.cprbroker.EGenderType;
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
 import util.cprbroker.IPerson;
@@ -50,7 +51,6 @@ import util.cprbroker.IRegisterInformation;
 import util.cprbroker.ITidspunkt;
 import util.cprbroker.ITilstand;
 import util.cprbroker.IVirkning;
-
 import static org.mockito.Mockito.*;
 
 public class PersonTest {
@@ -96,7 +96,7 @@ public class PersonTest {
 		builder.effect(newEffect);
 		
 		builder.firstname("newFirstname");
-		builder.gender("newGender");
+		builder.gender("MALE");
 		builder.lastname("newLastname");
 		builder.middelname("newMiddelname");
 		builder.nameForAdressing("newNameForAddressing");
@@ -173,7 +173,7 @@ public class PersonTest {
 	
 	@Test
 	public void testGender() {
-		assertEquals("newGender", testPerson.gender());
+		assertEquals(EGenderType.MALE, testPerson.gender());
 	}
 	
 	@Test

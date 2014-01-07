@@ -37,8 +37,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
+import static org.mockito.Mockito.*;
+import util.cprbroker.ELifeStatusType;
+import util.cprbroker.EMaritalStatusType;
 import util.cprbroker.ITilstand;
 import util.cprbroker.IVirkning;
 
@@ -53,9 +55,9 @@ public class TilstandTest {
 		mockedVirkning = mock(IVirkning.class);
 		
 		Tilstand.Builder builder = new Tilstand.Builder();
-		builder.civilStatusKode("newKode");
+		builder.civilStatusKode("GIFT");
 		builder.civilTilstandsVirkning(mockedVirkning);
-		builder.livStatusKode("newKode");
+		builder.livStatusKode("DOED");
 		builder.livTilstandsVirkning(mockedVirkning);
 		
 		testTilstand = builder.build();
@@ -63,7 +65,7 @@ public class TilstandTest {
 
 	@Test
 	public void testCivilStatusKode() {
-		String expected = "newKode";
+		EMaritalStatusType expected = EMaritalStatusType.GIFT;
 		
 		assertEquals(expected, testTilstand.civilStatusKode());
 	}
@@ -75,7 +77,7 @@ public class TilstandTest {
 	
 	@Test
 	public void testLivStatusKode() {
-		String expected = "newKode";
+		ELifeStatusType expected = ELifeStatusType.DOED;
 		
 		assertEquals(expected, testTilstand.livStatusKode());
 	}

@@ -33,28 +33,30 @@
 
 package util.cprbroker.models;
 
+import util.cprbroker.ELifeStatusType;
+import util.cprbroker.EMaritalStatusType;
 import util.cprbroker.IVirkning;
 import util.cprbroker.ITilstand;
 
 public class Tilstand implements ITilstand {
 
-	private final String civilStatusKode;
+	private final EMaritalStatusType civilStatusKode;
 	private final IVirkning civilTilstandsVirkning;
-	private final String livStatusKode;
+	private final ELifeStatusType livStatusKode;
 	private final IVirkning livTilstandsVirkning;
 
 	//TODO Look at ITilstand - isGraeseIndikator? Implement it!
 	public static class Builder {
-		private String civilStatusKode;
+		private EMaritalStatusType civilStatusKode;
 		private IVirkning civilTilstandsVirkning;
-		private String livStatusKode;
+		private ELifeStatusType livStatusKode;
 		private IVirkning livTilstandsVirkning;
 		
 		public ITilstand build() { return new Tilstand(this); }
 		
-		public Builder civilStatusKode(String newKode) { civilStatusKode = newKode; return this; }
+		public Builder civilStatusKode(String newKode) { civilStatusKode = EMaritalStatusType.valueOf(newKode); return this; }
 		public Builder civilTilstandsVirkning(IVirkning virkning) {civilTilstandsVirkning = virkning; return this; }
-		public Builder livStatusKode(String newKode) { livStatusKode = newKode; return this; }
+		public Builder livStatusKode(String newKode) { livStatusKode = ELifeStatusType.valueOf(newKode); return this; }
 		public Builder livTilstandsVirkning(IVirkning virkning) {livTilstandsVirkning = virkning; return this; }
 
 		
@@ -68,13 +70,13 @@ public class Tilstand implements ITilstand {
 	}
 	
 	@Override
-	public String civilStatusKode() { return civilStatusKode;}
+	public EMaritalStatusType civilStatusKode() { return civilStatusKode;}
 
 	@Override
 	public IVirkning civilTilstandsVirkning() { return civilTilstandsVirkning; }
 
 	@Override
-	public String livStatusKode() {	return livStatusKode; }
+	public ELifeStatusType livStatusKode() {	return livStatusKode; }
 
 	@Override
 	public IVirkning livTilstandsVirkning() {	return livTilstandsVirkning; }

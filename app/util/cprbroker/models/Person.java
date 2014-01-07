@@ -39,6 +39,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.DateTime;
 
+import util.cprbroker.EGenderType;
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
 import util.cprbroker.IPersonRelationshipsWithIPerson;
@@ -61,7 +62,7 @@ public class Person implements IPerson{
 	private final String lastname;
 	private final String callname;
 	private final String nameForAddressing;
-	private final String gender;
+	private final EGenderType gender;
 	private final DateTime birthdate;
 	private final String birthplace;
 	private final String birthRegisteringAuthority;
@@ -107,7 +108,7 @@ public class Person implements IPerson{
 		private String lastname = null;
 		private String callname = null;
 		private String nameForAddressing = null;
-		private String gender = null;
+		private EGenderType gender = null;
 		private DateTime birthdate = null;
 		private String birthplace = null;
 		private String birthRegisteringAuthority = null;
@@ -145,7 +146,7 @@ public class Person implements IPerson{
 		public Builder lastname(final String newName) { lastname = newName; return this; }
 		public Builder callname(final String newName) { callname = newName; return this; }
 		public Builder nameForAdressing(final String newName) { nameForAddressing = newName; return this; }
-		public Builder gender(final String newGender) {gender = newGender; return this;}
+		public Builder gender(final String newGender) {gender = EGenderType.valueOf(newGender); return this;}
 		public Builder birthdate(final GregorianCalendar newBirthdate) {birthdate = new DateTime(newBirthdate); return this;}
 		public Builder birthplace(final String newBirthplace) {birthplace = newBirthplace; return this;}
 		public Builder birthRegisteringAuthority(final String newBirthRegisteringAuthority) {birthRegisteringAuthority = newBirthRegisteringAuthority; return this;}
@@ -224,7 +225,7 @@ public class Person implements IPerson{
 	public String nameForAddressing() { return nameForAddressing; }
 	
 	@Override
-	public String gender() { return gender;	}
+	public EGenderType gender() { return gender; }
 
 	@Override
 	public DateTime birthdate() { return birthdate;	}

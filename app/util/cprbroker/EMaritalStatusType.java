@@ -33,25 +33,25 @@
 
 package util.cprbroker;
 
-public interface ITilstand {
+public enum EMaritalStatusType {
 
-	/* condition/status?
-	 * Civil
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getCivilStatusKode().name();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getAktoerRef();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getCommentText();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getFraTidspunkt().getTidsstempelDatoTid();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getFraTidspunkt().isGraenseIndikator();
-	* Life
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getLivStatusKode().name();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getAktoerRef();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getCommentText();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getFraTidspunkt().getTidsstempelDatoTid();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getFraTidspunkt().isGraenseIndikator();
-	 */
+	UGIFT("Ugift"),
+	GIFT("Gift"),
+	SKILT("Skilt"),
+	SEPARERET("Separeret"),
+	ENKE("Enke"),
+	REGISTRERET_PARTNER("Registeret partner"),
+	OPHAEVET_PARTNERSKAB("Ophævet partnerskab"),
+	LAENGSTLEVENDE("Længstlevende");
 	
-	EMaritalStatusType civilStatusKode();
-	IVirkning civilTilstandsVirkning();
-	ELifeStatusType livStatusKode();
-	IVirkning livTilstandsVirkning();
+	private final String prettyString;
+	
+	private EMaritalStatusType(String prettyString) {
+		this.prettyString = prettyString;
+	}
+	
+	@Override
+	public String toString() {
+		return prettyString;
+	}
 }

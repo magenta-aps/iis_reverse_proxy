@@ -101,7 +101,7 @@
 						              <dd>@person.nameForAddressing</dd>
 						          </dl>
 						      }  
-							 @if(person.gender) {
+							 @if(person.gender != null) {
 							     <dl class="dl-horizontal">
 							         <dt>@Messages("person.gender")</dt>
 							         <dd>@person.gender</dd>
@@ -137,7 +137,7 @@
                         </div>	                
 	                    <div class="panel-body">
 	                        @if(person.tilstand != null) {
-	                            @if(person.tilstand.civilStatusKode) {
+	                            @if(person.tilstand.civilStatusKode != null) {
 	                                <dl class="dl-horizontal">
 	                                    <dt>@Messages("person.tilstand.civilStatusKode")</dt>
 	                                    <dd>@person.tilstand.civilStatusKode</dd>
@@ -146,7 +146,7 @@
     	                                }
 	                                </dl>
 	                            }
-	                            @if(person.tilstand.civilStatusKode) {
+	                            @if(person.tilstand.livStatusKode != null) {
 	                                <dl class="dl-horizontal">
 	                                    <dt>@Messages("person.tilstand.livStatusKode")</dt>
 	                                    <dd>@person.tilstand.livStatusKode</dd>

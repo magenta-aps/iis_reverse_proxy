@@ -34,7 +34,7 @@
 @(tilstand : util.cprbroker.ITilstand)
 
 @if(tilstand != null) {
-    @if(tilstand.civilStatusKode) {
+    @if(tilstand.civilStatusKode != null) {
         <dl class="dl-horizontal">
             <dt>@Messages("person.tilstand.civilStatusKode")</dt>
             <dd>@tilstand.civilStatusKode</dd>
@@ -43,7 +43,7 @@
             }
         </dl>
     }
-    @if(tilstand.civilStatusKode) {
+    @if(tilstand.livStatusKode != null) {
         <dl class="dl-horizontal">
             <dt>@Messages("person.tilstand.livStatusKode")</dt>
             <dd>@tilstand.livStatusKode</dd>

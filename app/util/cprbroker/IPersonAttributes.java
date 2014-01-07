@@ -48,8 +48,7 @@ public interface IPersonAttributes {
 	
 	String nameForAddressing();
 	
-	//TODO make enum of genders
-	String gender();
+	EGenderType gender();
 	
 	DateTime birthdate();
 		

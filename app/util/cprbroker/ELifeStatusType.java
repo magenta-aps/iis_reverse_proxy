@@ -33,25 +33,20 @@
 
 package util.cprbroker;
 
-public interface ITilstand {
+public enum ELifeStatusType {
+	FORSVUNDET("Forsvundet"),
+	DOED("Død"),
+	FOEDT("Født"),
+	PRENATAL("Prenatal");
 
-	/* condition/status?
-	 * Civil
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getCivilStatusKode().name();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getAktoerRef();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getCommentText();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getFraTidspunkt().getTidsstempelDatoTid();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getCivilStatus().getTilstandVirkning().getFraTidspunkt().isGraenseIndikator();
-	* Life
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getLivStatusKode().name();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getAktoerRef();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getCommentText();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getFraTidspunkt().getTidsstempelDatoTid();
-	laesOutput.getLaesResultat().getRegistrering().getTilstandListe().getLivStatus().getTilstandVirkning().getFraTidspunkt().isGraenseIndikator();
-	 */
+	private final String prettyString;
 	
-	EMaritalStatusType civilStatusKode();
-	IVirkning civilTilstandsVirkning();
-	ELifeStatusType livStatusKode();
-	IVirkning livTilstandsVirkning();
+	private ELifeStatusType(final String prettyString) {
+		this.prettyString = prettyString;
+	}
+	
+	@Override
+	public String toString() {
+		return prettyString;
+	}
 }
