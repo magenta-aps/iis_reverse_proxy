@@ -54,8 +54,8 @@ import play.data.Form;
 import play.mvc.Result;
 import play.test.WithApplication;
 import util.auth.AuthResponseType;
-import util.auth.IAuthResponse;
-import util.auth.IAuthStrategy;
+import util.auth.IAuthenticationResponse;
+import util.auth.IAuthentication;
 
 public class ApplicationTest extends WithApplication {
 
@@ -88,9 +88,9 @@ public class ApplicationTest extends WithApplication {
 		public <A> A getControllerInstance(Class<A> arg0) throws Exception {
 
 			//Mocking
-			IAuthStrategy mockedStrategy = mock(IAuthStrategy.class);
-			IAuthResponse mockedSuccessResponse = mock(IAuthResponse.class);
-			IAuthResponse mockedErrorResponse = mock(IAuthResponse.class);
+			IAuthentication mockedStrategy = mock(IAuthentication.class);
+			IAuthenticationResponse mockedSuccessResponse = mock(IAuthenticationResponse.class);
+			IAuthenticationResponse mockedErrorResponse = mock(IAuthenticationResponse.class);
 			
 			//Mocking a successful request
 			when(mockedStrategy.authentication("username", "goodpassword")).thenReturn(mockedSuccessResponse);

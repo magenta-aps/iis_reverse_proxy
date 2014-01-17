@@ -31,7 +31,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-package util.auth.ldap;
+package util.auth.unboundid.implementations;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,8 +48,10 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import play.Configuration;
 import play.Play;
 import util.auth.AuthResponseType;
-import util.auth.IAuthResponse;
-import util.auth.IAuthStrategy;
+import util.auth.AuthenticationResponse;
+import util.auth.IAuthentication;
+import util.auth.IAuthenticationResponse;
+import util.auth.unboundid.IUnboundidAuthentication;
 
 import com.unboundid.ldap.sdk.BindRequest;
 import com.unboundid.ldap.sdk.BindResult;
@@ -64,8 +66,8 @@ import com.unboundid.ldap.sdk.SimpleBindRequest;
 import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustStoreTrustManager;
 
-public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
-
+public class UnboundidLdapAuthentication implements IUnboundidAuthentication {
+	
 	public static final int DEFAULT_PORT = 389;
 	public static final int DEFAULT_SSL_PORT = 636;
 	
@@ -79,7 +81,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 	private final String authorizedattribute;
 	
 	@Inject
-	public GenericLdapAuthenticationStrategy(final play.Configuration config) {	
+	public UnboundidLdapAuthentication(final play.Configuration config) {	
 		validate(config);
 		
 		hostname = config.getString("ldap.hostname");
@@ -203,7 +205,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 	 * Helper method to get a connection to the ldap
 	 * @return
 	 */
-	private final LDAPConnection getConnection() {
+	public final LDAPConnection getConnection() {
 		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.getConnection");
 		
 		LDAPConnection ldapConnection = null;
@@ -248,7 +250,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 	}
 
 	@Override
-	public final IAuthResponse authentication(final String username,
+	public final IAuthenticationResponse authentication(final String username,
 			final String password) {
 		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.authentication");
 
@@ -257,7 +259,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 
 		if (ldapConnection == null) {
 			stopWatch.stop("LdapAuthenticationStrategy.authentication.noConnection");
-			return new LdapAuthResponse(AuthResponseType.ERROR,
+			return new AuthenticationResponse(AuthResponseType.ERROR,
 					"Connection error");
 		}
 
@@ -279,20 +281,20 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 				SearchRequest searchRequest = new SearchRequest(authorizedgrouprdn + ", " + basedn,
 						SearchScope.SUB, Filter.createEqualityFilter(
 								authorizedattribute, binddn));
-
+				
 				SearchResult sr = ldapConnection.search(searchRequest);
 				
 				if (sr.getEntryCount() == 1) {
 					play.Logger.debug("Got 1 result");
 					stopWatch.stop("LdapAuthenticationStrategy.authentication.succesful");
 					// found one entry, so must be okay
-					return new LdapAuthResponse(AuthResponseType.SUCCESS,
+					return new AuthenticationResponse(AuthResponseType.SUCCESS,
 							"login.succesful");
 				} else if (sr.getEntryCount() == 0) {
 					play.Logger.debug("Got 0 results");
 					stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful");
 					// didn't return any, so user isn't authorized
-					return new LdapAuthResponse(AuthResponseType.INFO,
+					return new AuthenticationResponse(AuthResponseType.INFO,
 							"login.not_authorized");
 				} else {
 					stopWatch.stop("LdapAuthenticationStrategy.authentication.unexpectedSearchResult");
@@ -300,13 +302,13 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 					play.Logger
 							.error(this.getClass().getName()
 									+ ": return unexpected multiply result - should be 0 or 1");
-					return new LdapAuthResponse(AuthResponseType.ERROR,
+					return new AuthenticationResponse(AuthResponseType.ERROR,
 							"login.unexpected_error");
 				}
 			} else {
 				stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful");
 				// ResultCode != success
-				return new LdapAuthResponse(AuthResponseType.INFO,
+				return new AuthenticationResponse(AuthResponseType.INFO,
 						"login.invalid_credientials");
 			}
 		} catch (final LDAPException lex) {
@@ -314,7 +316,7 @@ public class GenericLdapAuthenticationStrategy implements IAuthStrategy {
 			stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful", lex.getMessage());
 			play.Logger.warn(lex.toString());
 
-			return new LdapAuthResponse(AuthResponseType.INFO,
+			return new AuthenticationResponse(AuthResponseType.INFO,
 					"login.invalid_credientials");
 
 		} finally {

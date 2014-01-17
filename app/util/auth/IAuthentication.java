@@ -33,17 +33,19 @@
 
 package util.auth;
 /**
- * Interface that decouples the implementation of a Authentication Strategy for
- * the application.
+ * Interface that decouples the implementation of a Authentication the
+ * application. It is suggested that this is used as an Adapter pattern
+ * and pass the actual work to an implementation of the
+ * IAuthenticationStrategy.
  * @author Søren Kirkegård
  *
  */
-public interface IAuthStrategy {
+public interface IAuthentication {
 	/**
 	 * @param username users part of credentials to be validated
 	 * @param password password part of credentials to be validated
 	 * @return true if user is valid
 	 */
-	IAuthResponse authentication(final String username, final String password);
+	IAuthenticationResponse authentication(final String username, final String password);
 	
 }

@@ -46,8 +46,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.auth.AuthResponseType;
-import util.auth.IAuthResponse;
-import util.auth.IAuthStrategy;
+import util.auth.IAuthenticationResponse;
+import util.auth.IAuthentication;
 import util.auth.Secured;
 import views.html.index;
 import views.html.login;
@@ -61,14 +61,14 @@ import controllers.Search.SearchInput;
 @Singleton
 public class Application extends Controller {
 	
-	private static IAuthStrategy authenticationStrategy;
+	private static IAuthentication authenticationStrategy;
 	
 	/**
 	 * 
 	 * @param newAuthenticationStrategy
 	 */
 	@Inject
-	public Application(IAuthStrategy newAuthenticationStrategy) {
+	public Application(IAuthentication newAuthenticationStrategy) {
 		authenticationStrategy = newAuthenticationStrategy;
 	}
 		
@@ -115,7 +115,7 @@ public class Application extends Controller {
     		return badRequest(login.render(loginForm));
     	}
 
-    	IAuthResponse authResponse = authenticationStrategy.authentication(
+    	IAuthenticationResponse authResponse = authenticationStrategy.authentication(
 						loginForm.get().username,
 						loginForm.get().password);
     	   	

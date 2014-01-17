@@ -32,21 +32,27 @@
  * ***** END LICENSE BLOCK ***** */
 
 package util.auth;
-/**
- * A response object containing the result of the Authentication/Authorization 
- * @author srnkrkgrd
- *
- */
-public interface IAuthResponse {
-	/**
-	 * Get the response message
-	 * @return Description of the response
-	 */
-	String message();
+
+
+
+public class AuthenticationResponse implements IAuthenticationResponse {
 	
-	/**
-	 * Get the type of the response
-	 * @return Reponse type eg. success, error etc
-	 */
-	AuthResponseType type();
+	private final AuthResponseType type;
+	private final String message;
+	
+	public AuthenticationResponse(AuthResponseType newType, String newMessage) {
+		type = newType;
+		message = newMessage;
+	}
+	
+	@Override
+	public String message() {
+		return message;
+	}
+
+	@Override
+	public AuthResponseType type() {
+		return type;
+	}
+	
 }

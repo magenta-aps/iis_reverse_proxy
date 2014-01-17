@@ -31,18 +31,15 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-package util.auth.ldap;
+package util.auth;
 
 import play.Configuration;
-import util.auth.AuthResponseType;
-import util.auth.IAuthResponse;
-import util.auth.IAuthStrategy;
 /**
- * Example implementation of the IAuthStrategy
+ * Simple example implementation of the IAuthentication used for testing
  * @author Søren Kirkegård
  *
  */
-public class TestAuthenticationStrategy implements IAuthStrategy {
+public class TestAuthenticationStrategy implements IAuthentication {
 
 	private final String username;
 	private final String password;
@@ -90,13 +87,13 @@ public class TestAuthenticationStrategy implements IAuthStrategy {
 	 * Authentication method
 	 */
 	@Override
-	public IAuthResponse authentication(final String username, final String password) {
+	public IAuthenticationResponse authentication(final String username, final String password) {
 		play.Logger.info("User tried to login with: " + username + ", " + password);
 		if(username.equals(this.username) && password.equals(this.password)) {
 			play.Logger.info("Returning AuthResponse with SUCCESS");
-			return new LdapAuthResponse(AuthResponseType.SUCCESS, "OK");
+			return new AuthenticationResponse(AuthResponseType.SUCCESS, "OK");
 		} else {
-			return new LdapAuthResponse(AuthResponseType.ERROR, "Forkert brugernavn eller kodeord");
+			return new AuthenticationResponse(AuthResponseType.ERROR, "Forkert brugernavn eller kodeord");
 		}
 	}	
 }

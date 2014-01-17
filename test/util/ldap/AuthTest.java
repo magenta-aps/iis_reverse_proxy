@@ -40,9 +40,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import util.auth.AuthResponseType;
-import util.auth.IAuthResponse;
-import util.auth.IAuthStrategy;
-import util.auth.ldap.LdapAuthResponse;
+import util.auth.AuthenticationResponse;
+import util.auth.IAuthenticationResponse;
+import util.auth.IAuthentication;
 import util.auth.ldap.LdapAuthenticationStrategy;
 
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
@@ -86,7 +86,7 @@ public class AuthTest {
 	
 	@Test
 	public void testLdapAuthResponse() {
-		IAuthResponse res = new LdapAuthResponse(AuthResponseType.INFO, "Test");
+		IAuthenticationResponse res = new AuthenticationResponse(AuthResponseType.INFO, "Test");
 		assertEquals(AuthResponseType.INFO, res.type());
 		assertEquals("Test", res.message());
 		assertEquals(AuthResponseType.ERROR, AuthResponseType.valueOf("ERROR"));
@@ -98,7 +98,7 @@ public class AuthTest {
 		int port = ds.getListenPort();
 		
 		// Make a new LdapAuthStrat
-		IAuthStrategy ldapAuthStrat = new LdapAuthenticationStrategy("localhost", port,
+		IAuthentication ldapAuthStrat = new LdapAuthenticationStrategy("localhost", port,
 				"ou=kbh,dc=nodomain", "cn=allowed,ou=Roles,dc=nodomain", "member");
 
 		ldapAuthStrat.authentication("cn=notallowed", "secret");

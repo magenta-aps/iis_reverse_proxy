@@ -34,9 +34,9 @@
 import play.Application;
 import play.GlobalSettings;
 import play.Play;
-import util.auth.IAuthStrategy;
-import util.auth.ldap.GenericLdapAuthenticationStrategy;
-import util.auth.ldap.TestAuthenticationStrategy;
+import util.auth.IAuthentication;
+import util.auth.TestAuthenticationStrategy;
+import util.auth.unboundid.implementations.UnboundidLdapAuthentication;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
 
@@ -70,14 +70,14 @@ public class Global extends GlobalSettings {
 	        @Override
 	        protected void configure() {      	
        	
-	            bind(IAuthStrategy.class)
-            	.toProvider(new Provider<IAuthStrategy>() {
+	            bind(IAuthentication.class)
+            	.toProvider(new Provider<IAuthentication>() {
 					@Override
-					public IAuthStrategy get() {
+					public IAuthentication get() {
 						play.Configuration config = Play.application().configuration();
 						
 //						return new TestAuthenticationStrategy(config);
-	            		return new GenericLdapAuthenticationStrategy(config);
+	            		return new UnboundidLdapAuthentication(config);
 					}	
             	});
 	            
@@ -99,7 +99,7 @@ public class Global extends GlobalSettings {
 	public void onStart(Application app) {
 		super.onStart(app);
 		// validate needed components
-		GenericLdapAuthenticationStrategy.validate(app.configuration());
+		UnboundidLdapAuthentication.validate(app.configuration());
 		JaxWsCprBroker.validate(app.configuration());
 	}
 	
