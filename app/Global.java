@@ -31,20 +31,28 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+import javax.inject.Singleton;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthentication;
 import util.auth.TestAuthenticationStrategy;
+import util.auth.unboundid.IUnboundidAuthentication;
+import util.auth.unboundid.IUnboundidConnection;
+import util.auth.unboundid.implementations.UnboundidConnection;
 import util.auth.unboundid.implementations.UnboundidLdapAuthentication;
 import util.cprbroker.ICprBrokerAccessor;
 import util.cprbroker.jaxws.JaxWsCprBroker;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 
+import conf.IConfiguration;
+import conf.PlayConfiguration;
 import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
 
 /**
@@ -69,17 +77,11 @@ public class Global extends GlobalSettings {
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
 	        protected void configure() {      	
-       	
-	            bind(IAuthentication.class)
-            	.toProvider(new Provider<IAuthentication>() {
-					@Override
-					public IAuthentication get() {
-						play.Configuration config = Play.application().configuration();
-						
-//						return new TestAuthenticationStrategy(config);
-	            		return new UnboundidLdapAuthentication(config);
-					}	
-            	});
+
+	        	bind(IConfiguration.class).to(PlayConfiguration.class).in(Singleton.class);
+	        	bind(IUnboundidConnection.class).to(UnboundidConnection.class);
+	        	bind(IAuthentication.class).to(IUnboundidAuthentication.class);
+	        	bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
 	            
 	            
 	            bind(ICprBrokerAccessor.class)
@@ -99,7 +101,7 @@ public class Global extends GlobalSettings {
 	public void onStart(Application app) {
 		super.onStart(app);
 		// validate needed components
-		UnboundidLdapAuthentication.validate(app.configuration());
+		// UnboundidLdapAuthentication.validate();
 		JaxWsCprBroker.validate(app.configuration());
 	}
 	
