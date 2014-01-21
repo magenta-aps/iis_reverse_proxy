@@ -37,6 +37,7 @@ import play.Application;
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthentication;
+import util.auth.TestAuthenticationStrategy;
 import util.auth.unboundid.IUnboundidAuthentication;
 import util.auth.unboundid.IUnboundidConnection;
 import util.auth.unboundid.implementations.ProxyUserUnboundidAuthentication;
@@ -80,10 +81,10 @@ public class Global extends GlobalSettings {
 	        	// Bind all configurations to a singleton of the play configuration
 	        	bind(IConfiguration.class).to(PlayConfiguration.class).in(Singleton.class);
 	        	
-	        	bind(IAuthentication.class).to(ProxyUserUnboundidAuthentication.class);
-		        bind(IUnboundidConnection.class).to(UnboundidConnection.class);
-		        
-		        bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
+	        	bind(IAuthentication.class).to(TestAuthenticationStrategy.class);
+//		        bind(IUnboundidConnection.class).to(UnboundidConnection.class);
+//		        
+//		        bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
 				       	
 	            
 	            bind(ICprBrokerAccessor.class)

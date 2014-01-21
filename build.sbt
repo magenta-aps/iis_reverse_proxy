@@ -14,6 +14,10 @@ libraryDependencies ++= Seq(
 
 play.Project.playJavaSettings
 
+requireJs += "main.js"
+
+requireJsShim += "main.js"
+
 lazy val jaxws = project
 
 lazy val root = project.in(file("."))
