@@ -40,83 +40,29 @@ import java.nio.file.Paths;
 
 import javax.inject.Inject;
 
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
-
 import play.Configuration;
-import util.auth.AuthResponseType;
-import util.auth.AuthenticationResponse;
+import util.auth.IAuthentication;
 import util.auth.IAuthenticationResponse;
 import util.auth.unboundid.IUnboundidAuthentication;
-import util.auth.unboundid.IUnboundidConnection;
-
-import com.unboundid.ldap.sdk.BindRequest;
-import com.unboundid.ldap.sdk.BindResult;
-import com.unboundid.ldap.sdk.Filter;
-import com.unboundid.ldap.sdk.LDAPConnection;
-import com.unboundid.ldap.sdk.LDAPException;
-import com.unboundid.ldap.sdk.ResultCode;
-import com.unboundid.ldap.sdk.SearchRequest;
-import com.unboundid.ldap.sdk.SearchResult;
-import com.unboundid.ldap.sdk.SearchScope;
-import com.unboundid.ldap.sdk.SimpleBindRequest;
-
 import conf.IConfiguration;
 import conf.IValidable;
 
 public class UnboundidLdapAuthentication implements IUnboundidAuthentication, IValidable {
 	
-	public static final int DEFAULT_PORT = 389;
-	public static final int DEFAULT_SSL_PORT = 636;
-	
-	private final String hostname;
-	private final int port;
-	private final boolean usingSsl;
-	private final String basedn;
-	private final String userattribute;
-	private final String usergrouprdn;
-	private final String authorizedgrouprdn;
-	private final String authorizedattribute;
-	
-	private final IUnboundidConnection connectionStrategy;
+	private final IAuthentication authenticationStrategy;
 	private final Configuration config;
 	
 	@Inject
-	public UnboundidLdapAuthentication(final IUnboundidConnection connectionStrategy, final IConfiguration configuration) {
+	public UnboundidLdapAuthentication(final IAuthentication authenticationStrategy,
+			final IConfiguration configuration) {
 		config = configuration.getConfiguration();
-		validate(); //TODO Should this be run at construction?
+		validate();
 		
-		this.connectionStrategy = connectionStrategy;
+		this.authenticationStrategy = authenticationStrategy;
 		
-		hostname = config.getString("ldap.hostname");
-		usingSsl = config.getBoolean("ldap.ssl");
-		// is a custom port defined?
-		if (config.getInt("ldap.port") == null) {
-			//if not use defaults
-			port = (usingSsl == true) ? DEFAULT_SSL_PORT : DEFAULT_PORT ;
-		} else {
-			//else use the custom
-			port = config.getInt("ldap.port");
-		}
-		basedn  = config.getString("ldap.basedn");
-		usergrouprdn = config.getString("ldap.usergrouprdn");
-		userattribute = config.getString("ldap.userattribute");
-		authorizedgrouprdn = config.getString("ldap.authorizedgrouprdn");
-		authorizedattribute = config.getString("ldap.authorizedattribute");
-		
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, hostname: " + hostname);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, port: " + port);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, usingSsl: " + usingSsl);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, basedn: " + basedn);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, usergrouprdn: " + usergrouprdn);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, userattribute: " + userattribute);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, authorizedgrouprdn: " + authorizedgrouprdn);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, authorizedattribute: " + authorizedattribute);
 
 	}
 	
-	
-	//TODO MOVE THIS INTO THE STRATEGIES
 	/**
 	 * Helper method to validate an IAuthStrategy.
 	 * Note this should handle error logging, if the state of the
@@ -188,14 +134,14 @@ public class UnboundidLdapAuthentication implements IUnboundidAuthentication, IV
 			play.Logger.info("GenericLdapAuthenticationStrategy.validate(): Using SSL");
 			
 			if(config.getInt("ldap.port") == null) {
-				play.Logger.info("GenericLdapAuthenticationStrategy.validate(): No port set. Assuming default port: " + DEFAULT_SSL_PORT);
+				play.Logger.info("GenericLdapAuthenticationStrategy.validate(): No port set. Assuming default port: 389");
 			}
 			
 		} else {
 			play.Logger.info("GenericLdapAuthenticationStrategy.validate(): Not using SSL");
 			
 			if(config.getInt("ldap.port") == null) {
-				play.Logger.info("GenericLdapAuthenticationStrategy.validate(): No port set. Assuming default port: " + DEFAULT_PORT);
+				play.Logger.info("GenericLdapAuthenticationStrategy.validate(): No port set. Assuming default port: 686");
 			}
 		}
 		
@@ -207,89 +153,10 @@ public class UnboundidLdapAuthentication implements IUnboundidAuthentication, IV
 		return true;
 		
 	}
-	
-	/**
-	 * Helper method to get a connection to the ldap
-	 * @return
-	 */
-	public final LDAPConnection getConnection() {
-		return (LDAPConnection) connectionStrategy.getConnection();
-	}
 
 	@Override
 	public final IAuthenticationResponse authentication(final String username,
 			final String password) {
-		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.authentication");
-
-		// Try to get a connection
-		LDAPConnection ldapConnection = getConnection();
-
-		if (ldapConnection == null) {
-			stopWatch.stop("LdapAuthenticationStrategy.authentication.noConnection");
-			return new AuthenticationResponse(AuthResponseType.ERROR,
-					"Connection error");
-		}
-
-		try {
-			final String binddn = userattribute + "=" +
-								  username + "," +
-								  usergrouprdn + "," +
-								  basedn;
-			play.Logger.debug("Created binddn: " + binddn);
-					
-			final BindRequest bindRequest = new SimpleBindRequest(binddn ,password);
-			
-			BindResult bindResult = ldapConnection.bind(bindRequest);
-
-			if (bindResult.getResultCode() == ResultCode.SUCCESS) {
-				play.Logger.debug("ResultCode.SUCCESS");
-
-				// search and check if the user is member of the predefined group
-				SearchRequest searchRequest = new SearchRequest(authorizedgrouprdn + ", " + basedn,
-						SearchScope.SUB, Filter.createEqualityFilter(
-								authorizedattribute, binddn));
-				
-				SearchResult sr = ldapConnection.search(searchRequest);
-				
-				if (sr.getEntryCount() == 1) {
-					play.Logger.debug("Got 1 result");
-					stopWatch.stop("LdapAuthenticationStrategy.authentication.succesful");
-					// found one entry, so must be okay
-					return new AuthenticationResponse(AuthResponseType.SUCCESS,
-							"login.succesful");
-				} else if (sr.getEntryCount() == 0) {
-					play.Logger.debug("Got 0 results");
-					stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful");
-					// didn't return any, so user isn't authorized
-					return new AuthenticationResponse(AuthResponseType.INFO,
-							"login.not_authorized");
-				} else {
-					stopWatch.stop("LdapAuthenticationStrategy.authentication.unexpectedSearchResult");
-					// something went wrong!
-					play.Logger
-							.error(this.getClass().getName()
-									+ ": return unexpected multiply result - should be 0 or 1");
-					return new AuthenticationResponse(AuthResponseType.ERROR,
-							"login.unexpected_error");
-				}
-			} else {
-				stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful");
-				// ResultCode != success
-				return new AuthenticationResponse(AuthResponseType.INFO,
-						"login.invalid_credientials");
-			}
-		} catch (final LDAPException lex) {
-
-			stopWatch.stop("LdapAuthenticationStrategy.authentication.unsuccesful", lex.getMessage());
-			play.Logger.warn(lex.toString());
-
-			return new AuthenticationResponse(AuthResponseType.INFO,
-					"login.invalid_credientials");
-
-		} finally {
-			// always close the connection afterwards
-			ldapConnection.close();
-
-		}
+		return authenticationStrategy.authentication(username, password);
 	}
 }

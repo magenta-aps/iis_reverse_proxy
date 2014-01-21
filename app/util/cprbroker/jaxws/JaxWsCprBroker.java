@@ -85,7 +85,6 @@ import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
 import play.Configuration;
-import play.Play;
 import util.cprbroker.ERelationshipType;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.IAddress;

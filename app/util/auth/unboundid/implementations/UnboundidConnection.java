@@ -31,16 +31,15 @@ public class UnboundidConnection implements IUnboundidConnection {
 	private final String hostname;
 	private final int port;
 	private final boolean usingSsl;
-	private final String basedn;
-	private final String userattribute;
-	private final String usergrouprdn;
-	private final String authorizedgrouprdn;
-	private final String authorizedattribute;
+	
+	private final IConfiguration configuration;
 	
 	@Inject
 	public UnboundidConnection(final IConfiguration configuration) {
-		//validate(config);
-		play.Configuration config = configuration.getConfiguration();
+		
+		this.configuration = configuration;
+		
+		play.Configuration config = this.configuration.getConfiguration();
 		hostname = config.getString("ldap.hostname");
 		usingSsl = config.getBoolean("ldap.ssl");
 		// is a custom port defined?
@@ -51,25 +50,15 @@ public class UnboundidConnection implements IUnboundidConnection {
 			//else use the custom
 			port = config.getInt("ldap.port");
 		}
-		basedn  = config.getString("ldap.basedn");
-		usergrouprdn = config.getString("ldap.usergrouprdn");
-		userattribute = config.getString("ldap.userattribute");
-		authorizedgrouprdn = config.getString("ldap.authorizedgrouprdn");
-		authorizedattribute = config.getString("ldap.authorizedattribute");
 		
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, hostname: " + hostname);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, port: " + port);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, usingSsl: " + usingSsl);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, basedn: " + basedn);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, usergrouprdn: " + usergrouprdn);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, userattribute: " + userattribute);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, authorizedgrouprdn: " + authorizedgrouprdn);
-		play.Logger.debug("GenericLdapAutenticationStrategy.constructor, authorizedattribute: " + authorizedattribute);	
+		play.Logger.debug("UnboundidConnection.constructor, hostname: " + hostname);
+		play.Logger.debug("UnboundidConnection.constructor, port: " + port);
+		play.Logger.debug("UnboundidConnection.constructor, usingSsl: " + usingSsl);
 	}
 	
 	@Override
 	public LDAPInterface getConnection() {
-		StopWatch stopWatch = new Slf4JStopWatch("LdapAuthenticationStrategy.getConnection");
+		StopWatch stopWatch = new Slf4JStopWatch("UnboundidConnection.getConnection");
 		
 		LDAPConnection ldapConnection = null;
 		
@@ -93,12 +82,12 @@ public class UnboundidConnection implements IUnboundidConnection {
 
 			} catch (LDAPException | GeneralSecurityException e) {
 				play.Logger.error(e.getMessage());
-				stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
+				stopWatch.stop("UnboundidConnection.getConnection.failed", e.getMessage());
 				
 			} catch (FileNotFoundException e) {
 				String trustStoreString  = Play.application().configuration().getString("keystorefile");
 				play.Logger.error("Truststore file does not exist at :'" + trustStoreString + "'. Check trustStoreFile path in your configuration.");
-				stopWatch.stop("LdapAuthenticationStrategy.getConnection.failed", e.getMessage());
+				stopWatch.stop("UnboundidConnection.getConnection.failed", e.getMessage());
 			} 			
 		} else {
 			try {

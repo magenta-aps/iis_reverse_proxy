@@ -35,20 +35,18 @@ package util.cprbroker.models;
 
 import java.util.GregorianCalendar;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.joda.time.DateTime;
 
 import util.cprbroker.EGenderType;
 import util.cprbroker.IAddress;
 import util.cprbroker.IContact;
-import util.cprbroker.IPersonRelationshipsWithIPerson;
-import util.cprbroker.ITidspunkt;
-import util.cprbroker.IVirkning;
 import util.cprbroker.IPerson;
 import util.cprbroker.IPersonRelationships;
+import util.cprbroker.IPersonRelationshipsWithIPerson;
 import util.cprbroker.IRegisterInformation;
+import util.cprbroker.ITidspunkt;
 import util.cprbroker.ITilstand;
+import util.cprbroker.IVirkning;
 
 public class Person implements IPerson{
 

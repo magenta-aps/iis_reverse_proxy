@@ -33,6 +33,9 @@
 
 package util.auth;
 
+import javax.inject.Inject;
+
+import conf.IConfiguration;
 import play.Configuration;
 /**
  * Simple example implementation of the IAuthentication used for testing
@@ -48,8 +51,10 @@ public class TestAuthenticationStrategy implements IAuthentication {
 	 * Constructor taking a configuration-object and validating it.
 	 * @param config
 	 */
-	public TestAuthenticationStrategy(final play.Configuration config) {
+	@Inject
+	public TestAuthenticationStrategy(final IConfiguration configuration) {
 		// validation of the configuration object at instantiation
+		play.Configuration config = configuration.getConfiguration();
 		validate(config);
 		
 		username = config.getString("auth.username");

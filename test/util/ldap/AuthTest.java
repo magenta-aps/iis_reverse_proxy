@@ -42,8 +42,6 @@ import org.junit.Test;
 import util.auth.AuthResponseType;
 import util.auth.AuthenticationResponse;
 import util.auth.IAuthenticationResponse;
-import util.auth.IAuthentication;
-import util.auth.ldap.LdapAuthenticationStrategy;
 
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
@@ -92,21 +90,21 @@ public class AuthTest {
 		assertEquals(AuthResponseType.ERROR, AuthResponseType.valueOf("ERROR"));
 	}
 
-	@Test
-	public void testLdapAuthenticationStrategy() {
-
-		int port = ds.getListenPort();
-		
-		// Make a new LdapAuthStrat
-		IAuthentication ldapAuthStrat = new LdapAuthenticationStrategy("localhost", port,
-				"ou=kbh,dc=nodomain", "cn=allowed,ou=Roles,dc=nodomain", "member");
-
-		ldapAuthStrat.authentication("cn=notallowed", "secret");
-		// Test the various stuff!
-		assertEquals(true, true);
-
-
-
-	}
+//	@Test
+//	public void testLdapAuthenticationStrategy() {
+//
+//		int port = ds.getListenPort();
+//		
+//		// Make a new LdapAuthStrat
+//		IAuthentication ldapAuthStrat = new UnboundidAuthentication("localhost", port,
+//				"ou=kbh,dc=nodomain", "cn=allowed,ou=Roles,dc=nodomain", "member");
+//
+//		ldapAuthStrat.authentication("cn=notallowed", "secret");
+//		// Test the various stuff!
+//		assertEquals(true, true);
+//
+//
+//
+//	}
 
 }

@@ -36,7 +36,6 @@ import static org.junit.Assert.assertEquals;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.fakeRequest;
-import static play.test.Helpers.header;
 import static play.test.Helpers.status;
 
 import org.junit.Before;

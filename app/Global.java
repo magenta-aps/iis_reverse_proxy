@@ -37,9 +37,9 @@ import play.Application;
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthentication;
-import util.auth.TestAuthenticationStrategy;
 import util.auth.unboundid.IUnboundidAuthentication;
 import util.auth.unboundid.IUnboundidConnection;
+import util.auth.unboundid.implementations.ProxyUserUnboundidAuthentication;
 import util.auth.unboundid.implementations.UnboundidConnection;
 import util.auth.unboundid.implementations.UnboundidLdapAuthentication;
 import util.cprbroker.ICprBrokerAccessor;
@@ -47,7 +47,6 @@ import util.cprbroker.jaxws.JaxWsCprBroker;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 
@@ -73,16 +72,19 @@ public class Global extends GlobalSettings {
 
 	public Global() {
 		super();
-
+		
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
 	        protected void configure() {      	
-
+	
+	        	// Bind all configurations to a singleton of the play configuration
 	        	bind(IConfiguration.class).to(PlayConfiguration.class).in(Singleton.class);
-	        	bind(IUnboundidConnection.class).to(UnboundidConnection.class);
-	        	bind(IAuthentication.class).to(IUnboundidAuthentication.class);
-	        	bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
-	            
+	        	
+	        	bind(IAuthentication.class).to(ProxyUserUnboundidAuthentication.class);
+		        bind(IUnboundidConnection.class).to(UnboundidConnection.class);
+		        
+		        bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
+				       	
 	            
 	            bind(ICprBrokerAccessor.class)
             	.toProvider(new Provider<ICprBrokerAccessor>() {
