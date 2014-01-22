@@ -52,8 +52,8 @@ public class CPRBrokerSOAPFactory implements ICPRBrokerSOAPFactory {
 											UnrecoverableKeyException,
 											KeyManagementException {
 		
-		//check
-		checkIfRequiredVarablesArePresent();
+		// check now done closer to the configuration
+		// checkIfRequiredVarablesArePresent();
 		// Make certain that Part.java points to the WDSL
 		Part service = new Part();
 
