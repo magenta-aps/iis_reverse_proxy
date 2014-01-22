@@ -70,8 +70,10 @@ public class Uuids implements IUuids {
 		
 		List<String> copy = new LinkedList<String>();
 		
-		for(String uuid : referencedValues) {
-			copy.add(uuid);
+		if(referencedValues != null) {
+			for(String uuid : referencedValues) {
+				copy.add(uuid);
+			}			
 		}
 		
 		return Collections.unmodifiableList(copy);
