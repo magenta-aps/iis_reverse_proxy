@@ -41,6 +41,7 @@ import util.auth.TestAuthenticationStrategy;
 import util.auth.unboundid.IUnboundidAuthentication;
 import util.auth.unboundid.IUnboundidConnection;
 import util.auth.unboundid.implementations.ProxyUserUnboundidAuthentication;
+import util.auth.unboundid.implementations.UnboundidAuthentication;
 import util.auth.unboundid.implementations.UnboundidConnection;
 import util.auth.unboundid.implementations.UnboundidLdapAuthentication;
 import util.cprbroker.ICprBrokerAccessor;
@@ -81,12 +82,11 @@ public class Global extends GlobalSettings {
 	        	// Bind all configurations to a singleton of the play configuration
 	        	bind(IConfiguration.class).to(PlayConfiguration.class).in(Singleton.class);
 	        	
-	        	bind(IAuthentication.class).to(TestAuthenticationStrategy.class);
-//		        bind(IUnboundidConnection.class).to(UnboundidConnection.class);
-//		        
-//		        bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
-				       	
+	        	bind(IAuthentication.class).to(ProxyUserUnboundidAuthentication.class);
+		        bind(IUnboundidConnection.class).to(UnboundidConnection.class);
 	            
+		        bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
+		        
 	            bind(ICprBrokerAccessor.class)
             	.toProvider(new Provider<ICprBrokerAccessor>() {
 					@Override
