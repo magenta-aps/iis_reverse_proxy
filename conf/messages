@@ -84,6 +84,23 @@ person.address.danishAddress.valgkredsDistrikt = Valgdistrikt
 person.address.danishAddress.isSpecielVejkode = Specielvejkode
 person.address.danishAddress.isUkendtAdresse = Ukendt adresse
 
+person.address.greenlandicAddress.streetName = Gadenavn
+person.address.greenlandicAddress.streetNameForAddressing = Adresseforadressering
+person.address.greenlandicAddress.streetBuilding = Gadenummer
+person.address.greenlandicAddress.floor = Etage
+person.address.greenlandicAddress.suite = Suite
+person.address.greenlandicAddress.districtSubdivision = Forstad
+person.address.greenlandicAddress.postCode = Postnummer
+person.address.greenlandicAddress.districtName = By
+person.address.greenlandicAddress.countryIdentificationCode = Landekode
+person.address.greenlandicAddress.municipalityCode = Kommunekode
+person.address.greenlandicAddress.streetCode = Vejkode
+person.address.greenlandicAddress.isSpecielVejkode = Specielvejkode
+person.address.greenlandicAddress.isUkendtAdresse = Ukendt adresse
+person.address.greenlandicAddress.note = Note
+
+
+
 person.address.worldAddress.postalAddressFirstLineText = Adresse
 person.address.worldAddress.postalAddressSecondLineText =
 person.address.worldAddress.postalAddressThirdLineText =
