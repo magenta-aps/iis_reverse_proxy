@@ -436,6 +436,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		List<String> uuidList = uuids.values();
 		
 		for(int i=0;i<size;i++) {
+			play.Logger.debug("Calling getPerson on: " + uuidList.get(i));
 			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur(), false);
 			persons.add(tmpPerson);
 		}
@@ -640,15 +641,16 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			// TODO make a guard check if the list has values
 			RegisterOplysningType register = registerList.get(0);
 			
-			// TODO make a guard check if the register has a cprCitizen
-			CprBorgerType citizenData = register.getCprBorger();
 
-			AdresseType address = citizenData.getFolkeregisterAdresse();
-			
+			CprBorgerType citizenData = register.getCprBorger();
 			IAddress newAddress;
-			newAddress = getAddress(address);
-			builder.address(newAddress);
+			if(citizenData != null) {
+				AdresseType address = citizenData.getFolkeregisterAdresse();
+				play.Logger.debug("Calling getAddress on: " + citizenData);
 			
+				newAddress = getAddress(address);
+				builder.address(newAddress);
+			}
 			// TODO make a guard check
 			AdresseType otherAddress = registering.getAttributListe().getEgenskab().get(0).getAndreAdresser();
 			newAddress = getAddress(otherAddress);
@@ -676,37 +678,39 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		IVirkning regVirkning = getEffect(register.getVirkning());
 		regInfoBuilder.virkning(regVirkning);
 		
-		// TODO make a guard check if the register has a cprCitizen
+
 		CprBorgerType citizenData = register.getCprBorger();
-
-		// Get social security information
-		String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
-		if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
 		
-		// Get nationality code
-		CountryIdentificationCodeType nationalityCode = citizenData.getPersonNationalityCode();
-		if(nationalityCode != null) { regInfoBuilder.personNationalityCode(nationalityCode.getValue()); }
-
-		// Is member of the church?
-		Boolean isChurchMember = citizenData.isFolkekirkeMedlemIndikator();
-		if (isChurchMember != null) { regInfoBuilder.isMemberOfTheChurch(isChurchMember); }
-
-		// Has researcher protection?
-		Boolean isResearcherProtected = citizenData.isForskerBeskyttelseIndikator();
-		if (isResearcherProtected != null) { regInfoBuilder.isResearcherProtected(isResearcherProtected); }
-
-		// Valid social security number?
-		Boolean isCprValid = citizenData.isPersonNummerGyldighedStatusIndikator();
-		if (isCprValid != null) { regInfoBuilder.isSocialSecurityNumberValid(isCprValid); }
-
-		// Name/Address protection?
-		Boolean isNameAddressProtected = citizenData.isNavneAdresseBeskyttelseIndikator();
-		if (isNameAddressProtected != null) { regInfoBuilder.isNameAdressProtected(isNameAddressProtected); }
-
-		// Name/Address protection?
-		Boolean isPhoneNumberProtected = citizenData.isTelefonNummerBeskyttelseIndikator();
-		if (isPhoneNumberProtected != null) { regInfoBuilder.isPhoneNumberProtected(isPhoneNumberProtected); }		
-					
+		if(citizenData != null) {
+			// Get social security information
+			play.Logger.debug("register was: " + citizenData);
+			String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
+			if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
+			
+			// Get nationality code
+			CountryIdentificationCodeType nationalityCode = citizenData.getPersonNationalityCode();
+			if(nationalityCode != null) { regInfoBuilder.personNationalityCode(nationalityCode.getValue()); }
+		
+			// Is member of the church?
+			Boolean isChurchMember = citizenData.isFolkekirkeMedlemIndikator();
+			if (isChurchMember != null) { regInfoBuilder.isMemberOfTheChurch(isChurchMember); }
+		
+			// Has researcher protection?
+			Boolean isResearcherProtected = citizenData.isForskerBeskyttelseIndikator();
+			if (isResearcherProtected != null) { regInfoBuilder.isResearcherProtected(isResearcherProtected); }
+		
+			// Valid social security number?
+			Boolean isCprValid = citizenData.isPersonNummerGyldighedStatusIndikator();
+			if (isCprValid != null) { regInfoBuilder.isSocialSecurityNumberValid(isCprValid); }
+		
+			// Name/Address protection?
+			Boolean isNameAddressProtected = citizenData.isNavneAdresseBeskyttelseIndikator();
+			if (isNameAddressProtected != null) { regInfoBuilder.isNameAdressProtected(isNameAddressProtected); }
+		
+			// Name/Address protection?
+			Boolean isPhoneNumberProtected = citizenData.isTelefonNummerBeskyttelseIndikator();
+			if (isPhoneNumberProtected != null) { regInfoBuilder.isPhoneNumberProtected(isPhoneNumberProtected); }		
+		}
 		// Return the register information data to the person
 		return regInfoBuilder.build();
 	}
@@ -777,8 +781,10 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			if(danishAddress != null) {
 				newAddress = getDanishAddress(address);
 			} else if (greenlandicAddress != null) {
+				play.Logger.debug("Found greenlandicAddress: " + address.toString());
 				newAddress = getGreenlandicAddress(address);
 			} else if (worldAddress != null) {
+				play.Logger.debug("Found worldAddress: " + address.toString());
 				newAddress = getWorldAddress(address);
 			}
 			
