@@ -39,7 +39,7 @@ person.firstname = Fornavn
 person.middelname = Mellemnavn
 person.lastname = Efternavn
 person.callname = Kaldenavn
-person.nameForAddressing = Addresseringsnavn
+person.nameForAddressing = Adresseringsnavn
 person.gender = Køn
 person.birthdate = Fødselsdato
 person.birthplace = Fødested
@@ -55,7 +55,7 @@ person.registerInformation.cprCitizen.socialSecurityNumber = CPR-nummer
 person.registerInformation.cprCitizen.personNationalityCode = Nationalitetskode
 person.registerInformation.cprCitizen.isMemberOfTheChurch = Folkekirkemedlem
 person.registerInformation.cprCitizen.isResearcherProtected = Forskerbeskyttelse
-person.registerInformation.cprCitizen.isNameAddressProtected = Navn- og Addressebeskyttelse
+person.registerInformation.cprCitizen.isNameAddressProtected = Navn- og Adressebeskyttelse
 person.registerInformation.cprCitizen.isPhoneNumberProtected = Telefonnummerbeskyttelse
 
 #------ ADDRESSE
@@ -68,7 +68,7 @@ person.address.danishAddress.postCode = Postnummer
 person.address.danishAddress.postOfficeBox = Postboks
 person.address.danishAddress.streetName = Gadenavn
 person.address.danishAddress.streetBuilding = Gadenummer
-person.address.danishAddress.streetNameForAddressing = Adresseforaddresering
+person.address.danishAddress.streetNameForAddressing = Adresseforadressering
 person.address.danishAddress.suite = Suite
 person.address.danishAddress.note = Note
 person.address.danishAddress.municipalityCode = Kommunekode
@@ -82,11 +82,20 @@ person.address.danishAddress.socialDistrikt = Socialdistrikt
 person.address.danishAddress.sogneDistrikt = Sognedistrikt
 person.address.danishAddress.valgkredsDistrikt = Valgdistrikt
 person.address.danishAddress.isSpecielVejkode = Specielvejkode
-person.address.danishAddress.isUkendtAdresse = Ukendt addresse
+person.address.danishAddress.isUkendtAdresse = Ukendt adresse
+
+person.address.worldAddress.postalAddressFirstLineText = Adresse
+person.address.worldAddress.postalAddressSecondLineText =
+person.address.worldAddress.postalAddressThirdLineText =
+person.address.worldAddress.postalAddressFourthLineText =
+person.address.worldAddress.postalAddressFifthLineText =
+person.address.worldAddress.isUkendtAdresseIndikator = Ukendt adresse
+person.address.worldAddress.locationDescriptionText = Beskrivelse
+person.address.worldAddress.note = Note
 
 #------ ANDEN ADDRESSE
 person.otherAddress.worldAddress.locationDescriptionText = Beskrivelse
-person.otherAddress.worldAddress.postalAddressFirstLineText = Addresse
+person.otherAddress.worldAddress.postalAddressFirstLineText = Adresse
 person.otherAddress.worldAddress.postalAddressSecondLineText =
 person.otherAddress.worldAddress.postalAddressThirdLineText =
 person.otherAddress.worldAddress.postalAddressFourthLineText =
