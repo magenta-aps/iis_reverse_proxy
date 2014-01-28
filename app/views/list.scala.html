@@ -50,7 +50,7 @@
       @if(person.firstname) { @person.firstname}
       @if(person.middelname) { @person.middelname}
       @if(person.lastname) { @person.lastname}
-      @if(person.address != null) {
+      @if(person.address != null && person.address.addressType == util.cprbroker.EAddressType.Danish ) {
         <span class="text-muted">
         @if(person.address.danishAddress.streetName) { @person.address.danishAddress.streetName}
         @if(person.address.danishAddress.streetBuilding) { @person.address.danishAddress.streetBuilding}
