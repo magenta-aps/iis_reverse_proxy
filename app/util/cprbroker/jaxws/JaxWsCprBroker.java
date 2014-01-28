@@ -436,7 +436,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		List<String> uuidList = uuids.values();
 		
 		for(int i=0;i<size;i++) {
-			play.Logger.debug("Calling getPerson on: " + uuidList.get(i));
 			tmpPerson = getPerson(uuidList.get(i), laesResultatTypeList.get(i), listOutput.getStandardRetur(), false);
 			persons.add(tmpPerson);
 		}
@@ -645,9 +644,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			CprBorgerType citizenData = register.getCprBorger();
 			IAddress newAddress;
 			if(citizenData != null) {
-				AdresseType address = citizenData.getFolkeregisterAdresse();
-				play.Logger.debug("Calling getAddress on: " + citizenData);
-			
+				AdresseType address = citizenData.getFolkeregisterAdresse();			
 				newAddress = getAddress(address);
 				builder.address(newAddress);
 			}
@@ -683,7 +680,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		if(citizenData != null) {
 			// Get social security information
-			play.Logger.debug("register was: " + citizenData);
 			String socialSecurityNumber = citizenData.getPersonCivilRegistrationIdentifier();
 			if(socialSecurityNumber != null) { regInfoBuilder.socialSecurityNumber(socialSecurityNumber); }
 			
@@ -781,10 +777,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			if(danishAddress != null) {
 				newAddress = getDanishAddress(address);
 			} else if (greenlandicAddress != null) {
-				play.Logger.debug("Found greenlandicAddress: " + address.toString());
 				newAddress = getGreenlandicAddress(address);
 			} else if (worldAddress != null) {
-				play.Logger.debug("Found worldAddress: " + address.toString());
 				newAddress = getWorldAddress(address);
 			}
 			
