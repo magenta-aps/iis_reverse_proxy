@@ -229,7 +229,7 @@
 				@danishaddress(person)            
             }
 			@if(person.address.addressType == EAddressType.Greenlandic) {	
-				GREENLAND
+				@greenlandicaddress(person)
             }
 			@if(person.address.addressType == EAddressType.World) {	
 				@worldaddress(person)            
