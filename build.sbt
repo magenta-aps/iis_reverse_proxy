@@ -1,4 +1,6 @@
 import play.Project._
+import de.johoop.jacoco4sbt._
+import JacocoPlugin._
 
 name := "play-cpreader"
 
@@ -13,6 +15,8 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-all" % "1.9.5" % "test")     
 
 play.Project.playJavaSettings
+
+jacoco.settings
 
 requireJs += "main.js"
 
