@@ -64,7 +64,7 @@ public class Application extends Controller {
 	private static IAuthentication authenticationStrategy;
 	
 	/**
-	 * 
+	 * Apparently only used for testing
 	 * @param newAuthenticationStrategy
 	 */
 	@Inject

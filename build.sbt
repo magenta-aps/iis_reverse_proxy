@@ -1,10 +1,6 @@
-import play.Project._
-import de.johoop.jacoco4sbt._
-import JacocoPlugin._
-
 name := "play-cpreader"
 
-version := "1.0.2-SNAPSHOT"
+version := "1.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   cache,
