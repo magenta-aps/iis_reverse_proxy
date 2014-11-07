@@ -218,10 +218,13 @@ public class CPRBrokerSOAPFactory implements ICPRBrokerSOAPFactory {
 	                        factory.createElement("UserToken",prefix,uri);
 	                usrTokenElem.addTextNode(userToken);
 	                appHeaderElem.addChildElement(usrTokenElem);
-	                
-	                
-	                // add the headers
-	                SOAPHeader header = envelope.addHeader();
+
+
+					// add the headers
+	                SOAPHeader header = envelope.getHeader();
+					if(header == null)
+						header = envelope.addHeader();
+					header.removeContents();
 	                header.addChildElement(sourceHeaderElem);
 	                header.addChildElement(appHeaderElem);
 
