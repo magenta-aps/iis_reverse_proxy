@@ -27,9 +27,9 @@ public class ObjectFactory {
 
     private final static QName _DistrictSubdivisionIdentifier_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", "DistrictSubdivisionIdentifier");
     private final static QName _StreetName_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", "StreetName");
+    private final static QName _BirthDate_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", "BirthDate");
     private final static QName _PostCodeIdentifier_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", "PostCodeIdentifier");
     private final static QName _DistrictName_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", "DistrictName");
-    private final static QName _BirthDate_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", "BirthDate");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: dk.oio.rep.ebxml.xml.schemas.dkcc._2005._03._15
@@ -57,6 +57,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", name = "BirthDate")
+    public JAXBElement<XMLGregorianCalendar> createBirthDate(XMLGregorianCalendar value) {
+        return new JAXBElement<XMLGregorianCalendar>(_BirthDate_QNAME, XMLGregorianCalendar.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
@@ -72,15 +81,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", name = "DistrictName")
     public JAXBElement<String> createDistrictName(String value) {
         return new JAXBElement<String>(_DistrictName_QNAME, String.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", name = "BirthDate")
-    public JAXBElement<XMLGregorianCalendar> createBirthDate(XMLGregorianCalendar value) {
-        return new JAXBElement<XMLGregorianCalendar>(_BirthDate_QNAME, XMLGregorianCalendar.class, null, value);
     }
 
 }

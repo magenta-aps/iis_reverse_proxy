@@ -55,6 +55,7 @@ public class EgenskabType {
     @XmlElement(name = "NavnStruktur")
     protected NavnStrukturType navnStruktur;
     @XmlElement(name = "PersonGenderCode", namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/23/", required = true)
+    @XmlSchemaType(name = "string")
     protected PersonGenderCodeType personGenderCode;
     @XmlElement(name = "BirthDate", namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/", required = true)
     @XmlSchemaType(name = "date")

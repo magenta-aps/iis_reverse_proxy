@@ -25,21 +25,29 @@ import oio.sagdok._2_0.SoegOutputType;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _SoegInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "SoegInput");
-    private final static QName _ListOejebliksbilledeInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "ListOejebliksbilledeInput");
-    private final static QName _LaesOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesOutput");
-    private final static QName _LaesPeriodInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesPeriodInput");
-    private final static QName _GetUuidOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "GetUuidOutput");
-    private final static QName _ListOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "ListOutput");
-    private final static QName _LaesOejebliksbilledeInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesOejebliksbilledeInput");
     private final static QName _SoegOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "SoegOutput");
+    private final static QName _LaesOejebliksbilledeInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesOejebliksbilledeInput");
+    private final static QName _ListOejebliksbilledeInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "ListOejebliksbilledeInput");
+    private final static QName _SoegInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "SoegInput");
+    private final static QName _LaesOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesOutput");
+    private final static QName _ListOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "ListOutput");
     private final static QName _ListPeriodInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "ListPeriodInput");
+    private final static QName _GetUuidOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "GetUuidOutput");
+    private final static QName _LaesPeriodInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesPeriodInput");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: oio.sagdok.person._1_0
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link LaesOutputType }
+     * 
+     */
+    public LaesOutputType createLaesOutputType() {
+        return new LaesOutputType();
     }
 
     /**
@@ -51,19 +59,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LaesPeriodInputType }
-     * 
-     */
-    public LaesPeriodInputType createLaesPeriodInputType() {
-        return new LaesPeriodInputType();
-    }
-
-    /**
      * Create an instance of {@link ListOejebliksbilledeInputType }
      * 
      */
     public ListOejebliksbilledeInputType createListOejebliksbilledeInputType() {
         return new ListOejebliksbilledeInputType();
+    }
+
+    /**
+     * Create an instance of {@link LaesPeriodInputType }
+     * 
+     */
+    public LaesPeriodInputType createLaesPeriodInputType() {
+        return new LaesPeriodInputType();
     }
 
     /**
@@ -99,51 +107,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LaesOutputType }
+     * Create an instance of {@link TelefonType }
      * 
      */
-    public LaesOutputType createLaesOutputType() {
-        return new LaesOutputType();
-    }
-
-    /**
-     * Create an instance of {@link KontaktKanalBaseType }
-     * 
-     */
-    public KontaktKanalBaseType createKontaktKanalBaseType() {
-        return new KontaktKanalBaseType();
-    }
-
-    /**
-     * Create an instance of {@link RelationListeType }
-     * 
-     */
-    public RelationListeType createRelationListeType() {
-        return new RelationListeType();
-    }
-
-    /**
-     * Create an instance of {@link SoegRelationListeType }
-     * 
-     */
-    public SoegRelationListeType createSoegRelationListeType() {
-        return new SoegRelationListeType();
-    }
-
-    /**
-     * Create an instance of {@link SoegEgenskabType }
-     * 
-     */
-    public SoegEgenskabType createSoegEgenskabType() {
-        return new SoegEgenskabType();
-    }
-
-    /**
-     * Create an instance of {@link RegistreringType }
-     * 
-     */
-    public RegistreringType createRegistreringType() {
-        return new RegistreringType();
+    public TelefonType createTelefonType() {
+        return new TelefonType();
     }
 
     /**
@@ -155,179 +123,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetUuidArrayOutputType }
+     * Create an instance of {@link CivilStatusType }
      * 
      */
-    public GetUuidArrayOutputType createGetUuidArrayOutputType() {
-        return new GetUuidArrayOutputType();
-    }
-
-    /**
-     * Create an instance of {@link DanskAdresseType }
-     * 
-     */
-    public DanskAdresseType createDanskAdresseType() {
-        return new DanskAdresseType();
-    }
-
-    /**
-     * Create an instance of {@link AdresseType }
-     * 
-     */
-    public AdresseType createAdresseType() {
-        return new AdresseType();
-    }
-
-    /**
-     * Create an instance of {@link SoegTilstandListeType }
-     * 
-     */
-    public SoegTilstandListeType createSoegTilstandListeType() {
-        return new SoegTilstandListeType();
-    }
-
-    /**
-     * Create an instance of {@link PersonType }
-     * 
-     */
-    public PersonType createPersonType() {
-        return new PersonType();
-    }
-
-    /**
-     * Create an instance of {@link SoegAttributListeType }
-     * 
-     */
-    public SoegAttributListeType createSoegAttributListeType() {
-        return new SoegAttributListeType();
-    }
-
-    /**
-     * Create an instance of {@link PeriodInputType }
-     * 
-     */
-    public PeriodInputType createPeriodInputType() {
-        return new PeriodInputType();
-    }
-
-    /**
-     * Create an instance of {@link AdresseBaseType }
-     * 
-     */
-    public AdresseBaseType createAdresseBaseType() {
-        return new AdresseBaseType();
-    }
-
-    /**
-     * Create an instance of {@link VerdenAdresseType }
-     * 
-     */
-    public VerdenAdresseType createVerdenAdresseType() {
-        return new VerdenAdresseType();
-    }
-
-    /**
-     * Create an instance of {@link OejebliksbilledeInputType }
-     * 
-     */
-    public OejebliksbilledeInputType createOejebliksbilledeInputType() {
-        return new OejebliksbilledeInputType();
-    }
-
-    /**
-     * Create an instance of {@link PersonRelationType }
-     * 
-     */
-    public PersonRelationType createPersonRelationType() {
-        return new PersonRelationType();
-    }
-
-    /**
-     * Create an instance of {@link TelefonType }
-     * 
-     */
-    public TelefonType createTelefonType() {
-        return new TelefonType();
-    }
-
-    /**
-     * Create an instance of {@link LivStatusType }
-     * 
-     */
-    public LivStatusType createLivStatusType() {
-        return new LivStatusType();
-    }
-
-    /**
-     * Create an instance of {@link OpretOutputType }
-     * 
-     */
-    public OpretOutputType createOpretOutputType() {
-        return new OpretOutputType();
-    }
-
-    /**
-     * Create an instance of {@link RegisterOplysningType }
-     * 
-     */
-    public RegisterOplysningType createRegisterOplysningType() {
-        return new RegisterOplysningType();
-    }
-
-    /**
-     * Create an instance of {@link SoegObjektType }
-     * 
-     */
-    public SoegObjektType createSoegObjektType() {
-        return new SoegObjektType();
-    }
-
-    /**
-     * Create an instance of {@link FiltreretOejebliksbilledeType }
-     * 
-     */
-    public FiltreretOejebliksbilledeType createFiltreretOejebliksbilledeType() {
-        return new FiltreretOejebliksbilledeType();
-    }
-
-    /**
-     * Create an instance of {@link SundhedOplysningType }
-     * 
-     */
-    public SundhedOplysningType createSundhedOplysningType() {
-        return new SundhedOplysningType();
-    }
-
-    /**
-     * Create an instance of {@link AttributListeType }
-     * 
-     */
-    public AttributListeType createAttributListeType() {
-        return new AttributListeType();
-    }
-
-    /**
-     * Create an instance of {@link RegisterOplysningBaseType }
-     * 
-     */
-    public RegisterOplysningBaseType createRegisterOplysningBaseType() {
-        return new RegisterOplysningBaseType();
-    }
-
-    /**
-     * Create an instance of {@link UkendtBorgerType }
-     * 
-     */
-    public UkendtBorgerType createUkendtBorgerType() {
-        return new UkendtBorgerType();
-    }
-
-    /**
-     * Create an instance of {@link LaesResultatType }
-     * 
-     */
-    public LaesResultatType createLaesResultatType() {
-        return new LaesResultatType();
+    public CivilStatusType createCivilStatusType() {
+        return new CivilStatusType();
     }
 
     /**
@@ -339,35 +139,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TilstandListeType }
+     * Create an instance of {@link RegistreringOutputType }
      * 
      */
-    public TilstandListeType createTilstandListeType() {
-        return new TilstandListeType();
+    public RegistreringOutputType createRegistreringOutputType() {
+        return new RegistreringOutputType();
     }
 
     /**
-     * Create an instance of {@link KontaktKanalType }
+     * Create an instance of {@link OejebliksbilledeInputType }
      * 
      */
-    public KontaktKanalType createKontaktKanalType() {
-        return new KontaktKanalType();
+    public OejebliksbilledeInputType createOejebliksbilledeInputType() {
+        return new OejebliksbilledeInputType();
     }
 
     /**
-     * Create an instance of {@link CivilStatusType }
+     * Create an instance of {@link OpretOutputType }
      * 
      */
-    public CivilStatusType createCivilStatusType() {
-        return new CivilStatusType();
+    public OpretOutputType createOpretOutputType() {
+        return new OpretOutputType();
     }
 
     /**
-     * Create an instance of {@link GroenlandAdresseType }
+     * Create an instance of {@link GetUuidArrayOutputType }
      * 
      */
-    public GroenlandAdresseType createGroenlandAdresseType() {
-        return new GroenlandAdresseType();
+    public GetUuidArrayOutputType createGetUuidArrayOutputType() {
+        return new GetUuidArrayOutputType();
+    }
+
+    /**
+     * Create an instance of {@link PersonType }
+     * 
+     */
+    public PersonType createPersonType() {
+        return new PersonType();
     }
 
     /**
@@ -379,11 +187,147 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NavnStrukturType }
+     * Create an instance of {@link TilstandListeType }
      * 
      */
-    public NavnStrukturType createNavnStrukturType() {
-        return new NavnStrukturType();
+    public TilstandListeType createTilstandListeType() {
+        return new TilstandListeType();
+    }
+
+    /**
+     * Create an instance of {@link VerdenAdresseType }
+     * 
+     */
+    public VerdenAdresseType createVerdenAdresseType() {
+        return new VerdenAdresseType();
+    }
+
+    /**
+     * Create an instance of {@link PersonRelationType }
+     * 
+     */
+    public PersonRelationType createPersonRelationType() {
+        return new PersonRelationType();
+    }
+
+    /**
+     * Create an instance of {@link PeriodInputType }
+     * 
+     */
+    public PeriodInputType createPeriodInputType() {
+        return new PeriodInputType();
+    }
+
+    /**
+     * Create an instance of {@link SoegTilstandListeType }
+     * 
+     */
+    public SoegTilstandListeType createSoegTilstandListeType() {
+        return new SoegTilstandListeType();
+    }
+
+    /**
+     * Create an instance of {@link RegisterOplysningBaseType }
+     * 
+     */
+    public RegisterOplysningBaseType createRegisterOplysningBaseType() {
+        return new RegisterOplysningBaseType();
+    }
+
+    /**
+     * Create an instance of {@link RegisterOplysningType }
+     * 
+     */
+    public RegisterOplysningType createRegisterOplysningType() {
+        return new RegisterOplysningType();
+    }
+
+    /**
+     * Create an instance of {@link KontaktKanalType }
+     * 
+     */
+    public KontaktKanalType createKontaktKanalType() {
+        return new KontaktKanalType();
+    }
+
+    /**
+     * Create an instance of {@link AdresseBaseType }
+     * 
+     */
+    public AdresseBaseType createAdresseBaseType() {
+        return new AdresseBaseType();
+    }
+
+    /**
+     * Create an instance of {@link UkendtBorgerType }
+     * 
+     */
+    public UkendtBorgerType createUkendtBorgerType() {
+        return new UkendtBorgerType();
+    }
+
+    /**
+     * Create an instance of {@link AdresseType }
+     * 
+     */
+    public AdresseType createAdresseType() {
+        return new AdresseType();
+    }
+
+    /**
+     * Create an instance of {@link LaesResultatType }
+     * 
+     */
+    public LaesResultatType createLaesResultatType() {
+        return new LaesResultatType();
+    }
+
+    /**
+     * Create an instance of {@link SoegAttributListeType }
+     * 
+     */
+    public SoegAttributListeType createSoegAttributListeType() {
+        return new SoegAttributListeType();
+    }
+
+    /**
+     * Create an instance of {@link AttributListeType }
+     * 
+     */
+    public AttributListeType createAttributListeType() {
+        return new AttributListeType();
+    }
+
+    /**
+     * Create an instance of {@link GroenlandAdresseType }
+     * 
+     */
+    public GroenlandAdresseType createGroenlandAdresseType() {
+        return new GroenlandAdresseType();
+    }
+
+    /**
+     * Create an instance of {@link SundhedOplysningType }
+     * 
+     */
+    public SundhedOplysningType createSundhedOplysningType() {
+        return new SundhedOplysningType();
+    }
+
+    /**
+     * Create an instance of {@link LivStatusType }
+     * 
+     */
+    public LivStatusType createLivStatusType() {
+        return new LivStatusType();
+    }
+
+    /**
+     * Create an instance of {@link RelationListeType }
+     * 
+     */
+    public RelationListeType createRelationListeType() {
+        return new RelationListeType();
     }
 
     /**
@@ -395,74 +339,67 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RegistreringOutputType }
+     * Create an instance of {@link FiltreretOejebliksbilledeType }
      * 
      */
-    public RegistreringOutputType createRegistreringOutputType() {
-        return new RegistreringOutputType();
+    public FiltreretOejebliksbilledeType createFiltreretOejebliksbilledeType() {
+        return new FiltreretOejebliksbilledeType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SoegInputType }{@code >}}
+     * Create an instance of {@link SoegObjektType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "SoegInput")
-    public JAXBElement<SoegInputType> createSoegInput(SoegInputType value) {
-        return new JAXBElement<SoegInputType>(_SoegInput_QNAME, SoegInputType.class, null, value);
+    public SoegObjektType createSoegObjektType() {
+        return new SoegObjektType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ListOejebliksbilledeInputType }{@code >}}
+     * Create an instance of {@link RegistreringType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "ListOejebliksbilledeInput")
-    public JAXBElement<ListOejebliksbilledeInputType> createListOejebliksbilledeInput(ListOejebliksbilledeInputType value) {
-        return new JAXBElement<ListOejebliksbilledeInputType>(_ListOejebliksbilledeInput_QNAME, ListOejebliksbilledeInputType.class, null, value);
+    public RegistreringType createRegistreringType() {
+        return new RegistreringType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LaesOutputType }{@code >}}
+     * Create an instance of {@link SoegRelationListeType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "LaesOutput")
-    public JAXBElement<LaesOutputType> createLaesOutput(LaesOutputType value) {
-        return new JAXBElement<LaesOutputType>(_LaesOutput_QNAME, LaesOutputType.class, null, value);
+    public SoegRelationListeType createSoegRelationListeType() {
+        return new SoegRelationListeType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LaesPeriodInputType }{@code >}}
+     * Create an instance of {@link NavnStrukturType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "LaesPeriodInput")
-    public JAXBElement<LaesPeriodInputType> createLaesPeriodInput(LaesPeriodInputType value) {
-        return new JAXBElement<LaesPeriodInputType>(_LaesPeriodInput_QNAME, LaesPeriodInputType.class, null, value);
+    public NavnStrukturType createNavnStrukturType() {
+        return new NavnStrukturType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetUuidOutputType }{@code >}}
+     * Create an instance of {@link KontaktKanalBaseType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "GetUuidOutput")
-    public JAXBElement<GetUuidOutputType> createGetUuidOutput(GetUuidOutputType value) {
-        return new JAXBElement<GetUuidOutputType>(_GetUuidOutput_QNAME, GetUuidOutputType.class, null, value);
+    public KontaktKanalBaseType createKontaktKanalBaseType() {
+        return new KontaktKanalBaseType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ListOutputType }{@code >}}
+     * Create an instance of {@link DanskAdresseType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "ListOutput")
-    public JAXBElement<ListOutputType> createListOutput(ListOutputType value) {
-        return new JAXBElement<ListOutputType>(_ListOutput_QNAME, ListOutputType.class, null, value);
+    public DanskAdresseType createDanskAdresseType() {
+        return new DanskAdresseType();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LaesOejebliksbilledeInputType }{@code >}}
+     * Create an instance of {@link SoegEgenskabType }
      * 
      */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "LaesOejebliksbilledeInput")
-    public JAXBElement<LaesOejebliksbilledeInputType> createLaesOejebliksbilledeInput(LaesOejebliksbilledeInputType value) {
-        return new JAXBElement<LaesOejebliksbilledeInputType>(_LaesOejebliksbilledeInput_QNAME, LaesOejebliksbilledeInputType.class, null, value);
+    public SoegEgenskabType createSoegEgenskabType() {
+        return new SoegEgenskabType();
     }
 
     /**
@@ -475,12 +412,75 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LaesOejebliksbilledeInputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "LaesOejebliksbilledeInput")
+    public JAXBElement<LaesOejebliksbilledeInputType> createLaesOejebliksbilledeInput(LaesOejebliksbilledeInputType value) {
+        return new JAXBElement<LaesOejebliksbilledeInputType>(_LaesOejebliksbilledeInput_QNAME, LaesOejebliksbilledeInputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListOejebliksbilledeInputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "ListOejebliksbilledeInput")
+    public JAXBElement<ListOejebliksbilledeInputType> createListOejebliksbilledeInput(ListOejebliksbilledeInputType value) {
+        return new JAXBElement<ListOejebliksbilledeInputType>(_ListOejebliksbilledeInput_QNAME, ListOejebliksbilledeInputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SoegInputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "SoegInput")
+    public JAXBElement<SoegInputType> createSoegInput(SoegInputType value) {
+        return new JAXBElement<SoegInputType>(_SoegInput_QNAME, SoegInputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LaesOutputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "LaesOutput")
+    public JAXBElement<LaesOutputType> createLaesOutput(LaesOutputType value) {
+        return new JAXBElement<LaesOutputType>(_LaesOutput_QNAME, LaesOutputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ListOutputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "ListOutput")
+    public JAXBElement<ListOutputType> createListOutput(ListOutputType value) {
+        return new JAXBElement<ListOutputType>(_ListOutput_QNAME, ListOutputType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ListPeriodInputType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "ListPeriodInput")
     public JAXBElement<ListPeriodInputType> createListPeriodInput(ListPeriodInputType value) {
         return new JAXBElement<ListPeriodInputType>(_ListPeriodInput_QNAME, ListPeriodInputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUuidOutputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "GetUuidOutput")
+    public JAXBElement<GetUuidOutputType> createGetUuidOutput(GetUuidOutputType value) {
+        return new JAXBElement<GetUuidOutputType>(_GetUuidOutput_QNAME, GetUuidOutputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LaesPeriodInputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "LaesPeriodInput")
+    public JAXBElement<LaesPeriodInputType> createLaesPeriodInput(LaesPeriodInputType value) {
+        return new JAXBElement<LaesPeriodInputType>(_LaesPeriodInput_QNAME, LaesPeriodInputType.class, null, value);
     }
 
 }

@@ -4,6 +4,7 @@ package oio.sagdok.person._1_0;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import oio.sagdok._2_0.TilstandVirkningType;
 
@@ -36,6 +37,7 @@ import oio.sagdok._2_0.TilstandVirkningType;
 public class CivilStatusType {
 
     @XmlElement(name = "CivilStatusKode", required = true)
+    @XmlSchemaType(name = "string")
     protected CivilStatusKodeType civilStatusKode;
     @XmlElement(name = "TilstandVirkning", namespace = "urn:oio:sagdok:2.0.0")
     protected TilstandVirkningType tilstandVirkning;

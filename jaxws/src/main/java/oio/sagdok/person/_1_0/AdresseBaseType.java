@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlType;
     "ukendtAdresseIndikator"
 })
 @XmlSeeAlso({
-    DanskAdresseType.class,
     VerdenAdresseType.class,
-    GroenlandAdresseType.class
+    GroenlandAdresseType.class,
+    DanskAdresseType.class
 })
 public class AdresseBaseType {
 

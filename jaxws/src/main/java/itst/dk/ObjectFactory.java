@@ -24,9 +24,9 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _SourceUsageOrderHeader_QNAME = new QName("http://dk.itst", "SourceUsageOrderHeader");
     private final static QName _ApplicationHeader_QNAME = new QName("http://dk.itst", "ApplicationHeader");
     private final static QName _QualityHeader_QNAME = new QName("http://dk.itst", "QualityHeader");
+    private final static QName _SourceUsageOrderHeader_QNAME = new QName("http://dk.itst", "SourceUsageOrderHeader");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: itst.dk
@@ -44,27 +44,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetUuid }
+     * Create an instance of {@link QualityHeader }
      * 
      */
-    public GetUuid createGetUuid() {
-        return new GetUuid();
-    }
-
-    /**
-     * Create an instance of {@link Search }
-     * 
-     */
-    public Search createSearch() {
-        return new Search();
-    }
-
-    /**
-     * Create an instance of {@link ListSnapshot }
-     * 
-     */
-    public ListSnapshot createListSnapshot() {
-        return new ListSnapshot();
+    public QualityHeader createQualityHeader() {
+        return new QualityHeader();
     }
 
     /**
@@ -76,43 +60,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReadPeriod }
+     * Create an instance of {@link RefreshReadResponse }
      * 
      */
-    public ReadPeriod createReadPeriod() {
-        return new ReadPeriod();
-    }
-
-    /**
-     * Create an instance of {@link ReadResponse }
-     * 
-     */
-    public ReadResponse createReadResponse() {
-        return new ReadResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListSnapshotResponse }
-     * 
-     */
-    public ListSnapshotResponse createListSnapshotResponse() {
-        return new ListSnapshotResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetUuidResponse }
-     * 
-     */
-    public GetUuidResponse createGetUuidResponse() {
-        return new GetUuidResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListPeriod }
-     * 
-     */
-    public ListPeriod createListPeriod() {
-        return new ListPeriod();
+    public RefreshReadResponse createRefreshReadResponse() {
+        return new RefreshReadResponse();
     }
 
     /**
@@ -124,6 +76,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetUuidArray }
+     * 
+     */
+    public GetUuidArray createGetUuidArray() {
+        return new GetUuidArray();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfString }
+     * 
+     */
+    public ArrayOfString createArrayOfString() {
+        return new ArrayOfString();
+    }
+
+    /**
      * Create an instance of {@link SearchResponse }
      * 
      */
@@ -132,35 +100,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SourceUsageOrderHeader }
+     * Create an instance of {@link GetUuid }
      * 
      */
-    public SourceUsageOrderHeader createSourceUsageOrderHeader() {
-        return new SourceUsageOrderHeader();
-    }
-
-    /**
-     * Create an instance of {@link RefreshReadResponse }
-     * 
-     */
-    public RefreshReadResponse createRefreshReadResponse() {
-        return new RefreshReadResponse();
-    }
-
-    /**
-     * Create an instance of {@link ReadPeriodResponse }
-     * 
-     */
-    public ReadPeriodResponse createReadPeriodResponse() {
-        return new ReadPeriodResponse();
-    }
-
-    /**
-     * Create an instance of {@link QualityHeader }
-     * 
-     */
-    public QualityHeader createQualityHeader() {
-        return new QualityHeader();
+    public GetUuid createGetUuid() {
+        return new GetUuid();
     }
 
     /**
@@ -172,27 +116,67 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ReadPeriodResponse }
+     * 
+     */
+    public ReadPeriodResponse createReadPeriodResponse() {
+        return new ReadPeriodResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUuidArrayResponse }
+     * 
+     */
+    public GetUuidArrayResponse createGetUuidArrayResponse() {
+        return new GetUuidArrayResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReadResponse }
+     * 
+     */
+    public ReadResponse createReadResponse() {
+        return new ReadResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUuidResponse }
+     * 
+     */
+    public GetUuidResponse createGetUuidResponse() {
+        return new GetUuidResponse();
+    }
+
+    /**
+     * Create an instance of {@link SourceUsageOrderHeader }
+     * 
+     */
+    public SourceUsageOrderHeader createSourceUsageOrderHeader() {
+        return new SourceUsageOrderHeader();
+    }
+
+    /**
+     * Create an instance of {@link Search }
+     * 
+     */
+    public Search createSearch() {
+        return new Search();
+    }
+
+    /**
+     * Create an instance of {@link ReadPeriod }
+     * 
+     */
+    public ReadPeriod createReadPeriod() {
+        return new ReadPeriod();
+    }
+
+    /**
      * Create an instance of {@link List }
      * 
      */
     public List createList() {
         return new List();
-    }
-
-    /**
-     * Create an instance of {@link ReadSnapshot }
-     * 
-     */
-    public ReadSnapshot createReadSnapshot() {
-        return new ReadSnapshot();
-    }
-
-    /**
-     * Create an instance of {@link ListPeriodResponse }
-     * 
-     */
-    public ListPeriodResponse createListPeriodResponse() {
-        return new ListPeriodResponse();
     }
 
     /**
@@ -204,12 +188,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SourceUsageOrderHeader }{@code >}}
+     * Create an instance of {@link ListSnapshotResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://dk.itst", name = "SourceUsageOrderHeader")
-    public JAXBElement<SourceUsageOrderHeader> createSourceUsageOrderHeader(SourceUsageOrderHeader value) {
-        return new JAXBElement<SourceUsageOrderHeader>(_SourceUsageOrderHeader_QNAME, SourceUsageOrderHeader.class, null, value);
+    public ListSnapshotResponse createListSnapshotResponse() {
+        return new ListSnapshotResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListPeriodResponse }
+     * 
+     */
+    public ListPeriodResponse createListPeriodResponse() {
+        return new ListPeriodResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSnapshot }
+     * 
+     */
+    public ListSnapshot createListSnapshot() {
+        return new ListSnapshot();
+    }
+
+    /**
+     * Create an instance of {@link ListPeriod }
+     * 
+     */
+    public ListPeriod createListPeriod() {
+        return new ListPeriod();
+    }
+
+    /**
+     * Create an instance of {@link ReadSnapshot }
+     * 
+     */
+    public ReadSnapshot createReadSnapshot() {
+        return new ReadSnapshot();
     }
 
     /**
@@ -228,6 +243,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://dk.itst", name = "QualityHeader")
     public JAXBElement<QualityHeader> createQualityHeader(QualityHeader value) {
         return new JAXBElement<QualityHeader>(_QualityHeader_QNAME, QualityHeader.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SourceUsageOrderHeader }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://dk.itst", name = "SourceUsageOrderHeader")
+    public JAXBElement<SourceUsageOrderHeader> createSourceUsageOrderHeader(SourceUsageOrderHeader value) {
+        return new JAXBElement<SourceUsageOrderHeader>(_SourceUsageOrderHeader_QNAME, SourceUsageOrderHeader.class, null, value);
     }
 
 }

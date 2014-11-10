@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
@@ -49,6 +50,7 @@ public class RegistreringType {
     @XmlElement(name = "Tidspunkt")
     protected TidspunktType tidspunkt;
     @XmlElement(name = "LivscyklusKode", required = true)
+    @XmlSchemaType(name = "string")
     protected LivscyklusKodeType livscyklusKode;
     @XmlElement(name = "AktoerRef")
     protected UnikIdType aktoerRef;

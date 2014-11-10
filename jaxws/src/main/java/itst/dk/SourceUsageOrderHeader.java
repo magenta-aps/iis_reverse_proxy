@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
@@ -38,6 +39,7 @@ import javax.xml.namespace.QName;
 public class SourceUsageOrderHeader {
 
     @XmlElement(name = "SourceUsageOrder", required = true, nillable = true)
+    @XmlSchemaType(name = "string")
     protected SourceUsageOrder sourceUsageOrder;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();

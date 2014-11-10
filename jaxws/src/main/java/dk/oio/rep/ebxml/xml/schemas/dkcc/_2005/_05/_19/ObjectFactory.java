@@ -24,9 +24,9 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _PostalAddressThirdLineText_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", "PostalAddressThirdLineText");
     private final static QName _PostalAddressFirstLineText_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", "PostalAddressFirstLineText");
     private final static QName _PostalAddressSecondLineText_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", "PostalAddressSecondLineText");
+    private final static QName _PostalAddressThirdLineText_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", "PostalAddressThirdLineText");
     private final static QName _PostalAddressFifthLineText_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", "PostalAddressFifthLineText");
     private final static QName _PostalAddressFourthLineText_QNAME = new QName("http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", "PostalAddressFourthLineText");
 
@@ -35,15 +35,6 @@ public class ObjectFactory {
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", name = "PostalAddressThirdLineText")
-    public JAXBElement<String> createPostalAddressThirdLineText(String value) {
-        return new JAXBElement<String>(_PostalAddressThirdLineText_QNAME, String.class, null, value);
     }
 
     /**
@@ -62,6 +53,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", name = "PostalAddressSecondLineText")
     public JAXBElement<String> createPostalAddressSecondLineText(String value) {
         return new JAXBElement<String>(_PostalAddressSecondLineText_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/", name = "PostalAddressThirdLineText")
+    public JAXBElement<String> createPostalAddressThirdLineText(String value) {
+        return new JAXBElement<String>(_PostalAddressThirdLineText_QNAME, String.class, null, value);
     }
 
     /**

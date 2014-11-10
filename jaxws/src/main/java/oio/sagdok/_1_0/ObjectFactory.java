@@ -26,8 +26,8 @@ import oio.dkal._1_0.ArrayOfString;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Idliste_QNAME = new QName("urn:oio:sagdok:1.0.0", "Idliste");
     private final static QName _BrugervendtNoegleTekst_QNAME = new QName("urn:oio:sagdok:1.0.0", "BrugervendtNoegleTekst");
+    private final static QName _Idliste_QNAME = new QName("urn:oio:sagdok:1.0.0", "Idliste");
     private final static QName _TidsstempelDatoTid_QNAME = new QName("urn:oio:sagdok:1.0.0", "TidsstempelDatoTid");
 
     /**
@@ -38,21 +38,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfString }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:oio:sagdok:1.0.0", name = "Idliste")
-    public JAXBElement<ArrayOfString> createIdliste(ArrayOfString value) {
-        return new JAXBElement<ArrayOfString>(_Idliste_QNAME, ArrayOfString.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "urn:oio:sagdok:1.0.0", name = "BrugervendtNoegleTekst")
     public JAXBElement<String> createBrugervendtNoegleTekst(String value) {
         return new JAXBElement<String>(_BrugervendtNoegleTekst_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfString }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:1.0.0", name = "Idliste")
+    public JAXBElement<ArrayOfString> createIdliste(ArrayOfString value) {
+        return new JAXBElement<ArrayOfString>(_Idliste_QNAME, ArrayOfString.class, null, value);
     }
 
     /**

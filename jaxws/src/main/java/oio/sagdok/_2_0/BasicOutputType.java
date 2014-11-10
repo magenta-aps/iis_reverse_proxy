@@ -37,11 +37,11 @@ import oio.sagdok.person._1_0.RegistreringOutputType;
     "standardRetur"
 })
 @XmlSeeAlso({
-    GetUuidOutputType.class,
     LaesOutputType.class,
-    GetUuidArrayOutputType.class,
+    GetUuidOutputType.class,
+    RegistreringOutputType.class,
     OpretOutputType.class,
-    RegistreringOutputType.class
+    GetUuidArrayOutputType.class
 })
 public class BasicOutputType {
 

@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="FiltreretOejebliksbillede" type="{urn:oio:sagdok:person:1.0.0}FiltreretOejebliksbilledeType" minOccurs="0"/>
  *           &lt;element name="Registrering" type="{urn:oio:sagdok:person:1.0.0}RegistreringType" minOccurs="0"/>
+ *           &lt;element name="FiltreretOejebliksbillede" type="{urn:oio:sagdok:person:1.0.0}FiltreretOejebliksbilledeType" minOccurs="0"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -31,39 +31,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LaesResultatType", propOrder = {
-    "filtreretOejebliksbillede",
-    "registrering"
+    "registrering",
+    "filtreretOejebliksbillede"
 })
 public class LaesResultatType {
 
-    @XmlElement(name = "FiltreretOejebliksbillede")
-    protected FiltreretOejebliksbilledeType filtreretOejebliksbillede;
     @XmlElement(name = "Registrering")
     protected RegistreringType registrering;
-
-    /**
-     * Gets the value of the filtreretOejebliksbillede property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link FiltreretOejebliksbilledeType }
-     *     
-     */
-    public FiltreretOejebliksbilledeType getFiltreretOejebliksbillede() {
-        return filtreretOejebliksbillede;
-    }
-
-    /**
-     * Sets the value of the filtreretOejebliksbillede property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link FiltreretOejebliksbilledeType }
-     *     
-     */
-    public void setFiltreretOejebliksbillede(FiltreretOejebliksbilledeType value) {
-        this.filtreretOejebliksbillede = value;
-    }
+    @XmlElement(name = "FiltreretOejebliksbillede")
+    protected FiltreretOejebliksbilledeType filtreretOejebliksbillede;
 
     /**
      * Gets the value of the registrering property.
@@ -87,6 +63,30 @@ public class LaesResultatType {
      */
     public void setRegistrering(RegistreringType value) {
         this.registrering = value;
+    }
+
+    /**
+     * Gets the value of the filtreretOejebliksbillede property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FiltreretOejebliksbilledeType }
+     *     
+     */
+    public FiltreretOejebliksbilledeType getFiltreretOejebliksbillede() {
+        return filtreretOejebliksbillede;
+    }
+
+    /**
+     * Sets the value of the filtreretOejebliksbillede property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FiltreretOejebliksbilledeType }
+     *     
+     */
+    public void setFiltreretOejebliksbillede(FiltreretOejebliksbilledeType value) {
+        this.filtreretOejebliksbillede = value;
     }
 
 }

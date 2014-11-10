@@ -50,6 +50,7 @@ public class AddressPointStatusStructureType {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar addressPointValidEndDateTime;
     @XmlElement(name = "AddressCoordinateQualityClassCode")
+    @XmlSchemaType(name = "string")
     protected AddressCoordinateQualityClassCodeType addressCoordinateQualityClassCode;
 
     /**

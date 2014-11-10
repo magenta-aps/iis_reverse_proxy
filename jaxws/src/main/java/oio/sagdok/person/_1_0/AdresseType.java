@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;choice>
  *           &lt;element name="GroenlandAdresse" type="{urn:oio:sagdok:person:1.0.0}GroenlandAdresseType" minOccurs="0"/>
- *           &lt;element name="DanskAdresse" type="{urn:oio:sagdok:person:1.0.0}DanskAdresseType" minOccurs="0"/>
  *           &lt;element name="VerdenAdresse" type="{urn:oio:sagdok:person:1.0.0}VerdenAdresseType" minOccurs="0"/>
+ *           &lt;element name="DanskAdresse" type="{urn:oio:sagdok:person:1.0.0}DanskAdresseType" minOccurs="0"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AdresseType", propOrder = {
     "groenlandAdresse",
-    "danskAdresse",
-    "verdenAdresse"
+    "verdenAdresse",
+    "danskAdresse"
 })
 public class AdresseType {
 
     @XmlElement(name = "GroenlandAdresse")
     protected GroenlandAdresseType groenlandAdresse;
-    @XmlElement(name = "DanskAdresse")
-    protected DanskAdresseType danskAdresse;
     @XmlElement(name = "VerdenAdresse")
     protected VerdenAdresseType verdenAdresse;
+    @XmlElement(name = "DanskAdresse")
+    protected DanskAdresseType danskAdresse;
 
     /**
      * Gets the value of the groenlandAdresse property.
@@ -70,30 +70,6 @@ public class AdresseType {
     }
 
     /**
-     * Gets the value of the danskAdresse property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DanskAdresseType }
-     *     
-     */
-    public DanskAdresseType getDanskAdresse() {
-        return danskAdresse;
-    }
-
-    /**
-     * Sets the value of the danskAdresse property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DanskAdresseType }
-     *     
-     */
-    public void setDanskAdresse(DanskAdresseType value) {
-        this.danskAdresse = value;
-    }
-
-    /**
      * Gets the value of the verdenAdresse property.
      * 
      * @return
@@ -115,6 +91,30 @@ public class AdresseType {
      */
     public void setVerdenAdresse(VerdenAdresseType value) {
         this.verdenAdresse = value;
+    }
+
+    /**
+     * Gets the value of the danskAdresse property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DanskAdresseType }
+     *     
+     */
+    public DanskAdresseType getDanskAdresse() {
+        return danskAdresse;
+    }
+
+    /**
+     * Sets the value of the danskAdresse property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DanskAdresseType }
+     *     
+     */
+    public void setDanskAdresse(DanskAdresseType value) {
+        this.danskAdresse = value;
     }
 
 }

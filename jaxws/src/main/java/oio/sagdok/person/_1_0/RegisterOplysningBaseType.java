@@ -20,8 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;choice>
  *           &lt;element name="UdenlandskBorger" type="{urn:oio:sagdok:person:1.0.0}UdenlandskBorgerType" minOccurs="0"/>
- *           &lt;element name="CprBorger" type="{urn:oio:sagdok:person:1.0.0}CprBorgerType" minOccurs="0"/>
  *           &lt;element name="UkendtBorger" type="{urn:oio:sagdok:person:1.0.0}UkendtBorgerType" minOccurs="0"/>
+ *           &lt;element name="CprBorger" type="{urn:oio:sagdok:person:1.0.0}CprBorgerType" minOccurs="0"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RegisterOplysningBaseType", propOrder = {
     "udenlandskBorger",
-    "cprBorger",
-    "ukendtBorger"
+    "ukendtBorger",
+    "cprBorger"
 })
 @XmlSeeAlso({
     RegisterOplysningType.class
@@ -44,10 +44,10 @@ public class RegisterOplysningBaseType {
 
     @XmlElement(name = "UdenlandskBorger")
     protected UdenlandskBorgerType udenlandskBorger;
-    @XmlElement(name = "CprBorger")
-    protected CprBorgerType cprBorger;
     @XmlElement(name = "UkendtBorger")
     protected UkendtBorgerType ukendtBorger;
+    @XmlElement(name = "CprBorger")
+    protected CprBorgerType cprBorger;
 
     /**
      * Gets the value of the udenlandskBorger property.
@@ -74,30 +74,6 @@ public class RegisterOplysningBaseType {
     }
 
     /**
-     * Gets the value of the cprBorger property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CprBorgerType }
-     *     
-     */
-    public CprBorgerType getCprBorger() {
-        return cprBorger;
-    }
-
-    /**
-     * Sets the value of the cprBorger property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CprBorgerType }
-     *     
-     */
-    public void setCprBorger(CprBorgerType value) {
-        this.cprBorger = value;
-    }
-
-    /**
      * Gets the value of the ukendtBorger property.
      * 
      * @return
@@ -119,6 +95,30 @@ public class RegisterOplysningBaseType {
      */
     public void setUkendtBorger(UkendtBorgerType value) {
         this.ukendtBorger = value;
+    }
+
+    /**
+     * Gets the value of the cprBorger property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link CprBorgerType }
+     *     
+     */
+    public CprBorgerType getCprBorger() {
+        return cprBorger;
+    }
+
+    /**
+     * Sets the value of the cprBorger property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CprBorgerType }
+     *     
+     */
+    public void setCprBorger(CprBorgerType value) {
+        this.cprBorger = value;
     }
 
 }

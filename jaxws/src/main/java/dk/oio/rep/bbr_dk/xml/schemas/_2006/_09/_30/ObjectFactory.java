@@ -42,14 +42,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GeographicCoordinateTupleType }
-     * 
-     */
-    public GeographicCoordinateTupleType createGeographicCoordinateTupleType() {
-        return new GeographicCoordinateTupleType();
-    }
-
-    /**
      * Create an instance of {@link AddressPointStatusStructureType }
      * 
      */
@@ -63,6 +55,14 @@ public class ObjectFactory {
      */
     public GeographicPointLocationType createGeographicPointLocationType() {
         return new GeographicPointLocationType();
+    }
+
+    /**
+     * Create an instance of {@link GeographicCoordinateTupleType }
+     * 
+     */
+    public GeographicCoordinateTupleType createGeographicCoordinateTupleType() {
+        return new GeographicCoordinateTupleType();
     }
 
     /**
