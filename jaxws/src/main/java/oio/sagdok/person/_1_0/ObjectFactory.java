@@ -26,6 +26,7 @@ import oio.sagdok._2_0.SoegOutputType;
 public class ObjectFactory {
 
     private final static QName _SoegOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "SoegOutput");
+    private final static QName _SoegListOutput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "SoegListOutput");
     private final static QName _LaesOejebliksbilledeInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "LaesOejebliksbilledeInput");
     private final static QName _ListOejebliksbilledeInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "ListOejebliksbilledeInput");
     private final static QName _SoegInput_QNAME = new QName("urn:oio:sagdok:person:1.0.0", "SoegInput");
@@ -96,6 +97,14 @@ public class ObjectFactory {
      */
     public LaesOejebliksbilledeInputType createLaesOejebliksbilledeInputType() {
         return new LaesOejebliksbilledeInputType();
+    }
+
+    /**
+     * Create an instance of {@link SoegListOutputType }
+     * 
+     */
+    public SoegListOutputType createSoegListOutputType() {
+        return new SoegListOutputType();
     }
 
     /**
@@ -409,6 +418,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "SoegOutput")
     public JAXBElement<SoegOutputType> createSoegOutput(SoegOutputType value) {
         return new JAXBElement<SoegOutputType>(_SoegOutput_QNAME, SoegOutputType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SoegListOutputType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:person:1.0.0", name = "SoegListOutput")
+    public JAXBElement<SoegListOutputType> createSoegListOutput(SoegListOutputType value) {
+        return new JAXBElement<SoegListOutputType>(_SoegListOutput_QNAME, SoegListOutputType.class, null, value);
     }
 
     /**

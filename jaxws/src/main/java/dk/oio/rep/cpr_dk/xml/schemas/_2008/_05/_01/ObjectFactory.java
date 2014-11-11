@@ -24,22 +24,14 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _ForeignAddressStructure_QNAME = new QName("http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/", "ForeignAddressStructure");
     private final static QName _AddressCompleteGreenland_QNAME = new QName("http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/", "AddressCompleteGreenland");
+    private final static QName _ForeignAddressStructure_QNAME = new QName("http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/", "ForeignAddressStructure");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: dk.oio.rep.cpr_dk.xml.schemas._2008._05._01
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link ForeignAddressStructureType }
-     * 
-     */
-    public ForeignAddressStructureType createForeignAddressStructureType() {
-        return new ForeignAddressStructureType();
     }
 
     /**
@@ -51,12 +43,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ForeignAddressStructureType }{@code >}}
+     * Create an instance of {@link ForeignAddressStructureType }
      * 
      */
-    @XmlElementDecl(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/", name = "ForeignAddressStructure")
-    public JAXBElement<ForeignAddressStructureType> createForeignAddressStructure(ForeignAddressStructureType value) {
-        return new JAXBElement<ForeignAddressStructureType>(_ForeignAddressStructure_QNAME, ForeignAddressStructureType.class, null, value);
+    public ForeignAddressStructureType createForeignAddressStructureType() {
+        return new ForeignAddressStructureType();
     }
 
     /**
@@ -66,6 +57,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/", name = "AddressCompleteGreenland")
     public JAXBElement<AddressCompleteGreenlandType> createAddressCompleteGreenland(AddressCompleteGreenlandType value) {
         return new JAXBElement<AddressCompleteGreenlandType>(_AddressCompleteGreenland_QNAME, AddressCompleteGreenlandType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ForeignAddressStructureType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/", name = "ForeignAddressStructure")
+    public JAXBElement<ForeignAddressStructureType> createForeignAddressStructure(ForeignAddressStructureType value) {
+        return new JAXBElement<ForeignAddressStructureType>(_ForeignAddressStructure_QNAME, ForeignAddressStructureType.class, null, value);
     }
 
 }

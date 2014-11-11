@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _Virkning_QNAME = new QName("urn:oio:sagdok:2.0.0", "Virkning");
+    private final static QName _StandardRetur_QNAME = new QName("urn:oio:sagdok:2.0.0", "StandardRetur");
     private final static QName _KaldenavnTekst_QNAME = new QName("urn:oio:sagdok:2.0.0", "KaldenavnTekst");
     private final static QName _NoteTekst_QNAME = new QName("urn:oio:sagdok:2.0.0", "NoteTekst");
     private final static QName _LokalUdvidelse_QNAME = new QName("urn:oio:sagdok:2.0.0", "LokalUdvidelse");
@@ -89,6 +90,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link StandardReturType }
+     * 
+     */
+    public StandardReturType createStandardReturType() {
+        return new StandardReturType();
+    }
+
+    /**
      * Create an instance of {@link LokalUdvidelseType }
      * 
      */
@@ -118,14 +127,6 @@ public class ObjectFactory {
      */
     public UnikIdType createUnikIdType() {
         return new UnikIdType();
-    }
-
-    /**
-     * Create an instance of {@link StandardReturType }
-     * 
-     */
-    public StandardReturType createStandardReturType() {
-        return new StandardReturType();
     }
 
     /**
@@ -223,6 +224,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:oio:sagdok:2.0.0", name = "Virkning")
     public JAXBElement<VirkningType> createVirkning(VirkningType value) {
         return new JAXBElement<VirkningType>(_Virkning_QNAME, VirkningType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link StandardReturType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oio:sagdok:2.0.0", name = "StandardRetur")
+    public JAXBElement<StandardReturType> createStandardRetur(StandardReturType value) {
+        return new JAXBElement<StandardReturType>(_StandardRetur_QNAME, StandardReturType.class, null, value);
     }
 
     /**

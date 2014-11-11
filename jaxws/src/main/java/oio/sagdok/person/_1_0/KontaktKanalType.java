@@ -18,9 +18,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:oio:sagdok:person:1.0.0}KontaktKanalBaseType">
  *       &lt;sequence>
  *         &lt;choice>
- *           &lt;element name="Telefon" type="{urn:oio:sagdok:person:1.0.0}TelefonType" minOccurs="0"/>
  *           &lt;element ref="{http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/}EmailAddressIdentifier" minOccurs="0"/>
  *           &lt;element name="AndenKontaktKanal" type="{urn:oio:sagdok:person:1.0.0}AndenKontaktKanalType" minOccurs="0"/>
+ *           &lt;element name="Telefon" type="{urn:oio:sagdok:person:1.0.0}TelefonType" minOccurs="0"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -32,44 +32,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "KontaktKanalType", propOrder = {
-    "telefon",
     "emailAddressIdentifier",
-    "andenKontaktKanal"
+    "andenKontaktKanal",
+    "telefon"
 })
 public class KontaktKanalType
     extends KontaktKanalBaseType
 {
 
-    @XmlElement(name = "Telefon")
-    protected TelefonType telefon;
     @XmlElement(name = "EmailAddressIdentifier", namespace = "http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/")
     protected String emailAddressIdentifier;
     @XmlElement(name = "AndenKontaktKanal")
     protected AndenKontaktKanalType andenKontaktKanal;
-
-    /**
-     * Gets the value of the telefon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TelefonType }
-     *     
-     */
-    public TelefonType getTelefon() {
-        return telefon;
-    }
-
-    /**
-     * Sets the value of the telefon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TelefonType }
-     *     
-     */
-    public void setTelefon(TelefonType value) {
-        this.telefon = value;
-    }
+    @XmlElement(name = "Telefon")
+    protected TelefonType telefon;
 
     /**
      * Gets the value of the emailAddressIdentifier property.
@@ -117,6 +93,30 @@ public class KontaktKanalType
      */
     public void setAndenKontaktKanal(AndenKontaktKanalType value) {
         this.andenKontaktKanal = value;
+    }
+
+    /**
+     * Gets the value of the telefon property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TelefonType }
+     *     
+     */
+    public TelefonType getTelefon() {
+        return telefon;
+    }
+
+    /**
+     * Sets the value of the telefon property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TelefonType }
+     *     
+     */
+    public void setTelefon(TelefonType value) {
+        this.telefon = value;
     }
 
 }

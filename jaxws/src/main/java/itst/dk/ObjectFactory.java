@@ -44,6 +44,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SearchListResponse }
+     * 
+     */
+    public SearchListResponse createSearchListResponse() {
+        return new SearchListResponse();
+    }
+
+    /**
      * Create an instance of {@link QualityHeader }
      * 
      */
@@ -57,14 +65,6 @@ public class ObjectFactory {
      */
     public ListResponse createListResponse() {
         return new ListResponse();
-    }
-
-    /**
-     * Create an instance of {@link RefreshReadResponse }
-     * 
-     */
-    public RefreshReadResponse createRefreshReadResponse() {
-        return new RefreshReadResponse();
     }
 
     /**
@@ -92,43 +92,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchResponse }
-     * 
-     */
-    public SearchResponse createSearchResponse() {
-        return new SearchResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetUuid }
-     * 
-     */
-    public GetUuid createGetUuid() {
-        return new GetUuid();
-    }
-
-    /**
      * Create an instance of {@link Read }
      * 
      */
     public Read createRead() {
         return new Read();
-    }
-
-    /**
-     * Create an instance of {@link ReadPeriodResponse }
-     * 
-     */
-    public ReadPeriodResponse createReadPeriodResponse() {
-        return new ReadPeriodResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetUuidArrayResponse }
-     * 
-     */
-    public GetUuidArrayResponse createGetUuidArrayResponse() {
-        return new GetUuidArrayResponse();
     }
 
     /**
@@ -145,14 +113,6 @@ public class ObjectFactory {
      */
     public GetUuidResponse createGetUuidResponse() {
         return new GetUuidResponse();
-    }
-
-    /**
-     * Create an instance of {@link SourceUsageOrderHeader }
-     * 
-     */
-    public SourceUsageOrderHeader createSourceUsageOrderHeader() {
-        return new SourceUsageOrderHeader();
     }
 
     /**
@@ -177,6 +137,70 @@ public class ObjectFactory {
      */
     public List createList() {
         return new List();
+    }
+
+    /**
+     * Create an instance of {@link ReadSnapshot }
+     * 
+     */
+    public ReadSnapshot createReadSnapshot() {
+        return new ReadSnapshot();
+    }
+
+    /**
+     * Create an instance of {@link RefreshReadResponse }
+     * 
+     */
+    public RefreshReadResponse createRefreshReadResponse() {
+        return new RefreshReadResponse();
+    }
+
+    /**
+     * Create an instance of {@link SearchResponse }
+     * 
+     */
+    public SearchResponse createSearchResponse() {
+        return new SearchResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUuid }
+     * 
+     */
+    public GetUuid createGetUuid() {
+        return new GetUuid();
+    }
+
+    /**
+     * Create an instance of {@link ReadPeriodResponse }
+     * 
+     */
+    public ReadPeriodResponse createReadPeriodResponse() {
+        return new ReadPeriodResponse();
+    }
+
+    /**
+     * Create an instance of {@link SearchList }
+     * 
+     */
+    public SearchList createSearchList() {
+        return new SearchList();
+    }
+
+    /**
+     * Create an instance of {@link GetUuidArrayResponse }
+     * 
+     */
+    public GetUuidArrayResponse createGetUuidArrayResponse() {
+        return new GetUuidArrayResponse();
+    }
+
+    /**
+     * Create an instance of {@link SourceUsageOrderHeader }
+     * 
+     */
+    public SourceUsageOrderHeader createSourceUsageOrderHeader() {
+        return new SourceUsageOrderHeader();
     }
 
     /**
@@ -217,14 +241,6 @@ public class ObjectFactory {
      */
     public ListPeriod createListPeriod() {
         return new ListPeriod();
-    }
-
-    /**
-     * Create an instance of {@link ReadSnapshot }
-     * 
-     */
-    public ReadSnapshot createReadSnapshot() {
-        return new ReadSnapshot();
     }
 
     /**
