@@ -21,6 +21,7 @@ error.required = Feltet {0} skal udfyldes
 # navbar
 nav.title = CPReader
 nav.quicksearch_placeholder = CPR eller efternavn
+nav.quicksearch_addresslaceholder = Adresse
 nav.quicksearch_submit = Søg
 
 nav.logout_button = Log ud

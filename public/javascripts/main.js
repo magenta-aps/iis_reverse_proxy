@@ -18,7 +18,8 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"],functio
 	   $('#quicksearchbutton').click(function(event) {
 		   event.preventDefault();
 		   var query = $('#query').val(); //get the content of the input field
-		   p.processQuery(query);
+		   var query2 = $('#query2').val(); //get the content of the input field
+		   p.processQuery(query, query2);
 	   });
 	   
 	   // handle submition routing on enter as well
@@ -26,7 +27,8 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"],functio
 		    if(event.which == 13) {
 		    	event.preventDefault();
 		    	var query = $('#query').val(); //get the content of the input field
-		    	p.processQuery(query);		    }
+				var query2 = $('#query2').val(); //get the content of the input field
+		    	p.processQuery(query, query2);		    }
 	   });
 	   
 	   // validate incomming input

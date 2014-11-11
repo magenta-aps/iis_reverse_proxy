@@ -1,6 +1,6 @@
 define(function() {
     return {
-         processQuery: function(query) {
+         processQuery: function(query, query2) {
 
         	    var cpr = /\b[0-9]{10}$/; // a cpr consists of exactly 10 numbers
         	    var cprpattern = /[0-9]{6}-[0-9]{4}$/; // or 10 numbers with a - between 6th and 7th char 
@@ -20,12 +20,16 @@ define(function() {
         	    }
         	    
         	    else if (firstmiddlelastname.test(query) || firstlastname.test(query)) {
-        	    	window.location = '/search/name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/') + '/page/1';
+        	    	window.location = '/search/name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/')
+						+ '/address/' + query2
+						+ '/page/1';
         	    } 
         	    
         	    else if(lastname.test(query)) {
         	 	   if(query.length > 0) {
-        	 		   window.location = '/search/name/' + query + '/page/1';
+        	 		   window.location = '/search/name/' + query
+					   		+ '/address/' + query2
+					   		+ '/page/1';
         	 	   }
         	    } 
         	    

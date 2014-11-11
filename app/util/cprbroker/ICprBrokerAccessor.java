@@ -59,6 +59,8 @@ public interface ICprBrokerAccessor {
 	
 	//TODO Add methods for SEARCH
 	IUuids search(final String firstname, final String middlename, final String lastname, int maxResults, int startIndex);
+
+	List<IPerson> searchList(String firstname, String middlename, String lastname, String address, int maxResults, int startIndex);
 	
 	//TODO Add methods for list
 	List<IPerson> list(final IUuids uuids, final ESourceUsageOrder sourceUsageOrder);

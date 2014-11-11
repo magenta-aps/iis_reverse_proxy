@@ -42,6 +42,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,35 +57,14 @@ import oio.sagdok._2_0.StandardReturType;
 import oio.sagdok._2_0.TilstandVirkningType;
 import oio.sagdok._2_0.UnikIdType;
 import oio.sagdok._2_0.VirkningType;
-import oio.sagdok.person._1_0.AdresseType;
-import oio.sagdok.person._1_0.AndenKontaktKanalType;
-import oio.sagdok.person._1_0.CivilStatusType;
-import oio.sagdok.person._1_0.CprBorgerType;
-import oio.sagdok.person._1_0.DanskAdresseType;
-import oio.sagdok.person._1_0.EgenskabType;
-import oio.sagdok.person._1_0.GetUuidOutputType;
-import oio.sagdok.person._1_0.GroenlandAdresseType;
-import oio.sagdok.person._1_0.KontaktKanalType;
-import oio.sagdok.person._1_0.LaesOutputType;
-import oio.sagdok.person._1_0.LaesResultatType;
-import oio.sagdok.person._1_0.ListOutputType;
-import oio.sagdok.person._1_0.LivStatusType;
-import oio.sagdok.person._1_0.NavnStrukturType;
-import oio.sagdok.person._1_0.PersonRelationType;
-import oio.sagdok.person._1_0.RegisterOplysningType;
-import oio.sagdok.person._1_0.RegistreringType;
-import oio.sagdok.person._1_0.RelationListeType;
-import oio.sagdok.person._1_0.SoegAttributListeType;
-import oio.sagdok.person._1_0.SoegEgenskabType;
-import oio.sagdok.person._1_0.SoegInputType;
-import oio.sagdok.person._1_0.SoegObjektType;
-import oio.sagdok.person._1_0.TilstandListeType;
-import oio.sagdok.person._1_0.VerdenAdresseType;
+import oio.sagdok.person._1_0.*;
 
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
 import play.Configuration;
+import scala.util.parsing.combinator.testing.Str;
+import util.Converters;
 import util.cprbroker.ERelationshipType;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.IAddress;
@@ -323,9 +303,77 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 						uuid.getStandardRetur().getStatusKode().intValue(),
 						uuid.getStandardRetur().getFejlbeskedTekst()); 
 	}
-	
+
+
 	@Override
 	public IUuids search(String firstname, String middlename, String lastname, int maxResults, int startIndex) {
+		//start the performance logging
+		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.search");
+
+		// Setup the input parameters
+		SoegInputType input = new SoegInputType();
+
+		// zerobased index of where the search should start
+		if (startIndex > 0) {
+			input.setFoersteResultatReference(BigInteger.valueOf(startIndex));
+		}
+
+		// defaults to 1000 if nothing is specified
+		if (maxResults > 0) {
+			input.setMaksimalAntalKvantitet(BigInteger.valueOf(maxResults));
+		}
+
+		// Set the name search criteria
+		Converters converters = new Converters();
+		NavnStrukturType navnStrukturType = converters.ToNavnStrukturType(firstname, middlename, lastname);
+
+		SoegEgenskabType soegEgenskabType = new SoegEgenskabType();
+		soegEgenskabType.setNavnStruktur(navnStrukturType);
+
+		SoegAttributListeType soegAttributListeType = new SoegAttributListeType();
+		List<SoegEgenskabType> soegEgenskabTypeList = soegAttributListeType.getSoegEgenskab();
+		soegEgenskabTypeList.add(soegEgenskabType);
+
+		SoegObjektType soegObjekt = new SoegObjektType();
+		soegObjekt.setSoegAttributListe(soegAttributListeType);
+
+		input.setSoegObjekt(soegObjekt);
+
+
+		// Access CPR broker
+		PartSoap12 service;
+		try {
+			service = getService(ESourceUsageOrder.LocalOnly);
+		} catch (InstantiationException e) {
+			play.Logger.error(e.getMessage());
+			return null;
+		}
+		// start performance measurement on cprbroker
+		StopWatch stopWatchCprBroker = new Slf4JStopWatch("JaxWsCprBroker.search.CprBroker");
+
+		SoegOutputType soegOutput = service.search(input);
+		// stop performance measurement on cprbroker
+		stopWatchCprBroker.stop();
+		// Add the Uuids
+		ArrayOfString idList = soegOutput.getIdliste();
+		List<String> newUuids = null;
+
+		if (idList != null) {
+			newUuids = idList.getUUID();
+		}
+
+		//return the Uuids
+		IUuids uuids = new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
+				soegOutput.getStandardRetur().getFejlbeskedTekst(),
+				newUuids);
+
+		// stop the performance log
+		stopWatch.stop();
+		return uuids;
+	}
+
+	@Override
+	public List<IPerson> searchList(String firstname, String middlename, String lastname, String address, int maxResults, int startIndex) {
 		//start the performance logging
 		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.search");
 		
@@ -341,62 +389,39 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		if(maxResults > 0) {
 			input.setMaksimalAntalKvantitet(BigInteger.valueOf(maxResults));
 		}
-		
-		// Set the name search criteria
-		PersonNameStructureType nameStructure = new PersonNameStructureType();
-		nameStructure.setPersonGivenName(firstname);
-		nameStructure.setPersonMiddleName(middlename);
-		nameStructure.setPersonSurnameName(lastname);
 
-		// Playing the matryoshka doll game
-		NavnStrukturType navnStrukturType = new NavnStrukturType();
-		navnStrukturType.setPersonNameStructure(nameStructure);
-		
-		SoegEgenskabType soegEgenskabType = new SoegEgenskabType();
-		soegEgenskabType.setNavnStruktur(navnStrukturType);
-		
-		SoegAttributListeType soegAttributListeType = new SoegAttributListeType();
-		List<SoegEgenskabType> soegEgenskabTypeList = soegAttributListeType.getSoegEgenskab();
-		soegEgenskabTypeList.add(soegEgenskabType);
-			
-		SoegObjektType soegObjekt = new SoegObjektType();
-		soegObjekt.setSoegAttributListe(soegAttributListeType);
-		
+		Converters converters=new Converters();
+		SoegObjektType soegObjekt = converters.ToSoegObjektType(firstname,middlename,lastname,address);
 		input.setSoegObjekt(soegObjekt);
-		
 
 		// Access CPR broker
 		PartSoap12 service;
 		try {
-			service = getService(ESourceUsageOrder.LocalOnly);
+			service = getService(ESourceUsageOrder.ExternalOnly);
 		} catch (InstantiationException e) {
 			play.Logger.error(e.getMessage());
 			return null;
 		}
 		// start performance measurement on cprbroker
 		StopWatch stopWatchCprBroker = new Slf4JStopWatch("JaxWsCprBroker.search.CprBroker");
-		
-		SoegOutputType soegOutput =  service.search(input);
+
+		SoegListOutputType soegListOutputType = service.searchList(input);
+
 		// stop performance measurement on cprbroker
 		stopWatchCprBroker.stop();
-		// Add the Uuids
-		ArrayOfString idList = soegOutput.getIdliste();
-		List<String> newUuids = null;
-		
-		if(idList != null) {
-			newUuids = idList.getUUID();
-		}	
-					
-		//return the Uuids
-		IUuids uuids = new Uuids(soegOutput.getStandardRetur().getStatusKode().intValue(),
-				soegOutput.getStandardRetur().getFejlbeskedTekst(),
-				newUuids);
-		
+
+		List<IPerson> persons = new ArrayList<IPerson>();
+		for(int i=0; i<soegListOutputType.getLaesResultat().size(); i++){
+			LaesResultatType laesResultatType = soegListOutputType.getLaesResultat().get(i);
+			String uuid = soegListOutputType.getIdliste().getUUID().get(i);
+			persons.add(getPerson(uuid, laesResultatType, soegListOutputType.getStandardRetur(), true));
+		}
+
 		// stop the performance log
 		stopWatch.stop();
-		return uuids;
-		
+		return persons;
 	}
+
 
 	@Override
 	public List<IPerson> list(final IUuids uuids, final ESourceUsageOrder sourceUsageOrder) {

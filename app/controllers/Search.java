@@ -114,8 +114,7 @@ public class Search extends Controller {
 				firstname);
 
 		// search for the results
-		IUuids uuids = cprBroker
-				.search(firstname, middlename, lastname, -1, -1);
+		IUuids uuids = cprBroker.search(firstname, middlename, lastname, -1, -1);
 
 		// logging the returned resultcode
 		play.Logger.info(session("username") +
@@ -158,12 +157,8 @@ public class Search extends Controller {
 
 			String path = request().path();
 			path = path.substring(0, path.indexOf("page") + 5);
-			
-			String query = (lastname != null) ? ((firstname != null) ? ((middlename != null) ? firstname
-					+ ", " + middlename + ", " + lastname
-					: firstname + ", " + lastname)
-					: lastname)
-					: "";
+
+			String query = getQuery(lastname, middlename, firstname);
 
 			return ok(list.render(persons, uuids.values().size(), page, path,
 					query));
@@ -171,6 +166,27 @@ public class Search extends Controller {
 
 		// TODO Make a decent error! bad request
 		return ok();
+	}
+
+	private String getQuery(String lastname, String middlename, String firstname) {
+		return (lastname != null) ? ((firstname != null) ? ((middlename != null) ? firstname
+                        + ", " + middlename + ", " + lastname
+                        : firstname + ", " + lastname)
+                        : lastname)
+                        : "";
+	}
+
+	@Security.Authenticated(Secured.class)
+	public Result searchNameAndAddress(String firstname, String middlename, String lastname, String address, int page){
+		List<IPerson> persons = cprBroker.searchList(firstname, middlename, lastname, address, -1, -1);
+
+		String path = request().path();
+		path = path.substring(0, path.indexOf("page") + 5);
+
+		String query = getQuery(lastname, middlename, firstname);
+
+		return ok(list.render(persons, persons.size(), page, path,
+				query));
 	}
 
 	/**
@@ -243,13 +259,21 @@ public class Search extends Controller {
 
 		@Required
 		public String query;
+		public String addressQuery;
 
 		public String getQuery() {
 			return query;
 		}
 
+		public String getAddressQuery(){
+			return addressQuery;
+		}
+
 		public void setQuery(String query) {
 			this.query = query;
+		}
+		public void setAddressQuery(String query) {
+			this.addressQuery = query;
 		}
 
 	}
