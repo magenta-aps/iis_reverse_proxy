@@ -8,34 +8,39 @@ define(function() {
         	    var firstlastname = /.*,\s*.*$/; // one comma 
         	    var firstmiddlelastname = /.*,\s*.*,\s.*$/; // two commas
 
-        	    if(cpr.test(query)) {
-        	    		$.post('/search/cpr/', {"query": query}, function(data) {
-        	    			window.location = '/show/uuid/' + data + '/';
-        	    		});
+			 	var redirectLocation = null;
+
+
+        	    if(cpr.test(query) || cprpattern.test(query)) {
+					$.post('/search/cpr/', {"query": query.replace("-", "")}, function(data) {
+						window.location = '/show/uuid/' + data + '/';
+					});
         	    } 
-        	    else if (cprpattern.test(query)) {
-        	   		$.post('/search/cpr/', {"query": query.replace("-", "")}, function(data) {
-        	    			window.location = '/show/uuid/' + data + '/';
-        	    		});    	   
-        	    }
-        	    
-        	    else if (firstmiddlelastname.test(query) || firstlastname.test(query)) {
-        	    	window.location = '/search/name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/')
-						+ '/address/' + query2
-						+ '/page/1';
+
+				else if (firstmiddlelastname.test(query) || firstlastname.test(query)) {
+					redirectLocation = '/search/name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/');
+					if(query2.length > 0)
+						redirectLocation += '/address/' + query2;
+					redirectLocation += '/page/1';
         	    } 
         	    
         	    else if(lastname.test(query)) {
         	 	   if(query.length > 0) {
-        	 		   window.location = '/search/name/' + query
-					   		+ '/address/' + query2
-					   		+ '/page/1';
+					   redirectLocation = '/search/name/' + query;
+					   if(query2.length > 0)
+					   		redirectLocation += '/address/' + query2;
+					   redirectLocation += '/page/1';
         	 	   }
-        	    } 
-        	    
-        	    else {
-        	        alert('error');
         	    }
+
+				else {
+					alert('error');
+				}
+
+				if(redirectLocation != null){
+					window.location = redirectLocation;
+				}
+
         	}
     }
 });
