@@ -8,7 +8,7 @@ require.config({
     }
 });
 
-require(["jquery", "bootstrap", "process", "validate", "modolus11"],function($,b,p,v,m) {
+require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"],function($,b,p,v,m) {
 	// wait for the document to be ready
 	$(function() {
 	   	// give focus to the search field
@@ -18,7 +18,7 @@ require(["jquery", "bootstrap", "process", "validate", "modolus11"],function($,b
 	   $('#quicksearchbutton').click(function(event) {
 		   event.preventDefault();
 		   var query = $('#query').val(); //get the content of the input field
-		   p.process(query);
+		   p.processQuery(query);
 	   });
 	   
 	   // handle submition routing on enter as well
@@ -26,7 +26,7 @@ require(["jquery", "bootstrap", "process", "validate", "modolus11"],function($,b
 		    if(event.which == 13) {
 		    	event.preventDefault();
 		    	var query = $('#query').val(); //get the content of the input field
-		    	p.process(query);		    }
+		    	p.processQuery(query);		    }
 	   });
 	   
 	   // validate incomming input

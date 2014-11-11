@@ -1,6 +1,6 @@
 define(function() {
     return {
-         process: function(query) {
+         processQuery: function(query) {
 
         	    var cpr = /\b[0-9]{10}$/; // a cpr consists of exactly 10 numbers
         	    var cprpattern = /[0-9]{6}-[0-9]{4}$/; // or 10 numbers with a - between 6th and 7th char 
