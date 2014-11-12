@@ -8,7 +8,9 @@ libraryDependencies ++= Seq(
   "com.unboundid" % "unboundid-ldapsdk" % "2.3.4",
   "com.google.inject" % "guice" % "3.0",
   "org.perf4j" % "perf4j" % "0.9.16",
-  "org.mockito" % "mockito-all" % "1.9.5" % "test")     
+  "org.mockito" % "mockito-all" % "1.9.5" % "test",
+  "pl.pragmatists" % "JUnitParams" % "1.0.3"
+)
 
 play.Project.playJavaSettings
 
