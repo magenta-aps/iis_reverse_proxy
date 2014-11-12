@@ -33,8 +33,27 @@
 
 package util.cprbroker.jaxws;
 
+import dk.magenta.cprbrokersoapfactory.ICPRBrokerSOAPFactory;
+import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
+import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.ForeignAddressStructureType;
+import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
+import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
+import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 import itst.dk.PartSoap12;
+import oio.dkal._1_0.ArrayOfString;
+import oio.sagdok._2_0.*;
+import oio.sagdok.person._1_0.*;
+import oio.sagdok.person._1_0.ListOutputType;
+import oio.sagdok.person._1_0.RegistreringType;
+import oio.sagdok.person._1_0.SoegInputType;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
+import play.Configuration;
+import util.Converters;
+import util.cprbroker.*;
+import util.cprbroker.models.*;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyManagementException;
@@ -45,64 +64,6 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import oio.dkal._1_0.ArrayOfString;
-import oio.sagdok._2_0.LaesInputType;
-import oio.sagdok._2_0.ListInputType;
-import oio.sagdok._2_0.PersonFlerRelationType;
-import oio.sagdok._2_0.SoegOutputType;
-import oio.sagdok._2_0.StandardReturType;
-import oio.sagdok._2_0.TilstandVirkningType;
-import oio.sagdok._2_0.UnikIdType;
-import oio.sagdok._2_0.VirkningType;
-import oio.sagdok.person._1_0.*;
-
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
-
-import play.Configuration;
-import scala.util.parsing.combinator.testing.Str;
-import util.Converters;
-import util.cprbroker.ERelationshipType;
-import util.cprbroker.ESourceUsageOrder;
-import util.cprbroker.IAddress;
-import util.cprbroker.IContact;
-import util.cprbroker.ICprBrokerAccessor;
-import util.cprbroker.IDanishAddress;
-import util.cprbroker.IPerson;
-import util.cprbroker.IPersonRelationships;
-import util.cprbroker.IRegisterInformation;
-import util.cprbroker.IRelationship;
-import util.cprbroker.IRelationshipWithIPerson;
-import util.cprbroker.ITidspunkt;
-import util.cprbroker.ITilstand;
-import util.cprbroker.IUuid;
-import util.cprbroker.IUuids;
-import util.cprbroker.IVirkning;
-import util.cprbroker.models.Contact;
-import util.cprbroker.models.CprCitizenData;
-import util.cprbroker.models.DanishAddress;
-import util.cprbroker.models.GreenlandicAddress;
-import util.cprbroker.models.Person;
-import util.cprbroker.models.PersonRelationships;
-import util.cprbroker.models.PersonRelationshipsWithPerson;
-import util.cprbroker.models.Relationship;
-import util.cprbroker.models.RelationshipWithPerson;
-import util.cprbroker.models.Tidspunkt;
-import util.cprbroker.models.Tilstand;
-import util.cprbroker.models.Uuid;
-import util.cprbroker.models.Uuids;
-import util.cprbroker.models.Virkning;
-import util.cprbroker.models.WorldAddress;
-import dk.magenta.cprbrokersoapfactory.ICPRBrokerSOAPFactory;
-import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.AddressCompleteGreenlandType;
-import dk.oio.rep.cpr_dk.xml.schemas._2008._05._01.ForeignAddressStructureType;
-import dk.oio.rep.ebxml.xml.schemas.dkcc._2003._02._13.CountryIdentificationCodeType;
-import dk.oio.rep.itst_dk.xml.schemas._2006._01._17.PersonNameStructureType;
-import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
-import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 
 public class JaxWsCprBroker implements ICprBrokerAccessor {
 
@@ -528,78 +489,33 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		//TODO Magic number removal (What status codes can it return?)
 		if(standardReturType.getStatusKode().intValue() == 200) {
 
-			// Assigning person tilstand
-			ITilstand newTilstand = getTilstande(laesResultatType);
-			builder.tilstand(newTilstand);
-			
-			// Assigning person relations
-			IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
-			builder.relations(newRelations);
+			// region Registration
+			// Only if return is RegistreringType
+			if (laesResultatType.getRegistrering() != null) {
+				ITidspunkt tidspunkt = getRegisteringsTidspunkt(laesResultatType.getRegistrering());
 
-			// Getting the person information for each relation
-			if(isGettingRelations) {
-				
-				List<IRelationship> allRelations = new LinkedList<IRelationship>();
-
-				// Get all the relations				
-				if(newRelations.erstatingAf() != null) allRelations.addAll(newRelations.erstatingAf());
-				if(newRelations.erstatingFor() != null) allRelations.addAll(newRelations.erstatingFor());
-				if(newRelations.fader() != null) allRelations.addAll(newRelations.fader());
-				if(newRelations.moder() != null) allRelations.addAll(newRelations.moder());
-				if(newRelations.foraeldremyndighedsindehaver() != null) allRelations.addAll(newRelations.foraeldremyndighedsindehaver());		
-				if(newRelations.retligHandleevneVaergeForPersonen() != null) allRelations.addAll(newRelations.retligHandleevneVaergeForPersonen());
-				if(newRelations.aegtefaelle() != null) allRelations.addAll(newRelations.aegtefaelle());
-				if(newRelations.registreretPartner() != null) allRelations.addAll(newRelations.registreretPartner());
-				if(newRelations.boern() != null) allRelations.addAll(newRelations.boern());
-				if(newRelations.foraeldremydighedsboern() != null) allRelations.addAll(newRelations.foraeldremydighedsboern());
-				if(newRelations.retligHandleevneVaergemaalsindehaver() != null) allRelations.addAll(newRelations.retligHandleevneVaergemaalsindehaver());
-				if(newRelations.bopaelssamling() != null) allRelations.addAll(newRelations.bopaelssamling());
-
-				List<String> relationUuids = new LinkedList<String>();
-				// Get all the uuids from those relations
-				for( IRelationship relation : allRelations){
-					relationUuids.add(relation.referenceUuid());
-				}
-				IUuids uuidsFromRelations = new Uuids(200, "", relationUuids);
-				
-				// Get all the persons with those uuids
-				List<IPerson> relationshipPersons = list(uuidsFromRelations, ESourceUsageOrder.LocalOnly);
-				
-				
-				RelationshipWithPerson.Builder relationshipWithPersonBuilder;
-				List<IRelationshipWithIPerson> relationshipsWithPersonList = new LinkedList<IRelationshipWithIPerson>();
-				
-				// Make the IPersonRelationshipsWithIPersons
-				for(int i = 0; i < relationshipPersons.size(); i++) {
-					
-					relationshipWithPersonBuilder = new RelationshipWithPerson.Builder();
-					
-					relationshipWithPersonBuilder.relationship(allRelations.get(i));
-					relationshipWithPersonBuilder.person(relationshipPersons.get(i));
-					
-					relationshipsWithPersonList.add(relationshipWithPersonBuilder.build());
-				}
-				
-				// Add the relationshipsWithPerson to the person
-				builder.relationsWithPerson(new PersonRelationshipsWithPerson(relationshipsWithPersonList));
-
+				builder.tidspunkt(tidspunkt);
 			}
-			
+
+			//endregion
+
+			// region Attributes
+			AttributListeType attributListeType = getAttributeListType(laesResultatType);
+
 			// Assigning person attributes
-			List<EgenskabType> personAttributes =
-					laesResultatType.getRegistrering().getAttributListe().getEgenskab();
+			List<EgenskabType> personAttributes = attributListeType.getEgenskab();
 
 			// Get the first from the list
 			EgenskabType attributes = personAttributes.get(0);
-			
+
 			// Make certain the person has a name (unborn doesn't!)
 			if(attributes != null &&
-					attributes.getNavnStruktur() != null) {	
+					attributes.getNavnStruktur() != null) {
 
 				// Get the givenname
 				String firstname = attributes.getNavnStruktur().getPersonNameStructure().getPersonGivenName();
 				if(firstname != null) { builder.firstname(firstname); }
-				
+
 				// Get the middlename
 				String middelName = attributes.getNavnStruktur().getPersonNameStructure().getPersonMiddleName();
 				if(middelName != null) { builder.middelname(middelName); }
@@ -607,7 +523,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				// Get the surname
 				String lastname = attributes.getNavnStruktur().getPersonNameStructure().getPersonSurnameName();
 				if(lastname != null) { builder.lastname(lastname); }
-				
+
 				// Get the callname
 				String callname = attributes.getNavnStruktur().getKaldenavnTekst();
 				if(callname != null) { builder.lastname(callname); }
@@ -616,67 +532,129 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 				String addressingName = attributes.getNavnStruktur().getPersonNameForAddressingName();
 				if(addressingName != null) { builder.nameForAdressing(addressingName); }
 
-			}			
+			}
 			// Get the gender
 			String gender = attributes.getPersonGenderCode().name();
 			if(gender != null) { builder.gender(gender); }
-			
+
 			// Get the birthdate
 			XMLGregorianCalendar birthdate = attributes.getBirthDate();
 			if(birthdate != null) { builder.birthdate(birthdate.toGregorianCalendar()); }
-			
+
 			// Get the birthplace
 			String birthplace = attributes.getFoedestedNavn();
 			if(birthplace != null) { builder.birthplace(birthplace); }
-		
+
 			// Get the birthRegisteringAutherity
 			String birthreg = attributes.getFoedselsregistreringMyndighedNavn();
-			if(birthreg != null) { builder.birthRegisteringAuthority(birthreg); }	
-			
+			if (birthreg != null) {
+				builder.birthRegisteringAuthority(birthreg);
+			}
+
 			// Add the contact information
 			IContact newContact = getContact(attributes.getKontaktKanal());
 			builder.contact(newContact);
-			
+
 			// Add the next of kin contact information
 			IContact newNextOfKinContact = getContact(attributes.getNaermestePaaroerende());
 			builder.nextOfKinContact(newNextOfKinContact);
-			
+
 			// Add effect to the person
 			IVirkning newEffect = getEffect(attributes.getVirkning());
 			builder.effect(newEffect);
-			
-			
-			////////////////////////
-			// Get the registration information
-			
-			RegistreringType registering = laesResultatType.getRegistrering();
-			
-			ITidspunkt tidspunkt = getRegisteringsTidspunkt(registering);
-			
-			builder.tidspunkt(tidspunkt);
-			
-			IRegisterInformation newRegInfo = getRegisterOplysning(registering);
+
+
+			// RegisterOplysning
+			IRegisterInformation newRegInfo = getRegisterOplysning(attributListeType);
 			builder.registerInformation(newRegInfo);
-			
+
 			// Get the address information and add it to the person
-			List<RegisterOplysningType> registerList = 
-					registering.getAttributListe().getRegisterOplysning();
+			List<RegisterOplysningType> registerList =
+					attributListeType.getRegisterOplysning();
 
 			// TODO make a guard check if the list has values
 			RegisterOplysningType register = registerList.get(0);
-			
+
 
 			CprBorgerType citizenData = register.getCprBorger();
 			IAddress newAddress;
 			if(citizenData != null) {
-				AdresseType address = citizenData.getFolkeregisterAdresse();			
+				AdresseType address = citizenData.getFolkeregisterAdresse();
 				newAddress = getAddress(address);
 				builder.address(newAddress);
 			}
 			// TODO make a guard check
-			AdresseType otherAddress = registering.getAttributListe().getEgenskab().get(0).getAndreAdresser();
+			AdresseType otherAddress = attributListeType.getEgenskab().get(0).getAndreAdresser();
 			newAddress = getAddress(otherAddress);
 			builder.otherAddress(newAddress);
+
+			//endregion
+
+			// region States
+			// Assigning person tilstand
+			ITilstand newTilstand = getTilstande(laesResultatType);
+			builder.tilstand(newTilstand);
+			//endregion
+
+			//region Relations
+			// Getting the person information for each relation
+			if (isGettingRelations) {
+				// Assigning person relations
+				IPersonRelationships newRelations = getAllPersonRelations(laesResultatType);
+				if (newRelations != null) {
+					builder.relations(newRelations);
+
+					List<IRelationship> allRelations = new LinkedList<IRelationship>();
+
+					// Get all the relations
+					if (newRelations.erstatingAf() != null) allRelations.addAll(newRelations.erstatingAf());
+					if (newRelations.erstatingFor() != null) allRelations.addAll(newRelations.erstatingFor());
+					if (newRelations.fader() != null) allRelations.addAll(newRelations.fader());
+					if (newRelations.moder() != null) allRelations.addAll(newRelations.moder());
+					if (newRelations.foraeldremyndighedsindehaver() != null)
+						allRelations.addAll(newRelations.foraeldremyndighedsindehaver());
+					if (newRelations.retligHandleevneVaergeForPersonen() != null)
+						allRelations.addAll(newRelations.retligHandleevneVaergeForPersonen());
+					if (newRelations.aegtefaelle() != null) allRelations.addAll(newRelations.aegtefaelle());
+					if (newRelations.registreretPartner() != null)
+						allRelations.addAll(newRelations.registreretPartner());
+					if (newRelations.boern() != null) allRelations.addAll(newRelations.boern());
+					if (newRelations.foraeldremydighedsboern() != null)
+						allRelations.addAll(newRelations.foraeldremydighedsboern());
+					if (newRelations.retligHandleevneVaergemaalsindehaver() != null)
+						allRelations.addAll(newRelations.retligHandleevneVaergemaalsindehaver());
+					if (newRelations.bopaelssamling() != null) allRelations.addAll(newRelations.bopaelssamling());
+
+					List<String> relationUuids = new LinkedList<String>();
+					// Get all the uuids from those relations
+					for (IRelationship relation : allRelations) {
+						relationUuids.add(relation.referenceUuid());
+					}
+					IUuids uuidsFromRelations = new Uuids(200, "", relationUuids);
+
+					// Get all the persons with those uuids
+					List<IPerson> relationshipPersons = list(uuidsFromRelations, ESourceUsageOrder.LocalOnly);
+
+
+					RelationshipWithPerson.Builder relationshipWithPersonBuilder;
+					List<IRelationshipWithIPerson> relationshipsWithPersonList = new LinkedList<IRelationshipWithIPerson>();
+
+					// Make the IPersonRelationshipsWithIPersons
+					for (int i = 0; i < relationshipPersons.size(); i++) {
+
+						relationshipWithPersonBuilder = new RelationshipWithPerson.Builder();
+
+						relationshipWithPersonBuilder.relationship(allRelations.get(i));
+						relationshipWithPersonBuilder.person(relationshipPersons.get(i));
+
+						relationshipsWithPersonList.add(relationshipWithPersonBuilder.build());
+					}
+
+					// Add the relationshipsWithPerson to the person
+					builder.relationsWithPerson(new PersonRelationshipsWithPerson(relationshipsWithPersonList));
+				}
+			}
+			//endregion
 		}
 
 		// stop performance logging
@@ -685,10 +663,19 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return builder.build();
 	}
 
-	private IRegisterInformation getRegisterOplysning(RegistreringType registering) {
-		
-		List<RegisterOplysningType> registerList = 
-				registering.getAttributListe().getRegisterOplysning();
+	private AttributListeType getAttributeListType(LaesResultatType laesResultatType) {
+		if (laesResultatType.getRegistrering() != null)
+			return laesResultatType.getRegistrering().getAttributListe();
+		else if (laesResultatType.getFiltreretOejebliksbillede() != null)
+			return laesResultatType.getFiltreretOejebliksbillede().getAttributListe();
+		else
+			return null;
+	}
+
+	private IRegisterInformation getRegisterOplysning(AttributListeType attributListeType) {
+
+		List<RegisterOplysningType> registerList =
+				attributListeType.getRegisterOplysning();
 
 		// TODO make a guard check if the list has values
 		RegisterOplysningType register = registerList.get(0);
@@ -736,10 +723,19 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		return regInfoBuilder.build();
 	}
 
+	private TilstandListeType getTilstandListeType(LaesResultatType laesResultatType) {
+		if (laesResultatType.getRegistrering() != null)
+			return laesResultatType.getRegistrering().getTilstandListe();
+		else if (laesResultatType.getFiltreretOejebliksbillede() != null)
+			return laesResultatType.getFiltreretOejebliksbillede().getTilstandListe();
+		else
+			return null;
+	}
+
 	private ITilstand getTilstande(LaesResultatType laesResultatType) {
 		// Assigning PersonTilstand
 		TilstandListeType personTilstandsListe =
-				laesResultatType.getRegistrering().getTilstandListe();
+				getTilstandListeType(laesResultatType);
 		
 		// null check
 		if(personTilstandsListe != null) {
@@ -784,8 +780,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	 * 
 	 * CAVEAT! CPR Broker doesn't return anything other than 
 	 * DanskAdresseType, so this type is the mostlikely used.. 
-	 * 
-	 * @param RegistreringType
+	 *
 	 * @return IDanishAddress, IGreenlandicAddress, IWorldAddress or null
 	 * 	
 	 */
@@ -815,7 +810,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 	/**
 	 * Helper method for getAddress used to extract a WorldAddressType
-	 * @param citizenData CprBorgerType with the address information 
 	 * @return IWorldAddress
 	 */
 	private IAddress getWorldAddress(AdresseType address) {
@@ -858,7 +852,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	
 	/**
 	 * Helper method for getAddress used to extract a GreenlandicAddressType
-	 * @param citizenData CprBorgerType with the address information 
 	 * @return IGreenladicAddress
 	 */
 	private IAddress getGreenlandicAddress(AdresseType address) {
@@ -907,7 +900,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
 	/**
 	 * Helper method for getAddress used to extract a DanishAddressType
-	 * @param citizenData CprBorgerType with the address information 
 	 * @return IDanishAddress
 	 */
 	private IDanishAddress getDanishAddress(AdresseType address) {
@@ -999,11 +991,19 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		
 		return null;
 	}
-	
-	
+
+
+	private RelationListeType getRelationListeType(LaesResultatType laesResultatType) {
+		if (laesResultatType.getRegistrering() != null)
+			return laesResultatType.getRegistrering().getRelationListe();
+		else if (laesResultatType.getFiltreretOejebliksbillede() != null)
+			return laesResultatType.getFiltreretOejebliksbillede().getRelationListe();
+		else
+			return null;
+	}
 	private IPersonRelationships getAllPersonRelations(LaesResultatType laesResultatType) {
 		RelationListeType personRelations =
-				laesResultatType.getRegistrering().getRelationListe();
+				getRelationListeType(laesResultatType);
 		
 		// yet another null check
 		if(personRelations != null) {
@@ -1203,10 +1203,8 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	/**
-	 * @param builder Instance of Person.Builder
-	 * @param contact 
-	 * @param isNextOfKin is it a next of kin contact or not?
-	 * @return 
+	 * @param contact
+	 * @return
 	 */
 	private IContact getContact(KontaktKanalType contact) {
 		
