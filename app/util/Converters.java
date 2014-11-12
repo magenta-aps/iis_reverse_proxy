@@ -5,16 +5,13 @@ import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressCompleteType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 import oio.sagdok.person._1_0.*;
-import scala.util.parsing.combinator.testing.Str;
-
-import java.util.List;
 
 /**
  * Created by Beemen on 11/11/2014.
  */
 public class Converters {
     public AdresseType ToAddressType(String addressString) {
-        if(addressString!=null && !!addressString.trim().isEmpty()) {
+        if (addressString != null && !addressString.trim().isEmpty()) {
 
             String streetName=null, houseNumber=null, floor=null, door=null, postCode=null, postDistrict=null;
             String[] lines = addressString.split("[\r\n]");
@@ -22,17 +19,19 @@ public class Converters {
             // First line
             String streetAddress = lines[0];
 
-            streetName = streetAddress.split("( +[0-9])?")[0];
-            String[] afterStreetName = streetAddress.substring(streetName.length()).split(" ");
+            streetName = streetAddress.split(" +[0-9]")[0];
+            if (streetAddress.length() > streetName.length()) {
+                String[] afterStreetNameArr = streetAddress.substring(streetName.length()).split(" ");
 
-            if(afterStreetName.length > 0)
-                houseNumber= afterStreetName[0];
+                if (afterStreetNameArr.length > 0)
+                    houseNumber = afterStreetNameArr[0];
 
-            if(afterStreetName.length > 1)
-                floor= afterStreetName[1];
+                if (afterStreetNameArr.length > 1)
+                    floor = afterStreetNameArr[1];
 
-            if(afterStreetName.length > 2)
-                door= afterStreetName[2];
+                if (afterStreetNameArr.length > 2)
+                    door = afterStreetNameArr[2];
+            }
 
             // Second line
             if(lines.length > 1){
@@ -56,6 +55,7 @@ public class Converters {
             addressPostal.setStreetName(streetName);
             addressPostal.setFloorIdentifier(floor);
             addressPostal.setSuiteIdentifier(door);
+            addressPostal.setPostCodeIdentifier(postCode);
             addressComplete.setAddressPostal(addressPostal);
 
             return ret;
