@@ -6,6 +6,9 @@ import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressCompleteType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 import oio.sagdok.person._1_0.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Beemen on 11/11/2014.
  */
@@ -13,52 +16,49 @@ public class Converters {
     public AdresseType ToAddressType(String addressString) {
         if (addressString != null && !addressString.trim().isEmpty()) {
 
-            String streetName=null, houseNumber=null, floor=null, door=null, postCode=null, postDistrict=null;
-            String[] lines = addressString.split("[\r\n]");
+            String comma = "((\\s+)|(\\s*[,;\\.]{1}\\s*))";
+            String alpha = "[\\w[^0-9]";
+            String pat = "(?<streetName>[^0-9]+)" + comma
+                    + "(?<houseNumber>[0-9]+" + alpha + "*)" + comma
+                    + "(" + "(?<floor>[0-9]{1,2})?(\\.)?(sal)?" + comma + ")?"
+                    + "(" + "(?<door>[a-zA-Z]+)" + comma + ")?"
+                    + "(?<postCode>[0-9]{4})" + comma
+                    + "(?<postDistrict>" + alpha + "+)";
 
-            // First line
-            String streetAddress = lines[0];
 
-            streetName = streetAddress.split(" +[0-9]")[0];
-            if (streetAddress.length() > streetName.length()) {
-                String[] afterStreetNameArr = streetAddress.substring(streetName.length()).split(" ");
+            Pattern p = Pattern.compile(pat);
+            Matcher m = p.matcher(addressString);
+            if (m.matches()) {
 
-                if (afterStreetNameArr.length > 0)
-                    houseNumber = afterStreetNameArr[0];
+                String streetName = null, houseNumber = null, floor = null, door = null, postCode = null, postDistrict = null;
 
-                if (afterStreetNameArr.length > 1)
-                    floor = afterStreetNameArr[1];
+                streetName = m.group("streetName");
+                houseNumber = m.group("houseNumber");
+                floor = m.group("floor");
+                door = m.group("door");
+                postCode = m.group("postCode");
+                postDistrict = m.group("postDistrict");
 
-                if (afterStreetNameArr.length > 2)
-                    door = afterStreetNameArr[2];
+                AdresseType ret = new AdresseType();
+                DanskAdresseType danskAdresse = new DanskAdresseType();
+                ret.setDanskAdresse(danskAdresse);
+
+                AddressCompleteType addressComplete = new AddressCompleteType();
+                danskAdresse.setAddressComplete(addressComplete);
+
+                AddressAccessType addressAccess = new AddressAccessType();
+                addressAccess.setStreetBuildingIdentifier(houseNumber);
+                addressComplete.setAddressAccess(addressAccess);
+
+                AddressPostalType addressPostal = new AddressPostalType();
+                addressPostal.setStreetName(streetName);
+                addressPostal.setFloorIdentifier(floor);
+                addressPostal.setSuiteIdentifier(door);
+                addressPostal.setPostCodeIdentifier(postCode);
+                addressComplete.setAddressPostal(addressPostal);
+
+                return ret;
             }
-
-            // Second line
-            if(lines.length > 1){
-                String[] postParts = lines[1].trim().split(" ");
-                postCode = postParts[0];
-                postDistrict = postParts[1];
-            }
-
-            AdresseType ret = new AdresseType();
-            DanskAdresseType danskAdresse = new DanskAdresseType();
-            ret.setDanskAdresse(danskAdresse);
-
-            AddressCompleteType addressComplete = new AddressCompleteType();
-            danskAdresse.setAddressComplete(addressComplete);
-
-            AddressAccessType addressAccess =new AddressAccessType();
-            addressAccess.setStreetBuildingIdentifier(houseNumber);
-            addressComplete.setAddressAccess(addressAccess);
-
-            AddressPostalType addressPostal = new AddressPostalType();
-            addressPostal.setStreetName(streetName);
-            addressPostal.setFloorIdentifier(floor);
-            addressPostal.setSuiteIdentifier(door);
-            addressPostal.setPostCodeIdentifier(postCode);
-            addressComplete.setAddressPostal(addressPostal);
-
-            return ret;
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class Converters {
         return navnStrukturType;
     }
 
-    public SoegObjektType ToSoegObjektType(String firstname, String middlename, String lastname, String address){
+    public SoegObjektType ToSoegObjektType(String firstname, String middlename, String lastname, String address) {
 
         NavnStrukturType navnStrukturType = ToNavnStrukturType(firstname, middlename, lastname);
         AdresseType addressObject = ToAddressType(address);
@@ -88,7 +88,7 @@ public class Converters {
         soegEgenskabType.setNavnStruktur(navnStrukturType);
         soegAttributListeType.getSoegEgenskab().add(soegEgenskabType);
 
-        if(addressObject != null){
+        if (addressObject != null) {
             RegisterOplysningType registerOplysningType = new RegisterOplysningType();
 
             CprBorgerType cprBorgerType = new CprBorgerType();
