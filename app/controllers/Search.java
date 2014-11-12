@@ -158,7 +158,7 @@ public class Search extends Controller {
 			String path = request().path();
 			path = path.substring(0, path.indexOf("page") + 5);
 
-			String query = getQuery(lastname, middlename, firstname);
+			String query = getQuery(firstname, lastname, middlename,  null);
 
 			return ok(list.render(persons, uuids.values().size(), page, path,
 					query));
@@ -168,12 +168,29 @@ public class Search extends Controller {
 		return ok();
 	}
 
-	private String getQuery(String lastname, String middlename, String firstname) {
-		return (lastname != null) ? ((firstname != null) ? ((middlename != null) ? firstname
-                        + ", " + middlename + ", " + lastname
-                        : firstname + ", " + lastname)
-                        : lastname)
-                        : "";
+	private String getQuery(String firstname, String middlename, String lastname, String address) {
+		String ret = "";
+		if(lastname!=null){
+			if(firstname!=null){
+				if(middlename!=null){
+					ret = firstname + ", " + middlename + ", " + lastname;
+				}
+				else{
+					ret = firstname + ", " + lastname;
+				}
+			}
+			else {
+				ret = lastname;
+			}
+		}
+		else {
+			ret = "";
+		}
+
+		if(address != null && !address.isEmpty()){
+			ret += " " + address;
+		}
+		return ret;
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -183,7 +200,7 @@ public class Search extends Controller {
 		String path = request().path();
 		path = path.substring(0, path.indexOf("page") + 5);
 
-		String query = getQuery(lastname, middlename, firstname);
+		String query = getQuery(firstname, middlename, lastname, address);
 
 		return ok(list.render(persons, persons.size(), page, path,
 				query));
