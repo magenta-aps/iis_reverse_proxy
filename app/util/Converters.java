@@ -17,7 +17,7 @@ public class Converters {
         if (addressString != null && !addressString.trim().isEmpty()) {
 
             String comma = "((\\s+)|(\\s*[,;\\.]{1}\\s*))";
-            String alpha = "[\\w[^0-9]";
+            String alpha = "[\\w&&[^0-9]]";
             String pat = "(?<streetName>[^0-9]+)" + comma
                     + "(?<houseNumber>[0-9]+" + alpha + "*)" + comma
                     + "(" + "(?<floor>[0-9]{1,2})?(\\.)?(sal)?" + comma + ")?"
