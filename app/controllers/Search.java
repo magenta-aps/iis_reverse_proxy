@@ -61,34 +61,6 @@ public class Search extends Controller {
 
 
 	/**
-	 * helper controller passing its request to searchLastMiddleFirstname
-	 * 
-	 * @param lastname
-	 *            String containing a lastname
-	 * @return Result with the response from the cprBroker
-	 */
-	@Security.Authenticated(Secured.class)
-	public Result searchLastname(String lastname, int page) {
-		return searchLastMiddleFirstname(lastname, null, null, page);
-	}
-
-	/**
-	 * 
-	 * helper controller passing its request to searchLastMiddleFirstname
-	 * 
-	 * @param lastname
-	 *            String containing a lastname
-	 * @param firstname
-	 *            String containing a firstname
-	 * @return Result with the response from the cprBroker
-	 */
-	@Security.Authenticated(Secured.class)
-	public Result searchLastFirstname(String lastname, String firstname,
-			int page) {
-		return searchLastMiddleFirstname(lastname, null, firstname, page);
-	}
-
-	/**
 	 * 
 	 * @param lastname
 	 *            String containing a lastname
