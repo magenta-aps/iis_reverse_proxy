@@ -225,7 +225,7 @@ public class Search extends Controller {
 				person.message());
 
 		if(person.code() == 200) {
-			return ok(search.render(Form.form(SearchInput.class), person));	
+			return ok(search.render(person));
 		} else {
 			//TODO - A person wasn't found
 			return ok(show_error.render(person.code()));
