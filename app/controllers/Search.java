@@ -33,26 +33,21 @@
 
 package controllers;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.auth.Secured;
-import util.cprbroker.ESourceUsageOrder;
-import util.cprbroker.ICprBrokerAccessor;
-import util.cprbroker.IPerson;
-import util.cprbroker.IUuid;
-import util.cprbroker.IUuids;
+import util.cprbroker.*;
 import util.cprbroker.models.Uuids;
 import views.html.list;
 import views.html.search;
 import views.html.show_error;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class Search extends Controller {
@@ -238,7 +233,7 @@ public class Search extends Controller {
 	}
 
 	@Security.Authenticated(Secured.class)
-	public Result searchCpr() {
+	public Result getUuidFromCpr() {
 
 		Form<SearchInput> searchForm = Form.form(SearchInput.class)
 				.bindFromRequest();
