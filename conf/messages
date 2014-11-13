@@ -23,6 +23,8 @@ nav.title = CPReader
 nav.quicksearch_placeholder = CPR eller efternavn
 nav.quicksearch_addresslaceholder = Adresse
 nav.quicksearch_submit = Søg
+nav.quicksearch_online = Online
+nav.quicksearch_local = Lokal
 
 nav.logout_button = Log ud
 

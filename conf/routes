@@ -14,11 +14,14 @@ POST        /login                                                              
 GET         /logout                                                                          controllers.Application.logout()
 
 # Search
-POST        /search/cpr/        @controllers.Search.getUuidFromCpr()
+POST        /search/cpr/                                                                     @controllers.Search.getUuidFromCpr()
 
-GET         /search/name/:lastname/address/:address/page/:page                               @controllers.Search.searchNameAndAddress(firstname = null , middlename =  null, lastname : String, address : String, page : Int)
-GET         /search/name/:firstname/:lastname/address/:address/page/:page                    @controllers.Search.searchNameAndAddress(firstname : String , middlename =  null, lastname : String, address : String, page : Int)
-GET         /search/name/:firstname/:middlename/:lastname/address/:address/page/:page        @controllers.Search.searchNameAndAddress(firstname : String , middlename : String, lastname : String, address : String, page : Int)
+GET         /search/name/:lastname/address/:address/page/:page                               @controllers.Search.searchNameAndAddress(firstname = null , middlename =  null, lastname : String, address : String, online:Boolean ?= false, page : Int)
+GET         /search/name/:lastname/address/:address/online/page/:page                        @controllers.Search.searchNameAndAddress(firstname = null , middlename =  null, lastname : String, address : String, online:Boolean ?= true, page : Int)
+GET         /search/name/:firstname/:lastname/address/:address/page/:page                    @controllers.Search.searchNameAndAddress(firstname : String , middlename =  null, lastname : String, address : String, online:Boolean ?= false, page : Int)
+GET         /search/name/:firstname/:lastname/address/:address/online/page/:page             @controllers.Search.searchNameAndAddress(firstname : String , middlename =  null, lastname : String, address : String, online:Boolean ?= true, page : Int)
+GET         /search/name/:firstname/:middlename/:lastname/address/:address/page/:page        @controllers.Search.searchNameAndAddress(firstname : String , middlename : String, lastname : String, address : String, online:Boolean ?= false, page : Int)
+GET         /search/name/:firstname/:middlename/:lastname/address/:address/onine/page/:page  @controllers.Search.searchNameAndAddress(firstname : String , middlename : String, lastname : String, address : String, online:Boolean ?= true, page : Int)
 
 GET         /search/name/:lastname/page/:page                                                @controllers.Search.searchLastname(lastname: String, page: Int)
 GET         /search/name/:firstname/:lastname/page/:page                                     @controllers.Search.searchLastFirstname(lastname: String, firstname : String, page : Int)

@@ -5,3 +5,8 @@ padding: 30px;
 .navbar {
 margin-bottom: 30px;
 }
+
+.navbar-form-online {
+    padding-top: 2%;
+    text-align: right;
+}

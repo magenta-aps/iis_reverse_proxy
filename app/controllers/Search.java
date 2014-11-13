@@ -189,7 +189,7 @@ public class Search extends Controller {
 	}
 
 	@Security.Authenticated(Secured.class)
-	public Result searchNameAndAddress(String firstname, String middlename, String lastname, String address, int page){
+	public Result searchNameAndAddress(String firstname, String middlename, String lastname, String address, boolean online, int page){
 		List<IPerson> persons = cprBroker.searchList(firstname, middlename, lastname, address, -1, -1);
 
 		String path = request().path();
@@ -271,22 +271,25 @@ public class Search extends Controller {
 
 		@Required
 		public String query;
-		public String addressQuery;
-
 		public String getQuery() {
 			return query;
 		}
-
-		public String getAddressQuery(){
-			return addressQuery;
-		}
-
 		public void setQuery(String query) {
 			this.query = query;
+		}
+
+		public String addressQuery;
+		public String getAddressQuery(){
+			return addressQuery;
 		}
 		public void setAddressQuery(String query) {
 			this.addressQuery = query;
 		}
+
+		public boolean online;
+		public boolean getOnline(){return this.online;}
+		public void setOnline(boolean value){this.online = value;}
+
 
 	}
 

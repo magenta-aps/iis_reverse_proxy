@@ -19,7 +19,8 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"],functio
 		   event.preventDefault();
 		   var query = $('#query').val(); //get the content of the input field
 		   var query2 = $('#query2').val(); //get the content of the input field
-		   p.processQuery(query, query2);
+		   var online = ($("input[name=online]:checked").val() == "true");
+		   p.processQuery(query, query2,online);
 	   });
 	   
 	   // handle submition routing on enter as well
@@ -28,7 +29,9 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"],functio
 		    	event.preventDefault();
 		    	var query = $('#query').val(); //get the content of the input field
 				var query2 = $('#query2').val(); //get the content of the input field
-		    	p.processQuery(query, query2);		    }
+				var online = ($("input[name=online]:checked").val() == "true");
+				p.processQuery(query, query2,online);
+			}
 	   });
 	   
 	   // validate incomming input
