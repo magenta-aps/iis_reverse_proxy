@@ -334,7 +334,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	@Override
-	public List<IPerson> searchList(String firstname, String middlename, String lastname, String address, int maxResults, int startIndex) {
+	public List<IPerson> searchList(String firstname, String middlename, String lastname, String address, ESourceUsageOrder sourceUsageOrder, int maxResults, int startIndex) {
 		//start the performance logging
 		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.search");
 		
@@ -358,7 +358,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		// Access CPR broker
 		PartSoap12 service;
 		try {
-			service = getService(ESourceUsageOrder.ExternalOnly);
+			service = getService(sourceUsageOrder);
 		} catch (InstantiationException e) {
 			play.Logger.error(e.getMessage());
 			return null;
