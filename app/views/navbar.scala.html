@@ -48,14 +48,15 @@
             <div class="form-group" id="querygroup">
                 <input type="text" class="form-control" id="query" placeholder="@Messages("nav.quicksearch_placeholder")" autocomplete="off" data-content="dummycontent" data-original-title="dummytitle" data-placement="bottom" />
                 <textarea class="form-control" id="query2" placeholder="@Messages("nav.quicksearch_addresslaceholder")" autocomplete="off" data-content="dummycontent" data-original-title="dummytitle" data-placement="bottom" ></textarea>
-
+                <button id="quicksearchbutton" type="button" class="btn btn-default">@Messages("nav.quicksearch_submit")</button>
                 <div class="navbar-form-online">
-                <input type="radio" name="online" value="false" checked>@Messages("nav.quicksearch_local")&nbsp;&nbsp;
-                <input type="radio" name="online" value="true">@Messages("nav.quicksearch_online")
+                    <input type="radio" name="online" id="online_false" value="false" checked>
+                    <label for="online_false">@Messages("nav.quicksearch_local") &nbsp;&nbsp;</label>
+                    <input type="radio" name="online" id="online_true" value="true">
+                    <label for="online_true"> @Messages("nav.quicksearch_online")</label>
                 </div>
             </div>
 
-            <button id="quicksearchbutton" type="button" class="btn btn-default">@Messages("nav.quicksearch_submit")</button>
         </form>
 
         <ul class="nav navbar-nav navbar-right">
