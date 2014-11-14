@@ -5,6 +5,8 @@ package util;
  */
 public class StringUtils {
     public static String TrimZerosOnLeft(String string) {
-        return string.replaceAll("\\A0+", "");
+        if (string != null)
+            return string.replaceAll("\\A0+", "");
+        return string;
     }
 }
