@@ -42,7 +42,7 @@ import util.auth.Secured;
 import util.cprbroker.*;
 import util.cprbroker.models.Uuids;
 import views.html.list;
-import views.html.search;
+
 import views.html.show_error;
 
 import javax.inject.Inject;
@@ -176,7 +176,7 @@ public class Search extends Controller {
      * @return Result containing the response from the cprBroker
      */
     @Security.Authenticated(Secured.class)
-    public Result show(String uuid) {
+    public Result showPerson(String uuid) {
         // Logging the show request
         play.Logger.info(session("username") +
                 " requested to see uuid " +
@@ -193,7 +193,7 @@ public class Search extends Controller {
                 person.message());
 
         if (person.code() == 200) {
-            return ok(search.render(person));
+            return ok(views.html.person.render(person));
         } else {
             //TODO - A person wasn't found
             return ok(show_error.render(person.code()));
