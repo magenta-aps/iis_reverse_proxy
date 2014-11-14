@@ -33,11 +33,8 @@
 
 package util.cprbroker.models;
 
-import util.cprbroker.EAddressType;
-import util.cprbroker.IBuilder;
-import util.cprbroker.IDanishAddress;
-import util.cprbroker.IGreenlandicAddress;
-import util.cprbroker.IWorldAddress;
+import util.StringUtils;
+import util.cprbroker.*;
 
 public class GreenlandicAddress implements IGreenlandicAddress {
 
@@ -104,16 +101,16 @@ public class GreenlandicAddress implements IGreenlandicAddress {
 		countryIdentificationCode = builder.countryIdentificationCode;
 		districtName = builder.districtName;
 		districtSubdivisionIdentifier = builder.districtSubdivisionIdentifier;
-		floorIdentifier = builder.floorIdentifier;
-		greenlandBuildingIdentifier = builder.greenlandBuildingIdentifier;
+		floorIdentifier = StringUtils.TrimZerosOnLeft(builder.floorIdentifier);
+		greenlandBuildingIdentifier = StringUtils.TrimZerosOnLeft(builder.greenlandBuildingIdentifier);
 		mailDeliverySublocationIdentifier = builder.mailDeliverySublocationIdentifier;
-		municipalityCode = builder.municipalityCode;
+		municipalityCode = StringUtils.TrimZerosOnLeft(builder.municipalityCode);
 		postCodeIdentifier = builder.postCodeIdentifier;
-		streetBuildingIdentifier = builder.streetBuildingIdentifier;
-		streetCode = builder.streetCode;
+		streetBuildingIdentifier = StringUtils.TrimZerosOnLeft(builder.streetBuildingIdentifier);
+		streetCode = StringUtils.TrimZerosOnLeft(builder.streetCode);
 		streetName = builder.streetName;
 		streetNameForAddressingName = builder.streetNameForAddressingName;
-		suiteIdentifier = builder.suiteIdentifier;
+		suiteIdentifier = StringUtils.TrimZerosOnLeft(builder.suiteIdentifier);
 		isSpecielVejkodeIndikator = builder.isSpecielVejkodeIndikator;
 		isUkendtAdresseIndikator = builder.isUkendtAdresseIndikator;
 		note = builder.note;
