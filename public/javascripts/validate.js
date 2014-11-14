@@ -1,6 +1,6 @@
 define(["modolus11"], function(modolus11) {
 	return {
-		validate : function(queryfield, query, querygroup) {
+		validateQuery : function(queryfield, query, querygroup) {
 
 			var containsspecialcharacters = /\½|\§|\!|\"|\@|\#|\£|\¤|\$|\%|\&|\/|\{|\(|\[|\)|\]|\=|\}|\?|\+|\'|\`|\||\^|\~|\*|\_|\;|\:|\.|\+/;
 			var containsnumbers = /[0-9]/;

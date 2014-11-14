@@ -40,7 +40,7 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"],functio
     	  var query = queryfield.val(); // value of the input field
     	  var querygroup = $('#querygroup'); // form-group wrapping input
 
-	      v.validate(queryfield, query, querygroup);
+	      v.validateQuery(queryfield, query, querygroup);
 	   });
 	}); //end ready
 });
