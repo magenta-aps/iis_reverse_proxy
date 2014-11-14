@@ -33,11 +33,8 @@
 
 package util.cprbroker.models;
 
-import util.cprbroker.EAddressType;
-import util.cprbroker.IBuilder;
-import util.cprbroker.IDanishAddress;
-import util.cprbroker.IGreenlandicAddress;
-import util.cprbroker.IWorldAddress;
+import util.StringUtils;
+import util.cprbroker.*;
 
 public class DanishAddress implements IDanishAddress {
 
@@ -135,19 +132,19 @@ public class DanishAddress implements IDanishAddress {
 		countryIdentificationCode = builder.countryIdentificationCode;
 		districtName = builder.districtName;
 		districtSubdivision = builder.districtSubdivision;
-		floor = builder.floor;
+		floor = StringUtils.TrimZerosOnLeft(builder.floor);
 		mailSubLocaltion = builder.mailSubLocaltion;
 		postCode = builder.postCode;
 		postOfficeBox = builder.postOfficeBox;
-		streetBuilding = builder.streetBuilding;
+		streetBuilding = StringUtils.TrimZerosOnLeft(builder.streetBuilding);
 		streetName = builder.streetName;
 		streetNameForAdressing = builder.streetNameForAdressing;
-		suite = builder.suite;
+		suite = StringUtils.TrimZerosOnLeft(builder.suite);
 		note = builder.note;
-		
-		municipalityCode = builder.municipalityCode;
-		streetBuildingIdentifier = builder.streetBuildingIdentifier;
-		streetCode = builder.streetCode;
+
+		municipalityCode = StringUtils.TrimZerosOnLeft(builder.municipalityCode);
+		streetBuildingIdentifier = StringUtils.TrimZerosOnLeft(builder.streetBuildingIdentifier);
+		streetCode = StringUtils.TrimZerosOnLeft(builder.streetCode);
 
 		danishNote = builder.danishNote;
 		politiDistrikt = builder.politiDistrikt;
