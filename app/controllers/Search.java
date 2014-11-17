@@ -154,10 +154,10 @@ public class Search extends Controller {
     }
 
     @Security.Authenticated(Secured.class)
-    public Result searchNameAndAddress(String firstname, String middlename, String lastname, String address, boolean online, int page) {
+    public Result searchNameAndAddress(String name, String address, boolean online, int page) {
 
         List<IPerson> persons = cprBroker.searchList(
-                firstname, middlename, lastname,
+                name,
                 address,
                 online ? ESourceUsageOrder.ExternalOnly : ESourceUsageOrder.LocalOnly,
                 -1, -1);
@@ -165,7 +165,9 @@ public class Search extends Controller {
         String path = request().path();
         path = path.substring(0, path.indexOf("page") + 5);
 
-        String query = getQuery(firstname, middlename, lastname, address);
+        String query = name;
+        if (address != null && !address.isEmpty())
+            query += " @ " + address;
 
         return ok(list.render(persons, persons.size(), page, path,
                 query));

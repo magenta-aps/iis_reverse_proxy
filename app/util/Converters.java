@@ -6,6 +6,7 @@ import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressCompleteType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 import oio.sagdok.person._1_0.*;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,6 +64,29 @@ public class Converters {
         return null;
     }
 
+    public NavnStrukturType ToNavnStrukturType(String name){
+
+        while (name.contains(",")){
+            int i = name.lastIndexOf(",");
+            name = name.substring(i+1) + " " + name.substring(0,i-1);
+        }
+
+        String firstName=null, middleName=null, lastName=null;
+        String[] arr = name.split(" ");
+        if(arr.length>=1)
+            firstName = arr[0];
+        if(arr.length>1)
+            lastName = arr[arr.length-1];
+        if(arr.length>2) {
+            middleName = "";
+            ArrayList<String> middleNames = new ArrayList<String>();
+            for (int i=1;i<arr.length-1;i++){
+                middleNames.add(arr[i]);
+            }
+            middleName = String.join(" ",middleNames);
+        }
+        return ToNavnStrukturType(firstName,middleName,lastName);
+    }
     public NavnStrukturType ToNavnStrukturType(String firstname, String middlename, String lastname) {
         // Set the name search criteria
         PersonNameStructureType nameStructure = new PersonNameStructureType();
@@ -76,9 +100,9 @@ public class Converters {
         return navnStrukturType;
     }
 
-    public SoegObjektType ToSoegObjektType(String firstname, String middlename, String lastname, String address) {
+    public SoegObjektType ToSoegObjektType(String name, String address) {
 
-        NavnStrukturType navnStrukturType = ToNavnStrukturType(firstname, middlename, lastname);
+        NavnStrukturType navnStrukturType = ToNavnStrukturType(name);
         AdresseType addressObject = ToAddressType(address);
 
         SoegAttributListeType soegAttributListeType = new SoegAttributListeType();

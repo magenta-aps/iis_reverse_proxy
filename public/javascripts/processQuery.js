@@ -16,8 +16,8 @@ define(function() {
 					});
         	    } 
 
-				else if (firstmiddlelastname.test(query) || firstlastname.test(query)) {
-					redirectLocation = '/search/name/' + query.replace(/ *?(?=,)/g, '').replace(/, */g, '/');
+				else if (firstmiddlelastname.test(query) || firstlastname.test(query) || lastname.test(query)) {
+					redirectLocation = '/search/name/' + query;
 					if(query2.length > 0)
 						redirectLocation += '/address/' + query2;
 					if(online)
@@ -25,17 +25,6 @@ define(function() {
 					redirectLocation += '/page/1';
         	    } 
         	    
-        	    else if(lastname.test(query)) {
-        	 	   if(query.length > 0) {
-					   redirectLocation = '/search/name/' + query;
-					   if(query2.length > 0)
-					   		redirectLocation += '/address/' + query2;
-					   if(online)
-						   redirectLocation += '/online'
-					   redirectLocation += '/page/1';
-        	 	   }
-        	    }
-
 				else {
 					alert('error');
 				}

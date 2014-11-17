@@ -9,26 +9,21 @@ GET         /                                                                   
 #GET 	/webjars/*file  			controllers.WebJarAssets.at(file)
 
 # Login
-GET         /login                                                                           controllers.Application.login()
-POST        /login                                                                           @controllers.Application.authenticate()
-GET         /logout                                                                          controllers.Application.logout()
+GET         /login                                                      controllers.Application.login()
+POST        /login                                                      @controllers.Application.authenticate()
+GET         /logout                                                     controllers.Application.logout()
 
 # Search
-POST        /search/cpr/                                                                     @controllers.Search.getUuidFromCpr()
+POST        /search/cpr/                                                @controllers.Search.getUuidFromCpr()
 
-GET         /search/name/:lastname/address/:address/page/:page                               @controllers.Search.searchNameAndAddress(firstname = null , middlename =  null, lastname : String, address : String, online:Boolean ?= false, page : Int)
-GET         /search/name/:lastname/address/:address/online/page/:page                        @controllers.Search.searchNameAndAddress(firstname = null , middlename =  null, lastname : String, address : String, online:Boolean ?= true, page : Int)
-GET         /search/name/:firstname/:lastname/address/:address/page/:page                    @controllers.Search.searchNameAndAddress(firstname : String , middlename =  null, lastname : String, address : String, online:Boolean ?= false, page : Int)
-GET         /search/name/:firstname/:lastname/address/:address/online/page/:page             @controllers.Search.searchNameAndAddress(firstname : String , middlename =  null, lastname : String, address : String, online:Boolean ?= true, page : Int)
-GET         /search/name/:firstname/:middlename/:lastname/address/:address/page/:page        @controllers.Search.searchNameAndAddress(firstname : String , middlename : String, lastname : String, address : String, online:Boolean ?= false, page : Int)
-GET         /search/name/:firstname/:middlename/:lastname/address/:address/onine/page/:page  @controllers.Search.searchNameAndAddress(firstname : String , middlename : String, lastname : String, address : String, online:Boolean ?= true, page : Int)
+GET         /search/name/:name/address/:address/page/:page              @controllers.Search.searchNameAndAddress(name : String, address : String, online:Boolean ?= false, page : Int)
+GET         /search/name/:name/address/:address/online/page/:page       @controllers.Search.searchNameAndAddress(name : String, address : String, online:Boolean ?= true, page : Int)
 
-GET         /search/name/:lastname/page/:page                                                @controllers.Search.searchLastMiddleFirstname(lastname: String, middlename = null, firstname = null, page: Int)
-GET         /search/name/:firstname/:lastname/page/:page                                     @controllers.Search.searchLastMiddleFirstname(lastname: String, middlename = null, firstname : String, page : Int)
-GET         /search/name/:firstname/:middlename/:lastname/page/:page                         @controllers.Search.searchLastMiddleFirstname(lastname: String, middlename: String , firstname : String, page : Int)
+GET         /search/name/:name/page/:page                               @controllers.Search.searchNameAndAddress(name : String, address = null, online:Boolean ?= false, page : Int)
+GET         /search/name/:name/online/page/:page                        @controllers.Search.searchNameAndAddress(name : String, address = null, online:Boolean ?= true, page : Int)
 
 
-GET         /show/uuid/:uuid/                                                                @controllers.Search.showPerson(uuid : String)
+GET         /show/uuid/:uuid/                                           @controllers.Search.showPerson(uuid : String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                                                                    controllers.Assets.at(path="/public", file)
+GET         /assets/*file                                               controllers.Assets.at(path="/public", file)

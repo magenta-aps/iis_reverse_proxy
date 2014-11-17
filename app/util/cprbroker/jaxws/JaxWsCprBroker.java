@@ -334,7 +334,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 	}
 
 	@Override
-	public List<IPerson> searchList(String firstname, String middlename, String lastname, String address, ESourceUsageOrder sourceUsageOrder, int maxResults, int startIndex) {
+	public List<IPerson> searchList(String name, String address, ESourceUsageOrder sourceUsageOrder, int maxResults, int startIndex) {
 		//start the performance logging
 		StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.search");
 		
@@ -352,7 +352,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 		}
 
 		Converters converters=new Converters();
-		SoegObjektType soegObjekt = converters.ToSoegObjektType(firstname,middlename,lastname,address);
+		SoegObjektType soegObjekt = converters.ToSoegObjektType(name,address);
 		input.setSoegObjekt(soegObjekt);
 
 		// Access CPR broker
