@@ -12,7 +12,10 @@ define(function () {
                 2 * numbers.charAt(8) +
                 1 * numbers.charAt(9);
 
-            if (num % 11 == 0)
+            if (
+                num % 11 == 0
+                | numbers.substring(0, 6) == '010165'
+                | numbers.substring(0, 6) == '010166')
                 return true;
 
             return false;

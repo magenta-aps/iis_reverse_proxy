@@ -44,6 +44,14 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"], functi
 
             v.validateQuery(queryfield, query, querygroup);
         });
+
+        // validate incomming input
+        $('#query2').keyup(function (event) {
+            var queryfield = $('#query2'); // the query input field
+            var query = queryfield.val(); // value of the input field
+
+            v.validateAddressQuery(queryfield, query);
+        });
     }); //end ready
 });
 
