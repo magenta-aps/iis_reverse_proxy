@@ -31,7 +31,9 @@
 * the terms of any one of the MPL, the GPL or the LGPL.
 *
 * ***** END LICENSE BLOCK ***** *@
-<!-- Static navbar -->
+
+@(searchInput : Search.SearchInput)
+
 <div class="navbar navbar-default">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -46,16 +48,16 @@
 
         <form id="quicksearch" class="navbar-form navbar-left" role="search">
             <div class="form-group" id="querygroup">
-                <input type="text" class="form-control" id="query" placeholder="@Messages("nav.quicksearch_placeholder")" autocomplete="off" data-content="dummycontent" data-original-title="dummytitle" data-placement="bottom" />
-                <input type="text" class="form-control" id="query2" placeholder="@Messages("nav.quicksearch_addresslaceholder")" autocomplete="off" data-content="dummycontent" data-original-title="dummytitle" data-placement="bottom" />
+                <input type="text" class="form-control" id="query" placeholder="@Messages("nav.quicksearch_placeholder")" autocomplete="off" data-content="dummycontent" data-original-title="dummytitle" data-placement="bottom" value="@searchInput.getQuery()" />
+                <input type="text" class="form-control" id="query2" placeholder="@Messages("nav.quicksearch_addresslaceholder")" autocomplete="off" data-content="dummycontent" data-original-title="dummytitle" data-placement="bottom" value="@searchInput.getAddressQuery()" />
 
-                <button id="quicksearchbutton" type="button" class="btn btn-default">@Messages("nav.quicksearch_submit")</button>
                 <div class="navbar-form-online">
-                    <input type="radio" name="online" id="online_false" value="false" checked>
+                    <input type="radio" name="online" id="online_false" value="false" @if(!searchInput.getOnline()){checked}>
                     <label for="online_false">@Messages("nav.quicksearch_local") &nbsp;&nbsp;</label>
-                    <input type="radio" name="online" id="online_true" value="true">
+                    <input type="radio" name="online" id="online_true" value="true" @if(searchInput.getOnline()){checked }>
                     <label for="online_true"> @Messages("nav.quicksearch_online")</label>
                 </div>
+                <button id="quicksearchbutton" type="button" class="btn btn-default navbar-form-search">@Messages("nav.quicksearch_submit")</button>
             </div>
 
         </form>

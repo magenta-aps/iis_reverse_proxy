@@ -7,7 +7,13 @@ margin-bottom: 30px;
 }
 
 .navbar-form-online {
-    float: right;
+    float: left;
     padding-top: 2%;
+    text-align: left;
+}
+
+.navbar-form-search{
+    float: right;
+    margin-top: 1%;
     text-align: right;
 }

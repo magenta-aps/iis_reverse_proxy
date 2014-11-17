@@ -94,6 +94,9 @@ define(["modolus11"], function(modolus11) {
 
 			var pat = /([^0-9]+)((\s+)|(\s*[,;\.]{1}\s*))([0-9]+[\w[^0-9]*)((\s+)|(\s*[,;\.]{1}\s*))(([0-9]{1,2})?(\.)?(sal)?((\s+)|(\s*[,;\.]{1}\s*)))?(([a-zA-Z]+)((\s+)|(\s*[,;\.]{1}\s*)))?([0-9]{4})((\s+)|(\s*[,;\.]{1}\s*))([\w[^0-9]+)/;
 			//alert(pat);
+			if(query.length == 0)
+				return;
+
 			if (!pat.test(query)) {
 				//alert('not match');
 				queryfield.addClass('has-warning');

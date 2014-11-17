@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
@@ -31,13 +32,17 @@
  *
  * ***** END LICENSE BLOCK ***** *@
  
-@(persons : java.util.List[util.cprbroker.IPerson], results : Int, currentpage : Int, location : String, query: String)
+@(persons : java.util.List[util.cprbroker.IPerson], results : Int, currentpage : Int, location : String, searchInput : Search.SearchInput)
 
-@main("CPReader") {
+@main("CPReader", searchInput) {
 
  <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">@Messages("results.list.amountOfResults", results) <strong>@query</strong></h3>
+        <h3 class="panel-title">@Messages("results.list.amountOfResults", results) <strong>@searchInput.getQuery()</strong>
+            @if(searchInput.getAddressQuery() !=null && searchInput.getAddressQuery().length>0){
+                &nbsp;@searchInput.getAddressQuery();
+            }
+        </h3>
     </div>
  </div>
  

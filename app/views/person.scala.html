@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
@@ -31,11 +32,11 @@
  *
  * ***** END LICENSE BLOCK ***** *@
 
-@(person: util.cprbroker.IPerson)
+@(person: util.cprbroker.IPerson, searchInput : controllers.Search.SearchInput)
 
 @import util.cprbroker.EAddressType;
 
-@main("CPReader") {
+@main("CPReader",searchInput) {
       
     <div class="well">           
         <h3>

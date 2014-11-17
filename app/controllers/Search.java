@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
@@ -122,9 +123,11 @@ public class Search extends Controller {
             path = path.substring(0, path.indexOf("page") + 5);
 
             String query = getQuery(firstname, lastname, middlename, null);
+            SearchInput searchInput = new SearchInput(query, null, false);
+            searchInput.saveToSession(this);
 
             return ok(list.render(persons, uuids.values().size(), page, path,
-                    query));
+                    searchInput));
         }
 
         // TODO Make a decent error! bad request
@@ -166,11 +169,10 @@ public class Search extends Controller {
         path = path.substring(0, path.indexOf("page") + 5);
 
         String query = name;
-        if (address != null && !address.isEmpty())
-            query += " @ " + address;
+        SearchInput searchInput = new SearchInput(name, address, online);
+        searchInput.saveToSession(this);
 
-        return ok(list.render(persons, persons.size(), page, path,
-                query));
+        return ok(list.render(persons, persons.size(), page, path, searchInput));
     }
 
     /**
@@ -194,11 +196,13 @@ public class Search extends Controller {
                 " - " +
                 person.message());
 
+        SearchInput searchInput = new SearchInput();
+        searchInput.fillFromSession(this);
         if (person.code() == 200) {
-            return ok(views.html.person.render(person));
+            return ok(views.html.person.render(person, searchInput));
         } else {
             //TODO - A person wasn't found
-            return ok(show_error.render(person.code()));
+            return ok(show_error.render(person.code(), searchInput));
         }
     }
 
@@ -239,6 +243,15 @@ public class Search extends Controller {
 
     public static class SearchInput {
 
+        public SearchInput() {
+        }
+
+        public SearchInput(String name, String address, Boolean online) {
+            this.setQuery(name);
+            this.setAddressQuery(address);
+            this.setOnline(online);
+        }
+
         @Required
         public String query;
 
@@ -270,6 +283,23 @@ public class Search extends Controller {
             this.online = value;
         }
 
+        public void fillFromSession(Controller controller) {
+            setQuery(controller.session("query"));
+            setAddressQuery(controller.session("addressQuery"));
+            String onlineS = controller.session("online");
+
+            if ("true".equals(onlineS))
+                setOnline(true);
+        }
+
+        public void saveToSession(Controller controller) {
+            controller.session("query", getQuery());
+            controller.session("addressQuery", getAddressQuery());
+            String onlineS = "false";
+            if (getOnline())
+                onlineS = "true";
+            controller.session("online", onlineS);
+        }
 
     }
 
