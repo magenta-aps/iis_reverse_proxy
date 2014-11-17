@@ -24,7 +24,7 @@ define(function() {
 						redirectLocation += '/online'
 					redirectLocation += '/page/1';
         	    } 
-        	    
+
 				else {
 					alert('error');
 				}
