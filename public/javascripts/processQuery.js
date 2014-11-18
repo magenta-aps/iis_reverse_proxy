@@ -17,7 +17,9 @@ define(function() {
         	    } 
 
 				else if (firstmiddlelastname.test(query) || firstlastname.test(query) || lastname.test(query)) {
-					redirectLocation = '/search/name/' + query;
+					redirectLocation = '/search'
+					if (query.length > 0)
+						redirectLocation += '/name/' + query;
 					if(query2.length > 0)
 						redirectLocation += '/address/' + query2;
 					if(online)

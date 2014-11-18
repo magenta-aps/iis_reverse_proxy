@@ -18,13 +18,12 @@ public class Converters {
         if (addressString != null && !addressString.trim().isEmpty()) {
 
             String comma = "((\\s+)|(\\s*[,;\\.]{1}\\s*))";
-            String alpha = "[\\w&&[^0-9]]";
             String pat = "(?<streetName>[^0-9]+)" + comma
-                    + "(?<houseNumber>[0-9]+" + alpha + "*)" + comma
+                    + "(?<houseNumber>[0-9]+[a-zA-Z]*)" + comma
                     + "(" + "(?<floor>[0-9]{1,2})?(\\.)?(sal)?" + comma + ")?"
                     + "(" + "(?<door>[a-zA-Z]+)" + comma + ")?"
                     + "(?<postCode>[0-9]{4})" + comma
-                    + "(?<postDistrict>" + alpha + "+)";
+                    + "(?<postDistrict>\\p{L}+(\\s+\\p{L}+)*)\\Z";
 
 
             Pattern p = Pattern.compile(pat);
@@ -64,29 +63,33 @@ public class Converters {
         return null;
     }
 
-    public NavnStrukturType ToNavnStrukturType(String name){
+    public NavnStrukturType ToNavnStrukturType(String name) {
 
-        while (name.contains(",")){
+        if (name == null || name.isEmpty())
+            return null;
+
+        while (name.contains(",")) {
             int i = name.lastIndexOf(",");
-            name = name.substring(i+1) + " " + name.substring(0,i-1);
+            name = name.substring(i + 1) + " " + name.substring(0, i - 1);
         }
 
-        String firstName=null, middleName=null, lastName=null;
+        String firstName = null, middleName = null, lastName = null;
         String[] arr = name.split(" ");
-        if(arr.length>=1)
+        if (arr.length >= 1)
             firstName = arr[0];
-        if(arr.length>1)
-            lastName = arr[arr.length-1];
-        if(arr.length>2) {
+        if (arr.length > 1)
+            lastName = arr[arr.length - 1];
+        if (arr.length > 2) {
             middleName = "";
             ArrayList<String> middleNames = new ArrayList<String>();
-            for (int i=1;i<arr.length-1;i++){
+            for (int i = 1; i < arr.length - 1; i++) {
                 middleNames.add(arr[i]);
             }
-            middleName = String.join(" ",middleNames);
+            middleName = String.join(" ", middleNames);
         }
-        return ToNavnStrukturType(firstName,middleName,lastName);
+        return ToNavnStrukturType(firstName, middleName, lastName);
     }
+
     public NavnStrukturType ToNavnStrukturType(String firstname, String middlename, String lastname) {
         // Set the name search criteria
         PersonNameStructureType nameStructure = new PersonNameStructureType();

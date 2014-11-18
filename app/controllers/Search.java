@@ -43,7 +43,6 @@ import util.auth.Secured;
 import util.cprbroker.*;
 import util.cprbroker.models.Uuids;
 import views.html.list;
-
 import views.html.show_error;
 
 import javax.inject.Inject;
@@ -168,7 +167,6 @@ public class Search extends Controller {
         String path = request().path();
         path = path.substring(0, path.indexOf("page") + 5);
 
-        String query = name;
         SearchInput searchInput = new SearchInput(name, address, online);
         searchInput.saveToSession(this);
 

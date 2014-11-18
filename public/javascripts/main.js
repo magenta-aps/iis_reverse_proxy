@@ -1,14 +1,16 @@
 require.config({
     paths: {
         'jquery': '//code.jquery.com/jquery-1.9.1.min',
-        'bootstrap': '//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min'
+        'bootstrap': '//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min',
+        'jqueryui': 'jquery-ui-1.11.2.custom/jquery-ui'
     },
     shim: {
-        'bootstrap': ['jquery']
+        'bootstrap': ['jquery'],
+        'jqueryui': ['jquery']
     }
 });
 
-require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"], function ($, b, p, v, m) {
+require(["jquery", "bootstrap", "processQuery", "validate", "modolus11", "jqueryui"], function ($, b, p, v, m, ui) {
 
     // wait for the document to be ready
     $(function () {
@@ -50,8 +52,35 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11"], functi
             var queryfield = $('#query2'); // the query input field
             var query = queryfield.val(); // value of the input field
 
-            v.validateAddressQuery(queryfield, query);
+            //v.validateAddressQuery(queryfield, query);
         });
+
+        $('#query2').autocomplete({
+
+            minLength: 1,
+            delay: 100,
+
+            source: function (request, response) {
+                $.ajax({
+                    url: 'http://dawa.aws.dk/adresser/autocomplete',
+                    type: "GET",
+                    dataType: "jsonp",
+                    data: {q: request.term, maxantal: 11},
+                    success: function (data) {
+                        var suggestions = [];
+                        $.each(data, function (i, val) {
+                            //var text = val.vejnavn.navn + ((val.husnr.length === 0) ? '' : ' ' + val.husnr) + ', ' + val.postnummer.nr + ' ' + val.postnummer.navn;
+                            var text = val.tekst;
+                            suggestions.push(text);
+                        });
+                        response(suggestions);
+                    },
+                    error: function (textStatus) {
+                        alert("Der kunne ikke hentes data fra AWS API'et. Serveren returnerede følgende:\n'" + textStatus + "'\n\nAdresseforslag virker derfor ikke pt.");
+                    }
+                });
+            }
+        })
     }); //end ready
 });
 
