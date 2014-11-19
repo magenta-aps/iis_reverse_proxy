@@ -40,8 +40,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.auth.Secured;
-import util.cprbroker.*;
-import util.cprbroker.models.Uuids;
+import util.cprbroker.ESourceUsageOrder;
+import util.cprbroker.ICprBrokerAccessor;
+import util.cprbroker.IPerson;
+import util.cprbroker.IUuid;
 import views.html.list;
 import views.html.show_error;
 
@@ -57,102 +59,6 @@ public class Search extends Controller {
     @Inject
     public Search(ICprBrokerAccessor newCprBroker) {
         cprBroker = newCprBroker;
-    }
-
-
-    /**
-     * @param lastname   String containing a lastname
-     * @param middlename String containing a middlename(s)
-     * @param firstname  String containing a firstname
-     * @return Result with the response from the cprBroker
-     */
-    @Security.Authenticated(Secured.class)
-    public Result searchLastMiddleFirstname(String lastname, String middlename,
-                                            String firstname, int page) {
-
-        // Logging the search
-        play.Logger.info(session("username") + " searched for: " +
-                lastname + ", " +
-                middlename + ", " +
-                firstname);
-
-        // search for the results
-        IUuids uuids = cprBroker.search(firstname, middlename, lastname, -1, -1);
-
-        // logging the returned resultcode
-        play.Logger.info(session("username") +
-                "'s search request to CPRBroker responded, " +
-                uuids.code() +
-                " - " +
-                uuids.message() +
-                ", results: " +
-                uuids.values().size());
-
-        if (uuids.code() == 200) {
-
-            // calculate the searchIndex, which is the starting point of the
-            // search
-            int fromIndex = ((page - 1) * 10);
-            int toIndex = ((page) * 10);
-
-            // log what page the user requested
-            play.Logger.info(session("username") +
-                    " requested page " +
-                    page +
-                    ", showing " +
-                    fromIndex +
-                    "-" +
-                    toIndex);
-
-
-            if (uuids.values().size() < fromIndex)
-                return badRequest();
-
-            if (uuids.values().size() < toIndex)
-                toIndex = uuids.values().size();
-
-            IUuids subUuuids = new Uuids(uuids.code(), uuids.message(), uuids
-                    .values().subList(fromIndex, toIndex));
-
-
-            List<IPerson> persons = cprBroker.list(subUuuids,
-                    ESourceUsageOrder.LocalOnly);
-
-            String path = request().path();
-            path = path.substring(0, path.indexOf("page") + 5);
-
-            String query = getQuery(firstname, lastname, middlename, null);
-            SearchInput searchInput = new SearchInput(query, null, false);
-            searchInput.saveToSession(this);
-
-            return ok(list.render(persons, uuids.values().size(), page, path,
-                    searchInput));
-        }
-
-        // TODO Make a decent error! bad request
-        return ok();
-    }
-
-    private String getQuery(String firstname, String middlename, String lastname, String address) {
-        String ret = "";
-        if (lastname != null) {
-            if (firstname != null) {
-                if (middlename != null) {
-                    ret = firstname + ", " + middlename + ", " + lastname;
-                } else {
-                    ret = firstname + ", " + lastname;
-                }
-            } else {
-                ret = lastname;
-            }
-        } else {
-            ret = "";
-        }
-
-        if (address != null && !address.isEmpty()) {
-            ret += " " + address;
-        }
-        return ret;
     }
 
     @Security.Authenticated(Secured.class)
