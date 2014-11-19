@@ -38,6 +38,10 @@ resultat.registeroplysninger = Registeroplysninger
 resultat.postaddresse = Postadresse
 resultat.andenaddresse = Anden adresse
 
+#------ GENERAL
+person.true = Ja
+person.false = Nej
+
 #------ EGENSKABER
 person.firstname = Fornavn
 person.middelname = Mellemnavn
