@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-

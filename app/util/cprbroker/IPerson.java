@@ -46,7 +46,9 @@ public interface IPerson extends IStandardResponse, IPersonAttributes {
 	IRegisterInformation registerInformation();
 	
 	IAddress address();
-	
+
+	String[] postalLabel();
+
 	IAddress otherAddress();
 	
 	IContact contact();

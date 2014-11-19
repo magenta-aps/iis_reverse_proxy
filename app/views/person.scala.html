@@ -1,254 +1,264 @@
 @* ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 2.0/GPL 2.0/LGPL 2.1
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS"basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * Contributor(s):
- * Beemen Beshara
- * Søren Kirkegård
- *
- * The code is currently governed by OS2 - Offentligt digitaliserings-
- * fællesskab / http://www.os2web.dk .
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 2 or later (the "GPL"), or
- * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
- * in which case the provisions of the GPL or the LGPL are applicable instead
- * of those above. If you wish to allow use of your version of this file only
- * under the terms of either the GPL or the LGPL, and not to allow others to
- * use your version of this file under the terms of the MPL, indicate your
- * decision by deleting the provisions above and replace them with the notice
- * and other provisions required by the GPL or the LGPL. If you do not delete
- * the provisions above, a recipient may use your version of this file under
- * the terms of any one of the MPL, the GPL or the LGPL.
- *
- * ***** END LICENSE BLOCK ***** *@
-
-@(person: util.cprbroker.IPerson, searchInput : controllers.Search.SearchInput)
+* Version: MPL 2.0/GPL 2.0/LGPL 2.1
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 2.0 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* Contributor(s):
+* Beemen Beshara
+* Søren Kirkegård
+*
+* The code is currently governed by OS2 - Offentligt digitaliserings-
+* fællesskab / http://www.os2web.dk .
+*
+* Alternatively, the contents of this file may be used under the terms of
+* either the GNU General Public License Version 2 or later (the "GPL"), or
+* the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+* in which case the provisions of the GPL or the LGPL are applicable instead
+* of those above. If you wish to allow use of your version of this file only
+* under the terms of either the GPL or the LGPL, and not to allow others to
+* use your version of this file under the terms of the MPL, indicate your
+* decision by deleting the provisions above and replace them with the notice
+* and other provisions required by the GPL or the LGPL. If you do not delete
+* the provisions above, a recipient may use your version of this file under
+* the terms of any one of the MPL, the GPL or the LGPL.
+*
+* ***** END LICENSE BLOCK ***** *@
+@(person: util.cprbroker.IPerson, searchInput: controllers.Search.SearchInput)
 
 @import util.cprbroker.EAddressType;
+@import util.Converters;
 
-@main("CPReader",searchInput) {
-      
-    <div class="well">           
+@main("CPReader", searchInput) {
+
+    <div class="well">
         <h3>
-            <span class="glyphicon glyphicon-user"></span> Person: @person.registerInformation.cprCitizen.socialSecurityNumber
+            <span class="glyphicon glyphicon-user"></span>
+            Person: @person.registerInformation.cprCitizen.socialSecurityNumber
         </h3>
+        <div>
+        @person.postalLabel().map { l =>
+            @l <br>
+        }
+        </div>
         @if(person.tidspunkt != null) {
-        <p class="text-right">
-            @if(person.tidspunkt.aktoerRefUuid) { @person.tidspunkt.sourceName }, 
-            @if(person.tidspunkt.tidspunkt != null) {<span class="glyphicon glyphicon-time"></span> @person.tidspunkt.tidspunkt.toString("dd.MM.yy HH:mm:ss")}
-        </p>
+            <p class="text-right">
+                @if(person.tidspunkt.aktoerRefUuid) {
+                    @person.tidspunkt.sourceName
+                },
+                @if(person.tidspunkt.tidspunkt != null) {
+                    <span class="glyphicon glyphicon-time"></span> @person.tidspunkt.tidspunkt.toString("dd.MM.yy HH:mm:ss")
+                }
+            </p>
         }
     </div>
-    
+
     <ul class="nav nav-pills nav-justified">
-		<li class="active"><a href="#generelt" data-toggle="pill">Generelt</a></li>
-		<li><a href="#addresse" data-toggle="pill">Adresse</a></li>
-		<li><a href="#relationer" data-toggle="pill">Relationer</a></li>
+        <li class="active"><a href="#generelt" data-toggle="pill">Generelt</a></li>
+        <li><a href="#addresse" data-toggle="pill">Adresse</a></li>
+        <li><a href="#relationer" data-toggle="pill">Relationer</a></li>
     </ul>
-    
-    
-    
+
+
+
     <div class="tab-content">
         <div class="tab-pane active" id="generelt">
-        
-			<div class="row">
-	            <div class="col-md-6">
-	                <br/>
-	                <div class="panel panel-default">
-	                
-	                    <div class="panel-heading">
-	                        <h3 class="panel-title">@Messages("resultat.egenskaber")</h3>
-	                    </div>
-	                
-	                    <div class="panel-body">
-							@if(person.firstname) {
-							    <dl class="dl-horizontal">
-							        <dt>@Messages("person.firstname")</dt>
-							        <dd>@person.firstname</dd>
-							    </dl>
-							}
-							@if(person.middelname) {
-						          <dl class="dl-horizontal">
-						              <dt>@Messages("person.middelname")</dt>
-						              <dd>@person.middelname</dd>
-						          </dl>
-						      }
-						      @if(person.lastname) {
-						          <dl class="dl-horizontal">
-						              <dt>@Messages("person.lastname")</dt>
-						              <dd>@person.lastname</dd>
-						          </dl>
-						      }
-						      @if(person.callname) {
-						          <dl class="dl-horizontal">
-						              <dt>@Messages("person.callname")</dt>
-						              <dd>@person.callname</dd>
-						          </dl>
-						      }
-						      
-						      @if(person.nameForAddressing) {
-						          <dl class="dl-horizontal">
-						              <dt>@Messages("person.nameForAddressing")</dt>
-						              <dd>@person.nameForAddressing</dd>
-						          </dl>
-						      }  
-							 @if(person.gender != null) {
-							     <dl class="dl-horizontal">
-							         <dt>@Messages("person.gender")</dt>
-							         <dd>@person.gender</dd>
-							     </dl>
-							 }
-							 @if(person.birthdate != null) {
-							     <dl class="dl-horizontal">
-							         <dt>@Messages("person.birthdate")</dt>
-							         <dd>@person.birthdate.toString("dd. MMMM yyyy", new Locale("da"))</dd>
-							     </dl>
-							 }
-							 @if(person.birthplace) {
-							     <dl class="dl-horizontal">
-							         <dt>@Messages("person.birthplace")</dt>
-							         <dd>@person.nameForAddressing</dd>
-							     </dl>
-							 }
-							 @if(person.birthRegisteringAuthority) {
-							     <dl class="dl-horizontal">
-							         <dt>@Messages("person.birthRegisteringAuthority")</dt>
-							         <dd>@person.birthRegisteringAuthority</dd>
-							     </dl>
-							 }                       
-	                    </div>
-	                    <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
-	                </div>
-	            </div>
-	            <div class="col-md-6">
-	                <br/>
-	                <div class="panel panel-default">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <br/>
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@Messages("resultat.egenskaber")</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            @if(person.firstname) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.firstname")</dt>
+                                    <dd>@person.firstname</dd>
+                                </dl>
+                            }
+                            @if(person.middelname) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.middelname")</dt>
+                                    <dd>@person.middelname</dd>
+                                </dl>
+                            }
+                            @if(person.lastname) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.lastname")</dt>
+                                    <dd>@person.lastname</dd>
+                                </dl>
+                            }
+                            @if(person.callname) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.callname")</dt>
+                                    <dd>@person.callname</dd>
+                                </dl>
+                            }
+
+                            @if(person.nameForAddressing) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.nameForAddressing")</dt>
+                                    <dd>@person.nameForAddressing</dd>
+                                </dl>
+                            }
+                            @if(person.gender != null) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.gender")</dt>
+                                    <dd>@person.gender</dd>
+                                </dl>
+                            }
+                            @if(person.birthdate != null) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.birthdate")</dt>
+                                    <dd>@person.birthdate.toString("dd. MMMM yyyy", new Locale("da"))</dd>
+                                </dl>
+                            }
+                            @if(person.birthplace) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.birthplace")</dt>
+                                    <dd>@person.nameForAddressing</dd>
+                                </dl>
+                            }
+                            @if(person.birthRegisteringAuthority) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.birthRegisteringAuthority")</dt>
+                                    <dd>@person.birthRegisteringAuthority</dd>
+                                </dl>
+                            }
+                        </div>
+                        <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <br/>
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">@Messages("resultat.tilstande")</h3>
-                        </div>	                
-	                    <div class="panel-body">
-	                        @if(person.tilstand != null) {
-	                            @if(person.tilstand.civilStatusKode != null) {
-	                                <dl class="dl-horizontal">
-	                                    <dt>@Messages("person.tilstand.civilStatusKode")</dt>
-	                                    <dd>@person.tilstand.civilStatusKode</dd>
-	                                    @if(person.tilstand.civilTilstandsVirkning.fraTidspunkt != null) {
-    	                                    <dd>@virkning(person.tilstand.civilTilstandsVirkning, false)</dd>
-    	                                }
-	                                </dl>
-	                            }
-	                            @if(person.tilstand.livStatusKode != null) {
-	                                <dl class="dl-horizontal">
-	                                    <dt>@Messages("person.tilstand.livStatusKode")</dt>
-	                                    <dd>@person.tilstand.livStatusKode</dd>
-                                        @if(person.tilstand.livTilstandsVirkning.fraTidspunkt != null) {	                                    
-	                                        <dd>@virkning(person.tilstand.livTilstandsVirkning, false)</dd>
-	                                    }
-	                                </dl>
-	                            }
-	                        }
-						</div>  
-			        </div>
-	
-					<div class="panel panel-default">
+                        </div>
+                        <div class="panel-body">
+                        @if(person.tilstand != null) {
+                            @if(person.tilstand.civilStatusKode != null) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.tilstand.civilStatusKode")</dt>
+                                    <dd>@person.tilstand.civilStatusKode</dd>
+                                    @if(person.tilstand.civilTilstandsVirkning.fraTidspunkt != null) {
+                                        <dd>@virkning(person.tilstand.civilTilstandsVirkning, false)</dd>
+                                    }
+                                </dl>
+                            }
+                            @if(person.tilstand.livStatusKode != null) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.tilstand.livStatusKode")</dt>
+                                    <dd>@person.tilstand.livStatusKode</dd>
+                                    @if(person.tilstand.livTilstandsVirkning.fraTidspunkt != null) {
+                                        <dd>@virkning(person.tilstand.livTilstandsVirkning, false)</dd>
+                                    }
+                                </dl>
+                            }
+                        }
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">@Messages("resultat.registeroplysninger")</h3>
-                        </div>					
-					    <div class="panel-body">
-					        @if(person.registerInformation != null) {
-					            @if(person.registerInformation.cprCitizen.socialSecurityNumber) {
-					                <dl class="dl-horizontal">
-					                    <dt>@Messages("person.registerInformation.cprCitizen.socialSecurityNumber")</dt>
-					                    <dd>
-					                        @person.registerInformation.cprCitizen.socialSecurityNumber
-					
-					               @if(person.registerInformation.cprCitizen.isSocialSecurityNumberValid != null) {
-				                       @glyphiconokban(person.registerInformation.cprCitizen.isSocialSecurityNumberValid)
-					               }				                    
-					                    </dd>
-					                </dl>
-					            }
-					            @if(person.registerInformation.cprCitizen.personNationalityCode) {
-					                <dl class="dl-horizontal">
-					                    <dt>@Messages("person.registerInformation.cprCitizen.personNationalityCode")</dt>
-					                    <dd>@person.registerInformation.cprCitizen.personNationalityCode</dd>
-					                </dl>
-					            }
-					            @if(person.registerInformation.cprCitizen.isMemberOfTheChurch != null) {
-					                <dl class="dl-horizontal">
-					                   <dd>
-						                    @Messages("person.registerInformation.cprCitizen.isMemberOfTheChurch")
-						                    @glyphiconokban(person.registerInformation.cprCitizen.isMemberOfTheChurch)
-					                   </dd> 
-					                </dl>
-					            }
-					            @if(person.registerInformation.cprCitizen.isResearcherProtected != null) {
-					                <dl class="dl-horizontal">					                    
-					                    <dd>
-					                        @Messages("person.registerInformation.cprCitizen.isResearcherProtected")
-					                        @glyphiconokban(person.registerInformation.cprCitizen.isResearcherProtected)
-					                    </dd>
-					                </dl>
-					            }
-					            @if(person.registerInformation.cprCitizen.isNameAddressProtected != null) {
-					                <dl class="dl-horizontal">
-					                    <dd>
-                                            @Messages("person.registerInformation.cprCitizen.isNameAddressProtected")
-                                            @glyphiconokban(person.registerInformation.cprCitizen.isNameAddressProtected)
-					                    </dd>
-					                </dl>
-					            }
-					            @if(person.registerInformation.cprCitizen.isPhoneNumberProtected != null) {
-					                <dl class="dl-horizontal">
-					                    <dd>
-					                        @Messages("person.registerInformation.cprCitizen.isPhoneNumberProtected")
-					                        @glyphiconokban(person.registerInformation.cprCitizen.isPhoneNumberProtected)
-					                    </dd>
-					                </dl>
-					            }					
-					        }
-					    </div>
-					    <div class="panel-footer"><p class="text-right">@virkning(person.registerInformation.virkning, true)</p></div>  
+                        </div>
+                        <div class="panel-body">
+                        @if(person.registerInformation != null) {
+                            @if(person.registerInformation.cprCitizen.socialSecurityNumber) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.registerInformation.cprCitizen.socialSecurityNumber")</dt>
+                                    <dd>
+                                        @person.registerInformation.cprCitizen.socialSecurityNumber
+
+                                        @if(person.registerInformation.cprCitizen.isSocialSecurityNumberValid != null) {
+                                            @glyphiconokban(person.registerInformation.cprCitizen.isSocialSecurityNumberValid)
+                                        }
+                                    </dd>
+                                </dl>
+                            }
+                            @if(person.registerInformation.cprCitizen.personNationalityCode) {
+                                <dl class="dl-horizontal">
+                                    <dt>@Messages("person.registerInformation.cprCitizen.personNationalityCode")</dt>
+                                    <dd>@person.registerInformation.cprCitizen.personNationalityCode</dd>
+                                </dl>
+                            }
+                            @if(person.registerInformation.cprCitizen.isMemberOfTheChurch != null) {
+                                <dl class="dl-horizontal">
+                                    <dd>
+                                        @Messages("person.registerInformation.cprCitizen.isMemberOfTheChurch")
+                                        @glyphiconokban(person.registerInformation.cprCitizen.isMemberOfTheChurch)
+                                    </dd>
+                                </dl>
+                            }
+                            @if(person.registerInformation.cprCitizen.isResearcherProtected != null) {
+                                <dl class="dl-horizontal">
+                                    <dd>
+                                        @Messages("person.registerInformation.cprCitizen.isResearcherProtected")
+                                        @glyphiconokban(person.registerInformation.cprCitizen.isResearcherProtected)
+                                    </dd>
+                                </dl>
+                            }
+                            @if(person.registerInformation.cprCitizen.isNameAddressProtected != null) {
+                                <dl class="dl-horizontal">
+                                    <dd>
+                                        @Messages("person.registerInformation.cprCitizen.isNameAddressProtected")
+                                        @glyphiconokban(person.registerInformation.cprCitizen.isNameAddressProtected)
+                                    </dd>
+                                </dl>
+                            }
+                            @if(person.registerInformation.cprCitizen.isPhoneNumberProtected != null) {
+                                <dl class="dl-horizontal">
+                                    <dd>
+                                        @Messages("person.registerInformation.cprCitizen.isPhoneNumberProtected")
+                                        @glyphiconokban(person.registerInformation.cprCitizen.isPhoneNumberProtected)
+                                    </dd>
+                                </dl>
+                            }
+                        }
+                        </div>
+                        <div class="panel-footer"><p class="text-right">@virkning(person.registerInformation.virkning, true)</p></div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="tab-pane" id="addresse">
-        @if(person.address != null){
-            @if(person.address.addressType == EAddressType.Danish) {	
-				@danishaddress(person)            
+        @if(person.address != null) {
+            @if(person.address.addressType == EAddressType.Danish) {
+                @danishaddress(person)
             }
-			@if(person.address.addressType == EAddressType.Greenlandic) {	
-				@greenlandicaddress(person)
+            @if(person.address.addressType == EAddressType.Greenlandic) {
+                @greenlandicaddress(person)
             }
-			@if(person.address.addressType == EAddressType.World) {	
-				@worldaddress(person)            
+            @if(person.address.addressType == EAddressType.World) {
+                @worldaddress(person)
             }
         }
         </div>
-		
-		<div class="tab-pane" id="relationer">
+
+        <div class="tab-pane" id="relationer">
             <div class="row">
                 <div class="col-md-12">
                     <br/>
-                @if(person.relationsWithPerson != null) {
-                    @for(r <- person.relationsWithPerson.allRelations) {
+                    @if(person.relationsWithPerson != null) {
+                        @for(r <- person.relationsWithPerson.allRelations) {
                             @relation(r)
-                    }    
-                }
+                        }
+                    }
                 </div>
-                
+
             </div>
         </div>
     </div>

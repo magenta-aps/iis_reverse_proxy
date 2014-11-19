@@ -1,10 +1,44 @@
-package util;
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 2.0/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Contributor(s):
+ * Beemen Beshara
+ *
+ * The code is currently governed by OS2 - Offentligt digitaliserings-
+ * fællesskab / http://www.os2web.dk .
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+ package util;
 
 import dk.oio.rep.itst_dk.xml.schemas._2006._01._17.PersonNameStructureType;
 import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressCompleteType;
 import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 import oio.sagdok.person._1_0.*;
+import util.cprbroker.*;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -101,6 +135,58 @@ public class Converters {
         NavnStrukturType navnStrukturType = new NavnStrukturType();
         navnStrukturType.setPersonNameStructure(nameStructure);
         return navnStrukturType;
+    }
+
+
+    public String[] ToPostalLabel(IPerson person) {
+
+        String newLine = System.getProperty("line.separator");
+
+        // name
+        String nameString = StringUtils.format("%s %s %s",
+                person.firstname(),
+                person.middelname(),
+                person.lastname()
+        );
+        nameString = nameString.replaceAll("\\s{2,}", " ");
+
+
+        // Address
+        String addressString = "";
+        if (person.address() != null) {
+            IAddress address = person.address();
+
+
+            switch (person.address().addressType()) {
+                case Danish:
+                    IDanishAddress danishAddress = address.danishAddress();
+                    addressString = StringUtils.format("%s %s %s %s", danishAddress.streetName(), danishAddress.streetBuildingIdentifier(), danishAddress.floor(), danishAddress.suite()) + newLine
+                            + StringUtils.format("%s", danishAddress.districtSubdivision()) + newLine
+                            + StringUtils.format("%s %s", danishAddress.postCode(), danishAddress.postDistrikt());
+                    break;
+                case Greenlandic:
+                    IGreenlandicAddress greenlandicAddress = address.greenlandicAddress();
+                    addressString = StringUtils.format("%s %s %s %s", greenlandicAddress.streetName(), greenlandicAddress.streetBuilding(), greenlandicAddress.floor(), greenlandicAddress.suite()) + newLine
+                            + StringUtils.format("%s", greenlandicAddress.districtSubdivision()) + newLine
+                            + StringUtils.format("%s %s", greenlandicAddress.postCode(), greenlandicAddress.districtName());
+                    break;
+                case World:
+                    IWorldAddress worldAddress = address.worldAddress();
+                    addressString = String.format("%s", worldAddress.postalAddressFirstLineText()) + newLine
+                            + StringUtils.format("%s", worldAddress.postalAddressSecondLineText()) + newLine
+                            + StringUtils.format("%s", worldAddress.postalAddressThirdLineText()) + newLine
+                            + StringUtils.format("%s", worldAddress.postalAddressFourthLineText()) + newLine
+                            + StringUtils.format("%s", worldAddress.postalAddressFifthLineText()) + newLine;
+                    break;
+            }
+            addressString = addressString.replaceAll(" " + newLine, newLine);
+            addressString = addressString.replaceAll("[ ]{2,}", " ");
+            addressString = addressString.replaceAll("(" + newLine + "){2,}", newLine);
+        }
+
+        String ret = nameString + newLine + addressString;
+        ret = ret.replaceAll("(" + newLine + "){2,}", newLine);
+        return ret.split(newLine);
     }
 
     public SoegObjektType ToSoegObjektType(String name, String address) {
