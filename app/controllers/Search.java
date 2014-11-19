@@ -34,6 +34,7 @@
 
 package controllers;
 
+import play.cache.Cache;
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.mvc.Controller;
@@ -61,19 +62,41 @@ public class Search extends Controller {
         cprBroker = newCprBroker;
     }
 
+    String getSessionId() {
+        // Generate a unique id
+        String uuid = session("uuid");
+        if (uuid == null) {
+            uuid = java.util.UUID.randomUUID().toString();
+            session("uuid", uuid);
+        }
+        return uuid;
+    }
+
     @Security.Authenticated(Secured.class)
     public Result searchNameAndAddress(String name, String address, boolean online, int page) {
 
         List<IPerson> persons = null;
         try {
-            persons = cprBroker.searchList(
-                    name,
-                    address,
-                    online ? ESourceUsageOrder.ExternalOnly : ESourceUsageOrder.LocalOnly,
-                    -1, -1);
+            String key = String.format("session=%s;name=%s;address=%s", getSessionId(), name, address);
+            if (online) {
+                Object o = Cache.get(key);
+                if (o != null)
+                    persons = (List<IPerson>) o;
+            }
+            if (persons == null) {
+                persons = cprBroker.searchList(
+                        name,
+                        address,
+                        online ? ESourceUsageOrder.ExternalOnly : ESourceUsageOrder.LocalOnly,
+                        -1, -1);
+            }
+            if (online) {
+                Cache.set(key, persons);
+            }
         } catch (Exception ex) {
             play.Logger.error(ex.toString());
         }
+
 
         String path = request().path();
         path = path.substring(0, path.indexOf("page") + 5);
