@@ -64,11 +64,16 @@ public class Search extends Controller {
     @Security.Authenticated(Secured.class)
     public Result searchNameAndAddress(String name, String address, boolean online, int page) {
 
-        List<IPerson> persons = cprBroker.searchList(
-                name,
-                address,
-                online ? ESourceUsageOrder.ExternalOnly : ESourceUsageOrder.LocalOnly,
-                -1, -1);
+        List<IPerson> persons = null;
+        try {
+            persons = cprBroker.searchList(
+                    name,
+                    address,
+                    online ? ESourceUsageOrder.ExternalOnly : ESourceUsageOrder.LocalOnly,
+                    -1, -1);
+        } catch (Exception ex) {
+            play.Logger.error(ex.toString());
+        }
 
         String path = request().path();
         path = path.substring(0, path.indexOf("page") + 5);
@@ -108,18 +113,22 @@ public class Search extends Controller {
                 " requested to see uuid " +
                 uuid);
 
-        IPerson person = cprBroker
-                .read(uuid, true);
+        IPerson person = null;
+        try {
+            person = cprBroker.read(uuid, true);
 
-        // Logging the show request
-        play.Logger.info(session("username") +
-                "'s request to CPRBroker responded, " +
-                person.code() +
-                " - " +
-                person.message());
+            // Logging the show request
+            play.Logger.info(session("username") + "'s request to CPRBroker responded, " + person.code() + " - " + person.message());
+        } catch (Exception ex) {
+            play.Logger.error(ex.toString());
+        }
 
         SearchInput searchInput = new SearchInput();
         searchInput.fillFromSession(this);
+
+        if (person == null) {
+            return ok(show_error.render(503, searchInput));
+        }
         if (person.code() == 200) {
             return ok(views.html.person.render(person, searchInput));
         } else {
@@ -131,30 +140,32 @@ public class Search extends Controller {
     @Security.Authenticated(Secured.class)
     public Result getUuidFromCpr() {
 
-        Form<SearchInput> searchForm = Form.form(SearchInput.class)
-                .bindFromRequest();
+        Form<SearchInput> searchForm = Form.form(SearchInput.class).bindFromRequest();
+
+        // Search is now by CPR, clear the saved name (if any)
+        SearchInput searchInput = new SearchInput();
+        searchInput.fillFromSession(this);
+        searchInput.setQuery("");
+        searchInput.saveToSession(this);
 
         // Logging the search
-        play.Logger.info(session("username") + " searched for: " +
-                searchForm.get().query);
+        play.Logger.info(session("username") + " searched for: " + searchForm.get().query);
 
         // Check if there is errors (empty strings)
         if (searchForm.hasErrors()) {
             return badRequest("Form had errors");
         }
 
+
         // Input type == cprnumber
         IUuid uuid = cprBroker.getUuid(searchForm.get().query);
 
         // logging the returned resultcode
-        play.Logger.info(session("username") +
-                "'s search request to CPRBroker responded, " +
-                uuid.code() +
-                " - " +
-                uuid.message());
+        play.Logger.info(session("username") + "'s search request to CPRBroker responded, " + uuid.code() + " - " + uuid.message());
 
         if (uuid.code() == 200) {
-            return ok(uuid.value());
+            String uuidStr = uuid.value();
+            return ok(uuidStr);
         } else {
             // this should never happen as person master will just assign
             // a new uuid if it doesn't exist
@@ -166,6 +177,9 @@ public class Search extends Controller {
     public static class SearchInput {
 
         public SearchInput() {
+            this.setQuery("");
+            this.setAddressQuery("");
+            this.setOnline(false);
         }
 
         public SearchInput(String name, String address, Boolean online) {
