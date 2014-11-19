@@ -373,15 +373,20 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         // stop performance measurement on cprbroker
         stopWatchCprBroker.stop();
 
-        List<IPerson> persons = new ArrayList<IPerson>();
-        if (soegListOutputType.getLaesResultat() != null) {
-            for (int i = 0; i < soegListOutputType.getLaesResultat().size(); i++) {
-                LaesResultatType laesResultatType = soegListOutputType.getLaesResultat().get(i);
-                String uuid = soegListOutputType.getIdliste().getUUID().get(i);
-                persons.add(getPerson(uuid, laesResultatType, soegListOutputType.getStandardRetur(), true));
+        List<IPerson> persons = null;
+        if (soegListOutputType != null
+                && soegListOutputType.getStandardRetur() != null
+                && soegListOutputType.getStandardRetur().getStatusKode().equals(BigInteger.valueOf(200))) {
+
+            persons = new ArrayList<IPerson>();
+            if (soegListOutputType.getLaesResultat() != null) {
+                for (int i = 0; i < soegListOutputType.getLaesResultat().size(); i++) {
+                    LaesResultatType laesResultatType = soegListOutputType.getLaesResultat().get(i);
+                    String uuid = soegListOutputType.getIdliste().getUUID().get(i);
+                    persons.add(getPerson(uuid, laesResultatType, soegListOutputType.getStandardRetur(), true));
+                }
             }
         }
-
         // stop the performance log
         stopWatch.stop();
         return persons;

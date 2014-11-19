@@ -28,7 +28,8 @@ nav.quicksearch_local = Lokal
 
 nav.logout_button = Log ud
 
-results.list.amountOfResults = Der er {0} resultater på søgningen: 
+results.list.amountOfResults = Der er {0} resultater på søgningen:
+results.list.searchFailed = Fejl i søgningen
 
 #---RESULTATSIDE
 resultat.egenskaber = Egenskaber

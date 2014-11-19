@@ -170,7 +170,25 @@ public class Search extends Controller {
         SearchInput searchInput = new SearchInput(name, address, online);
         searchInput.saveToSession(this);
 
-        return ok(list.render(persons, persons.size(), page, path, searchInput));
+        if (persons != null) {
+            // calculate the searchIndex, which is the starting point of the search
+            int fromIndex = ((page - 1) * 10);
+            int toIndex = ((page) * 10);
+
+            // log what page the user requested
+            play.Logger.info(session("username") + " requested page " + page + ", showing " + fromIndex + "-" + toIndex);
+
+            if (persons.size() < fromIndex)
+                return badRequest();
+
+            if (persons.size() < toIndex)
+                toIndex = persons.size();
+
+            List<IPerson> subPersons = persons.subList(fromIndex, toIndex);
+
+            return ok(list.render(subPersons, persons.size(), page, path, searchInput));
+        } else
+            return ok(list.render(persons, 0, page, path, searchInput));
     }
 
     /**
