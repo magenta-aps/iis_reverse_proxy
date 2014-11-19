@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s2="urn:oio:dkal:1.0.0" xmlns:s6="http://rep.oio.dk/itst.dk/xml/schemas/2006/01/17/" xmlns:s18="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/" xmlns:s16="http://rep.oio.dk/bbr.dk/xml/schemas/2006/09/30/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://dk.itst" xmlns:s5="urn:oio:sagdok:part:1.0.0" xmlns:s19="http://rep.oio.dk/capevo.dk/xml/schemas/2007/08/01/" xmlns:s9="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/23/" xmlns:s14="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" xmlns:s11="http://rep.oio.dk/itst.dk/xml/schemas/2005/01/10/" xmlns:s8="http://rep.oio.dk/itst.dk/xml/schemas/2005/02/22/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s10="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/" xmlns:s13="http://rep.oio.dk/xkom.dk/xml/schemas/2006/01/06/" xmlns:s12="http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/" xmlns:s15="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/13/" xmlns:s3="urn:oio:sagdok:1.0.0" xmlns:s17="http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s20="http://rep.oio.dk/vejsektoren.dk/core/schemas/xml/2007/03/31/" xmlns:s21="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/03/" xmlns:s22="http://rep.oio.dk/cpr.dk/xml/schemas/2007/01/02/" xmlns:s4="urn:oio:sagdok:person:1.0.0" xmlns:s7="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" xmlns:s1="urn:oio:sagdok:2.0.0" targetNamespace="http://dk.itst" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:s16="http://rep.oio.dk/bbr.dk/xml/schemas/2006/09/30/" xmlns:s7="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" xmlns:s15="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/13/" xmlns:s2="urn:oio:dkal:1.0.0" xmlns:s19="http://rep.oio.dk/capevo.dk/xml/schemas/2007/08/01/" xmlns:s13="http://rep.oio.dk/xkom.dk/xml/schemas/2006/01/06/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s9="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/23/" xmlns:s5="http://rep.oio.dk/vejsektoren.dk/core/schemas/xml/2007/03/31/" xmlns:s8="http://rep.oio.dk/itst.dk/xml/schemas/2005/02/22/" xmlns:s10="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/" xmlns:s12="http://rep.oio.dk/itst.dk/xml/schemas/2005/01/10/" xmlns:s18="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s17="http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/" xmlns:s3="urn:oio:sagdok:1.0.0" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s21="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/03/" xmlns:tns="http://dk.itst" xmlns:s6="http://rep.oio.dk/itst.dk/xml/schemas/2006/01/17/" xmlns:s20="http://rep.oio.dk/cpr.dk/xml/schemas/2007/01/02/" xmlns:s1="urn:oio:sagdok:2.0.0" xmlns:s22="urn:oio:sagdok:part:1.0.0" xmlns:s11="http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s4="urn:oio:sagdok:person:1.0.0" xmlns:s14="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://dk.itst" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is the main service of CPR Broker. It allows access to CPR data through a standard PART interface.  Methods of this service are executed via local data provider whenever possible (except RefreshRead). Otherwise, an external data provider is used to implement the request.</wsdl:documentation>
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://dk.itst">
@@ -97,6 +97,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="SearchList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s4:SoegInput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s4:SoegListOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetUuid">
         <s:complexType>
           <s:sequence>
@@ -108,6 +122,25 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" ref="s4:GetUuidOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUuidArray">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cprNumberArray" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetUuidArrayResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUuidArrayResult" type="s4:GetUuidArrayOutputType" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -201,75 +234,12 @@
           <s:element minOccurs="0" maxOccurs="1" name="FejlbeskedTekst" type="s:string" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="SagDokObjektType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" ref="s2:UUID" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s3:BrugervendtNoegleTekst" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="LaesFiltreretOutputType">
-        <s:complexContent mixed="false">
-          <s:extension base="s1:SagDokObjektType" />
-        </s:complexContent>
-      </s:complexType>
-      <s:element name="KaldenavnTekst" type="s:string" />
-      <s:element name="NoteTekst" type="s:string" />
-      <s:element name="Virkning" type="s1:VirkningType" />
-      <s:complexType name="VirkningType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="FraTidspunkt" type="s1:TidspunktType" />
-          <s:element minOccurs="0" maxOccurs="1" name="TilTidspunkt" type="s1:TidspunktType" />
-          <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="UnikIdType">
-        <s:sequence>
-          <s:choice minOccurs="1" maxOccurs="1">
-            <s:element minOccurs="0" maxOccurs="1" name="URNIdentifikator" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" ref="s2:UUID" />
-          </s:choice>
-        </s:sequence>
-      </s:complexType>
-      <s:element name="LokalUdvidelse" type="s1:LokalUdvidelseType" />
-      <s:complexType name="LokalUdvidelseType">
-        <s:sequence>
-          <s:any minOccurs="0" maxOccurs="unbounded" />
-        </s:sequence>
-      </s:complexType>
-      <s:element name="TilstandVirkning" type="s1:TilstandVirkningType" />
-      <s:complexType name="TilstandVirkningType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="FraTidspunkt" type="s1:TidspunktType" />
-          <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="RelationType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Virkning" type="s1:VirkningType" />
-          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="PersonFlerRelationType">
-        <s:complexContent mixed="false">
-          <s:extension base="s1:FlerRelationType" />
-        </s:complexContent>
-      </s:complexType>
-      <s:complexType name="FlerRelationType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Virkning" type="s1:VirkningType" />
-          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
-        </s:sequence>
-      </s:complexType>
       <s:complexType name="RegistreringType">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="Tidspunkt" type="s1:TidspunktType" />
           <s:element minOccurs="1" maxOccurs="1" name="LivscyklusKode" type="s1:LivscyklusKodeType" />
           <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
           <s:element minOccurs="0" maxOccurs="unbounded" name="Virkning" type="s1:VirkningType" />
         </s:sequence>
       </s:complexType>
@@ -282,6 +252,69 @@
           <s:enumeration value="Rettet" />
         </s:restriction>
       </s:simpleType>
+      <s:complexType name="UnikIdType">
+        <s:sequence>
+          <s:choice minOccurs="1" maxOccurs="1">
+            <s:element minOccurs="0" maxOccurs="1" name="URNIdentifikator" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s2:UUID" />
+          </s:choice>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VirkningType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FraTidspunkt" type="s1:TidspunktType" />
+          <s:element minOccurs="0" maxOccurs="1" name="TilTidspunkt" type="s1:TidspunktType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="KaldenavnTekst" type="s:string" />
+      <s:element name="NoteTekst" type="s:string" />
+      <s:element name="Virkning" type="s1:VirkningType" />
+      <s:element name="LokalUdvidelse" type="s1:LokalUdvidelseType" />
+      <s:complexType name="LokalUdvidelseType">
+        <s:sequence>
+          <s:any minOccurs="0" maxOccurs="unbounded" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TilstandVirkning" type="s1:TilstandVirkningType" />
+      <s:complexType name="TilstandVirkningType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FraTidspunkt" type="s1:TidspunktType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RelationType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Virkning" type="s1:VirkningType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s1:UnikIdType" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PersonFlerRelationType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:FlerRelationType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="FlerRelationType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Virkning" type="s1:VirkningType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s1:UnikIdType" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SagDokObjektType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s2:UUID" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s3:BrugervendtNoegleTekst" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LaesFiltreretOutputType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:SagDokObjektType" />
+        </s:complexContent>
+      </s:complexType>
       <s:element name="ListInput" type="s1:ListInputType" />
       <s:complexType name="ListInputType">
         <s:sequence>
@@ -316,7 +349,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="Tidspunkt" type="s1:TidspunktType" />
           <s:element minOccurs="0" maxOccurs="1" name="LivscyklusKode" type="s1:LivscyklusKodeType" />
           <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="SoegVirkningType">
@@ -324,7 +357,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="FraTidspunkt" type="s1:TidspunktType" />
           <s:element minOccurs="0" maxOccurs="1" name="TilTidspunkt" type="s1:TidspunktType" />
           <s:element minOccurs="0" maxOccurs="1" name="AktoerRef" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
         </s:sequence>
       </s:complexType>
       <s:element name="SoegVirkning" type="s1:SoegVirkningType" />
@@ -332,7 +365,7 @@
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="SoegVirkning" type="s1:SoegVirkningType" />
           <s:element minOccurs="0" maxOccurs="1" name="ReferenceID" type="s1:UnikIdType" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s20:CommentText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s5:CommentText" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="SoegOutputType">
@@ -341,6 +374,7 @@
           <s:element minOccurs="0" maxOccurs="1" ref="s3:Idliste" />
         </s:sequence>
       </s:complexType>
+      <s:element name="StandardRetur" type="s1:StandardReturType" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="urn:oio:dkal:1.0.0">
       <s:element name="UUID" type="s:string" />
@@ -359,26 +393,36 @@
     <s:schema elementFormDefault="qualified" targetNamespace="urn:oio:sagdok:person:1.0.0">
       <s:import namespace="urn:oio:sagdok:2.0.0" />
       <s:import namespace="urn:oio:dkal:1.0.0" />
-      <s:import namespace="urn:oio:sagdok:part:1.0.0" />
       <s:import namespace="http://rep.oio.dk/itst.dk/xml/schemas/2006/01/17/" />
       <s:import namespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/02/22/" />
       <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/23/" />
       <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/" />
-      <s:import namespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/01/10/" />
       <s:import namespace="http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/" />
+      <s:import namespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/01/10/" />
       <s:import namespace="http://rep.oio.dk/xkom.dk/xml/schemas/2006/01/06/" />
       <s:import namespace="http://rep.oio.dk/bbr.dk/xml/schemas/2006/09/30/" />
       <s:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/" />
-      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/03/" />
       <s:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/2007/01/02/" />
-      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
       <s:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" />
+      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/03/" />
+      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
+      <s:import namespace="urn:oio:sagdok:part:1.0.0" />
+      <s:import namespace="urn:oio:sagdok:1.0.0" />
       <s:element name="LaesOutput" type="s4:LaesOutputType" />
       <s:complexType name="LaesOutputType">
         <s:complexContent mixed="false">
           <s:extension base="s1:BasicOutputType">
             <s:sequence>
               <s:element minOccurs="0" maxOccurs="1" name="LaesResultat" type="s4:LaesResultatType" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GetUuidOutputType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:BasicOutputType">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" ref="s2:UUID" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -392,27 +436,18 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="OpretOutputType">
+      <s:complexType name="RegistreringOutputType">
         <s:complexContent mixed="false">
           <s:extension base="s1:BasicOutputType">
             <s:sequence>
-              <s:element minOccurs="0" maxOccurs="1" name="Person" type="s4:PersonType" />
+              <s:element minOccurs="0" maxOccurs="1" name="Registrering" type="s4:RegistreringType" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="PersonType">
+      <s:complexType name="RegistreringType">
         <s:complexContent mixed="false">
-          <s:extension base="s5:PartType">
-            <s:sequence>
-              <s:element minOccurs="0" maxOccurs="unbounded" name="Registrering" type="s4:RegistreringType" />
-            </s:sequence>
-          </s:extension>
-        </s:complexContent>
-      </s:complexType>
-      <s:complexType name="FiltreretOejebliksbilledeType">
-        <s:complexContent mixed="false">
-          <s:extension base="s1:LaesFiltreretOutputType">
+          <s:extension base="s1:RegistreringType">
             <s:sequence>
               <s:element minOccurs="0" maxOccurs="1" name="AttributListe" type="s4:AttributListeType" />
               <s:element minOccurs="0" maxOccurs="1" name="TilstandListe" type="s4:TilstandListeType" />
@@ -455,9 +490,9 @@
           <s:extension base="s4:KontaktKanalBaseType">
             <s:sequence>
               <s:choice minOccurs="1" maxOccurs="1">
-                <s:element minOccurs="0" maxOccurs="1" name="Telefon" type="s4:TelefonType" />
-                <s:element minOccurs="0" maxOccurs="1" ref="s12:EmailAddressIdentifier" />
+                <s:element minOccurs="0" maxOccurs="1" ref="s11:EmailAddressIdentifier" />
                 <s:element minOccurs="0" maxOccurs="1" name="AndenKontaktKanal" type="s4:AndenKontaktKanalType" />
+                <s:element minOccurs="0" maxOccurs="1" name="Telefon" type="s4:TelefonType" />
               </s:choice>
             </s:sequence>
           </s:extension>
@@ -469,33 +504,32 @@
           <s:element minOccurs="0" maxOccurs="1" ref="s1:NoteTekst" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="TelefonType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" ref="s11:TelephoneNumberIdentifier" />
-          <s:element minOccurs="1" maxOccurs="1" name="KanBrugesTilSmsIndikator" type="s:boolean" />
-        </s:sequence>
-      </s:complexType>
       <s:complexType name="AndenKontaktKanalType">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" ref="s1:NoteTekst" />
           <s:element minOccurs="0" maxOccurs="1" name="KontaktKanalTekst" type="s:string" />
         </s:sequence>
       </s:complexType>
+      <s:complexType name="TelefonType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s12:TelephoneNumberIdentifier" />
+          <s:element minOccurs="1" maxOccurs="1" name="KanBrugesTilSmsIndikator" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
       <s:complexType name="AdresseType">
         <s:sequence>
           <s:choice minOccurs="1" maxOccurs="1">
-            <s:element minOccurs="0" maxOccurs="1" name="GroenlandAdresse" type="s4:GroenlandAdresseType" />
-            <s:element minOccurs="0" maxOccurs="1" name="DanskAdresse" type="s4:DanskAdresseType" />
             <s:element minOccurs="0" maxOccurs="1" name="VerdenAdresse" type="s4:VerdenAdresseType" />
+            <s:element minOccurs="0" maxOccurs="1" name="DanskAdresse" type="s4:DanskAdresseType" />
+            <s:element minOccurs="0" maxOccurs="1" name="GroenlandAdresse" type="s4:GroenlandAdresseType" />
           </s:choice>
         </s:sequence>
       </s:complexType>
-      <s:complexType name="GroenlandAdresseType">
+      <s:complexType name="VerdenAdresseType">
         <s:complexContent mixed="false">
           <s:extension base="s4:AdresseBaseType">
             <s:sequence>
-              <s:element minOccurs="0" maxOccurs="1" ref="s17:AddressCompleteGreenland" />
-              <s:element minOccurs="0" maxOccurs="1" name="SpecielVejkodeIndikator" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" ref="s17:ForeignAddressStructure" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -523,11 +557,12 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="VerdenAdresseType">
+      <s:complexType name="GroenlandAdresseType">
         <s:complexContent mixed="false">
           <s:extension base="s4:AdresseBaseType">
             <s:sequence>
-              <s:element minOccurs="0" maxOccurs="1" ref="s17:ForeignAddressStructure" />
+              <s:element minOccurs="0" maxOccurs="1" ref="s17:AddressCompleteGreenland" />
+              <s:element minOccurs="0" maxOccurs="1" name="SpecielVejkodeIndikator" type="s:boolean" />
             </s:sequence>
           </s:extension>
         </s:complexContent>
@@ -552,19 +587,15 @@
       <s:complexType name="RegisterOplysningBaseType">
         <s:sequence>
           <s:choice minOccurs="1" maxOccurs="1">
-            <s:element minOccurs="0" maxOccurs="1" name="UdenlandskBorger" type="s4:UdenlandskBorgerType" />
-            <s:element minOccurs="0" maxOccurs="1" name="CprBorger" type="s4:CprBorgerType" />
             <s:element minOccurs="0" maxOccurs="1" name="UkendtBorger" type="s4:UkendtBorgerType" />
+            <s:element minOccurs="0" maxOccurs="1" name="CprBorger" type="s4:CprBorgerType" />
+            <s:element minOccurs="0" maxOccurs="1" name="UdenlandskBorger" type="s4:UdenlandskBorgerType" />
           </s:choice>
         </s:sequence>
       </s:complexType>
-      <s:complexType name="UdenlandskBorgerType">
+      <s:complexType name="UkendtBorgerType">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="PersonIdentifikator" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="unbounded" ref="s21:PersonNationalityCode" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s22:PersonCivilRegistrationReplacementIdentifier" />
-          <s:element minOccurs="0" maxOccurs="unbounded" name="SprogKode" type="s7:CountryIdentificationCodeType" />
-          <s:element minOccurs="0" maxOccurs="1" name="FoedselslandKode" type="s7:CountryIdentificationCodeType" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s20:PersonCivilRegistrationReplacementIdentifier" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="CprBorgerType">
@@ -580,9 +611,13 @@
           <s:element minOccurs="1" maxOccurs="1" name="FolkekirkeMedlemIndikator" type="s:boolean" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="UkendtBorgerType">
+      <s:complexType name="UdenlandskBorgerType">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" ref="s22:PersonCivilRegistrationReplacementIdentifier" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonIdentifikator" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s21:PersonNationalityCode" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s20:PersonCivilRegistrationReplacementIdentifier" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SprogKode" type="s7:CountryIdentificationCodeType" />
+          <s:element minOccurs="0" maxOccurs="1" name="FoedselslandKode" type="s7:CountryIdentificationCodeType" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="TilstandListeType">
@@ -646,9 +681,27 @@
           <s:extension base="s1:RelationType" />
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="RegistreringType">
+      <s:complexType name="OpretOutputType">
         <s:complexContent mixed="false">
-          <s:extension base="s1:RegistreringType">
+          <s:extension base="s1:BasicOutputType">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Person" type="s4:PersonType" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="PersonType">
+        <s:complexContent mixed="false">
+          <s:extension base="s22:PartType">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="Registrering" type="s4:RegistreringType" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="FiltreretOejebliksbilledeType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:LaesFiltreretOutputType">
             <s:sequence>
               <s:element minOccurs="0" maxOccurs="1" name="AttributListe" type="s4:AttributListeType" />
               <s:element minOccurs="0" maxOccurs="1" name="TilstandListe" type="s4:TilstandListeType" />
@@ -657,29 +710,11 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="RegistreringOutputType">
-        <s:complexContent mixed="false">
-          <s:extension base="s1:BasicOutputType">
-            <s:sequence>
-              <s:element minOccurs="0" maxOccurs="1" name="Registrering" type="s4:RegistreringType" />
-            </s:sequence>
-          </s:extension>
-        </s:complexContent>
-      </s:complexType>
-      <s:complexType name="GetUuidOutputType">
-        <s:complexContent mixed="false">
-          <s:extension base="s1:BasicOutputType">
-            <s:sequence>
-              <s:element minOccurs="0" maxOccurs="1" ref="s2:UUID" />
-            </s:sequence>
-          </s:extension>
-        </s:complexContent>
-      </s:complexType>
       <s:complexType name="LaesResultatType">
         <s:sequence>
           <s:choice minOccurs="1" maxOccurs="1">
-            <s:element minOccurs="0" maxOccurs="1" name="FiltreretOejebliksbillede" type="s4:FiltreretOejebliksbilledeType" />
             <s:element minOccurs="0" maxOccurs="1" name="Registrering" type="s4:RegistreringType" />
+            <s:element minOccurs="0" maxOccurs="1" name="FiltreretOejebliksbillede" type="s4:FiltreretOejebliksbilledeType" />
           </s:choice>
         </s:sequence>
       </s:complexType>
@@ -760,6 +795,14 @@
         </s:sequence>
       </s:complexType>
       <s:element name="SoegOutput" type="s1:SoegOutputType" />
+      <s:element name="SoegListOutput" type="s4:SoegListOutputType" />
+      <s:complexType name="SoegListOutputType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:StandardRetur" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="LaesResultat" type="s4:LaesResultatType" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s3:Idliste" />
+        </s:sequence>
+      </s:complexType>
       <s:element name="GetUuidOutput" type="s4:GetUuidOutputType" />
       <s:element name="LaesOejebliksbilledeInput" type="s4:LaesOejebliksbilledeInputType" />
       <s:complexType name="LaesOejebliksbilledeInputType">
@@ -813,13 +856,8 @@
       <s:element name="ListOejebliksbilledeInput" type="s4:ListOejebliksbilledeInputType" />
       <s:element name="ListPeriodInput" type="s4:ListPeriodInputType" />
     </s:schema>
-    <s:schema elementFormDefault="qualified" targetNamespace="urn:oio:sagdok:part:1.0.0">
-      <s:import namespace="urn:oio:sagdok:2.0.0" />
-      <s:complexType name="PartType">
-        <s:complexContent mixed="false">
-          <s:extension base="s1:SagDokObjektType" />
-        </s:complexContent>
-      </s:complexType>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/vejsektoren.dk/core/schemas/xml/2007/03/31/">
+      <s:element name="CommentText" type="s:string" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/itst.dk/xml/schemas/2006/01/17/">
       <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
@@ -877,14 +915,11 @@
       <s:element name="PostCodeIdentifier" type="s:string" />
       <s:element name="DistrictName" type="s:string" />
     </s:schema>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/01/10/">
-      <s:element name="TelephoneNumberIdentifier" type="s:string" />
-    </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/">
       <s:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" />
       <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
       <s:element name="EmailAddressIdentifier" type="s:string" />
-      <s:element name="AddressAccess" type="s12:AddressAccessType" />
+      <s:element name="AddressAccess" type="s11:AddressAccessType" />
       <s:complexType name="AddressAccessType">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" ref="s14:MunicipalityCode" />
@@ -892,6 +927,9 @@
           <s:element minOccurs="0" maxOccurs="1" ref="s7:StreetBuildingIdentifier" />
         </s:sequence>
       </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/01/10/">
+      <s:element name="TelephoneNumberIdentifier" type="s:string" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/xkom.dk/xml/schemas/2006/01/06/">
       <s:import namespace="http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/" />
@@ -902,7 +940,7 @@
       <s:element name="AddressComplete" type="s13:AddressCompleteType" />
       <s:complexType name="AddressCompleteType">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" ref="s12:AddressAccess" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s11:AddressAccess" />
           <s:element minOccurs="0" maxOccurs="1" name="AddressPostal" type="s13:AddressPostalType" />
         </s:sequence>
       </s:complexType>
@@ -970,23 +1008,11 @@
       </s:simpleType>
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/cpr.dk/xml/schemas/2008/05/01/">
-      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/" />
-      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
-      <s:import namespace="http://rep.oio.dk/capevo.dk/xml/schemas/2007/08/01/" />
       <s:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" />
+      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
       <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/" />
-      <s:element name="ForeignAddressStructure" type="s17:ForeignAddressStructureType" />
-      <s:complexType name="ForeignAddressStructureType">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressFirstLineText" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressSecondLineText" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressThirdLineText" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressFourthLineText" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressFifthLineText" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s7:CountryIdentificationCode" />
-          <s:element minOccurs="0" maxOccurs="1" ref="s19:LocationDescriptionText" />
-        </s:sequence>
-      </s:complexType>
+      <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/" />
+      <s:import namespace="http://rep.oio.dk/capevo.dk/xml/schemas/2007/08/01/" />
       <s:element name="AddressCompleteGreenland" type="s17:AddressCompleteGreenlandType" />
       <s:complexType name="AddressCompleteGreenlandType">
         <s:sequence>
@@ -1005,6 +1031,18 @@
           <s:element minOccurs="0" maxOccurs="1" ref="s7:CountryIdentificationCode" />
         </s:sequence>
       </s:complexType>
+      <s:element name="ForeignAddressStructure" type="s17:ForeignAddressStructureType" />
+      <s:complexType name="ForeignAddressStructureType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressFirstLineText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressSecondLineText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressThirdLineText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressFourthLineText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s18:PostalAddressFifthLineText" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s7:CountryIdentificationCode" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s19:LocationDescriptionText" />
+        </s:sequence>
+      </s:complexType>
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/">
       <s:element name="PostalAddressFirstLineText" type="s:string" />
@@ -1016,15 +1054,20 @@
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/capevo.dk/xml/schemas/2007/08/01/">
       <s:element name="LocationDescriptionText" type="s:string" />
     </s:schema>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/vejsektoren.dk/core/schemas/xml/2007/03/31/">
-      <s:element name="CommentText" type="s:string" />
+    <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/cpr.dk/xml/schemas/2007/01/02/">
+      <s:element name="PersonCivilRegistrationReplacementIdentifier" type="s:string" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2006/01/03/">
       <s:import namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
       <s:element name="PersonNationalityCode" type="s7:CountryIdentificationCodeType" />
     </s:schema>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://rep.oio.dk/cpr.dk/xml/schemas/2007/01/02/">
-      <s:element name="PersonCivilRegistrationReplacementIdentifier" type="s:string" />
+    <s:schema elementFormDefault="qualified" targetNamespace="urn:oio:sagdok:part:1.0.0">
+      <s:import namespace="urn:oio:sagdok:2.0.0" />
+      <s:complexType name="PartType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:SagDokObjektType" />
+        </s:complexContent>
+      </s:complexType>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="ReadSoap12In">
@@ -1081,6 +1124,18 @@
   <wsdl:message name="SearchQualityHeader">
     <wsdl:part name="QualityHeader" element="tns:QualityHeader" />
   </wsdl:message>
+  <wsdl:message name="SearchListSoap12In">
+    <wsdl:part name="parameters" element="tns:SearchList" />
+  </wsdl:message>
+  <wsdl:message name="SearchListSoap12Out">
+    <wsdl:part name="parameters" element="tns:SearchListResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchListApplicationHeader">
+    <wsdl:part name="ApplicationHeader" element="tns:ApplicationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchListSourceUsageOrderHeader">
+    <wsdl:part name="SourceUsageOrderHeader" element="tns:SourceUsageOrderHeader" />
+  </wsdl:message>
   <wsdl:message name="GetUuidSoap12In">
     <wsdl:part name="parameters" element="tns:GetUuid" />
   </wsdl:message>
@@ -1088,6 +1143,15 @@
     <wsdl:part name="parameters" element="tns:GetUuidResponse" />
   </wsdl:message>
   <wsdl:message name="GetUuidApplicationHeader">
+    <wsdl:part name="ApplicationHeader" element="tns:ApplicationHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetUuidArraySoap12In">
+    <wsdl:part name="parameters" element="tns:GetUuidArray" />
+  </wsdl:message>
+  <wsdl:message name="GetUuidArraySoap12Out">
+    <wsdl:part name="parameters" element="tns:GetUuidArrayResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUuidArrayApplicationHeader">
     <wsdl:part name="ApplicationHeader" element="tns:ApplicationHeader" />
   </wsdl:message>
   <wsdl:message name="ReadSnapshotSoap12In">
@@ -1213,6 +1277,24 @@
       <wsdl:input message="tns:SearchSoap12In" />
       <wsdl:output message="tns:SearchSoap12Out" />
     </wsdl:operation>
+    <wsdl:operation name="SearchList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches the local database for matching persons. The current implementation can only search by UUID, CPR number, first name, middle  name or last name. Search is performed for whole words only.
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Signature:&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt;SoegOutputType Search(SoegInputType1 searchCriteria)
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Parameter Description:&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt;searchCriteria: The search criteria. 
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Return value copmponents:&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt;StandardRetur: Detailed status code and text.
+&lt;br&gt;Idliste: List of UUID's of the found persons. You can then call Read or List to get detailed data.
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Review:&lt;/u&gt;&lt;/b&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;td width='30%'&gt;2011-03-06, CPR Broker &lt;/td&gt;&lt;td width='10%'&gt;&lt;/td&gt;&lt;td width='60%'&gt;Part release.&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br&gt;==============================
+</wsdl:documentation>
+      <wsdl:input message="tns:SearchListSoap12In" />
+      <wsdl:output message="tns:SearchListSoap12Out" />
+    </wsdl:operation>
     <wsdl:operation name="GetUuid">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets the person's UUID from his CPR number. If no mapping is found locally, it calls the UUID assignment authority (PersonMaster service).
 &lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Signature:&lt;/u&gt;&lt;/b&gt;
@@ -1230,6 +1312,24 @@
 </wsdl:documentation>
       <wsdl:input message="tns:GetUuidSoap12In" />
       <wsdl:output message="tns:GetUuidSoap12Out" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUuidArray">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets persons' UUIDs from their CPR numbers. If no mapping is found locally, it calls the UUID assignment authority (PersonMaster service).
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Signature:&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt;GetUuidOutputType GetUuid(string[] cprNumberArray)
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Parameter Description:&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt;cprNumberArray: CPR numbers of persons needed.
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Return value copmponents:&lt;/u&gt;&lt;/b&gt;
+&lt;br&gt;StandardRetur: Detailed status code and text.
+&lt;br&gt;UUID: The persons' UUIDs.
+&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;u&gt;Review:&lt;/u&gt;&lt;/b&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;td width='30%'&gt;2012-11-25, CPR Broker &lt;/td&gt;&lt;td width='10%'&gt;&lt;/td&gt;&lt;td width='60%'&gt;Part release.&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br&gt;==============================
+</wsdl:documentation>
+      <wsdl:input message="tns:GetUuidArraySoap12In" />
+      <wsdl:output message="tns:GetUuidArraySoap12Out" />
     </wsdl:operation>
     <wsdl:operation name="ReadSnapshot">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets a single snapshot of one person's CPR data</wsdl:documentation>
@@ -1300,11 +1400,32 @@
         <soap12:header message="tns:SearchQualityHeader" part="QualityHeader" use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SearchList">
+      <soap12:operation soapAction="http://dk.itst/SearchList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchListApplicationHeader" part="ApplicationHeader" use="literal" />
+        <soap12:header message="tns:SearchListSourceUsageOrderHeader" part="SourceUsageOrderHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetUuid">
       <soap12:operation soapAction="http://dk.itst/GetUuid" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
         <soap12:header message="tns:GetUuidApplicationHeader" part="ApplicationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUuidArray">
+      <soap12:operation soapAction="http://dk.itst/GetUuidArray" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetUuidArrayApplicationHeader" part="ApplicationHeader" use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
@@ -1358,7 +1479,7 @@
   <wsdl:service name="Part">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is the main service of CPR Broker. It allows access to CPR data through a standard PART interface.  Methods of this service are executed via local data provider whenever possible (except RefreshRead). Otherwise, an external data provider is used to implement the request.</wsdl:documentation>
     <wsdl:port name="PartSoap12" binding="tns:PartSoap12">
-      <soap12:address location="http://cprbroker.magenta-aps.dk/Services/Part.asmx" />
+      <soap12:address location="http://localhost:1551/Services/Part.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
