@@ -19,7 +19,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "Part", targetNamespace = "http://dk.itst", wsdlLocation = "http://localhost:1551/Services/Part.asmx?wsdl")
+@WebServiceClient(name = "Part", targetNamespace = "http://dk.itst")
 public class Part
     extends Service
 {
@@ -29,15 +29,8 @@ public class Part
     private final static QName PART_QNAME = new QName("http://dk.itst", "Part");
 
     static {
-        URL url = null;
-        WebServiceException e = null;
-        try {
-            url = new URL("http://localhost:1551/Services/Part.asmx?wsdl");
-        } catch (MalformedURLException ex) {
-            e = new WebServiceException(ex);
-        }
-        PART_WSDL_LOCATION = url;
-        PART_EXCEPTION = e;
+        PART_WSDL_LOCATION = null;
+        PART_EXCEPTION = null;
     }
 
     public Part() {
