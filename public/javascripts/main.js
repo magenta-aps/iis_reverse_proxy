@@ -38,6 +38,13 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11", "jquery
             }
         });
 
+        $('#query2').keypress(function (event) {
+            if (event.which == 13) {
+                event.preventDefault();
+                callProcessQuery($);
+            }
+        });
+
         // validate incomming input
         $('#query').keyup(function (event) {
             var queryfield = $('#query'); // the query input field
