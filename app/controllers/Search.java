@@ -40,6 +40,7 @@ import play.data.validation.Constraints.Required;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import util.StringUtils;
 import util.auth.Secured;
 import util.cprbroker.ESourceUsageOrder;
 import util.cprbroker.ICprBrokerAccessor;
@@ -243,10 +244,10 @@ public class Search extends Controller {
         }
 
         public void fillFromSession(Controller controller) {
-            setQuery(controller.session("query"));
-            setAddressQuery(controller.session("addressQuery"));
-            String onlineS = controller.session("online");
+            setQuery(StringUtils.format("%s",controller.session("query")));
+            setAddressQuery(StringUtils.format("%s", controller.session("addressQuery")));
 
+            String onlineS = controller.session("online");
             if ("true".equals(onlineS))
                 setOnline(true);
         }
