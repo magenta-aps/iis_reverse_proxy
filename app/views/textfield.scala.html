@@ -13,7 +13,6 @@
 *
 * Contributor(s):
 * Beemen Beshara
-* Søren Kirkegård
 *
 * The code is currently governed by OS2 - Offentligt digitaliserings-
 * fællesskab / http://www.os2web.dk .
@@ -31,9 +30,10 @@
 * the terms of any one of the MPL, the GPL or the LGPL.
 *
 * ***** END LICENSE BLOCK ***** *@
-@(isOkay: Boolean)
-@if(isOkay) {
-    @Messages("person.true")
-} else {
-    @Messages("person.false")
+@(titleKey: String, value: Object)
+@if(value != null && value.toString().length > 0) {
+    <dl class="dl-horizontal">
+        <dt>@Messages(titleKey)</dt>
+        <dd>@value </dd>
+    </dl>
 }

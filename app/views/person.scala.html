@@ -81,61 +81,20 @@
                         </div>
 
                         <div class="panel-body">
-                            @if(person.firstname) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.firstname")</dt>
-                                    <dd>@person.firstname</dd>
-                                </dl>
-                            }
-                            @if(person.middelname) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.middelname")</dt>
-                                    <dd>@person.middelname</dd>
-                                </dl>
-                            }
-                            @if(person.lastname) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.lastname")</dt>
-                                    <dd>@person.lastname</dd>
-                                </dl>
-                            }
-                            @if(person.callname) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.callname")</dt>
-                                    <dd>@person.callname</dd>
-                                </dl>
-                            }
-
-                            @if(person.nameForAddressing) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.nameForAddressing")</dt>
-                                    <dd>@person.nameForAddressing</dd>
-                                </dl>
-                            }
-                            @if(person.gender != null) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.gender")</dt>
-                                    <dd>@person.gender</dd>
-                                </dl>
-                            }
+                            @textfield("person.firstname", person.firstname)
+                            @textfield("person.middelname", person.middelname)
+                            @textfield("person.lastname", person.lastname)
+                            @textfield("person.callname", person.callname)
+                            @textfield("person.nameForAddressing", person.nameForAddressing)
+                            @textfield("person.gender", person.gender)
                             @if(person.birthdate != null) {
                                 <dl class="dl-horizontal">
                                     <dt>@Messages("person.birthdate")</dt>
                                     <dd>@person.birthdate.toString("dd. MMMM yyyy", new Locale("da"))</dd>
                                 </dl>
                             }
-                            @if(person.birthplace) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.birthplace")</dt>
-                                    <dd>@person.nameForAddressing</dd>
-                                </dl>
-                            }
-                            @if(person.birthRegisteringAuthority) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.birthRegisteringAuthority")</dt>
-                                    <dd>@person.birthRegisteringAuthority</dd>
-                                </dl>
-                            }
+                            @textfield("person.birthplace", person.nameForAddressing)
+                            @textfield("person.birthRegisteringAuthority", person.birthRegisteringAuthority)
                         </div>
                         <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
                     </div>
@@ -176,56 +135,13 @@
                         </div>
                         <div class="panel-body">
                         @if(person.registerInformation != null) {
-                            @if(person.registerInformation.cprCitizen.socialSecurityNumber) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.registerInformation.cprCitizen.socialSecurityNumber")</dt>
-                                    <dd>
-                                        @person.registerInformation.cprCitizen.socialSecurityNumber
+                            @booleanfield(true, "person.registerInformation.cprCitizen.socialSecurityNumberActive", person.registerInformation.cprCitizen.isSocialSecurityNumberValid)
+                            @textfield("person.registerInformation.cprCitizen.personNationalityCode", person.registerInformation.cprCitizen.personNationalityCode)
 
-                                        @if(person.registerInformation.cprCitizen.isSocialSecurityNumberValid != null) {
-                                            @glyphiconokban(person.registerInformation.cprCitizen.isSocialSecurityNumberValid)
-                                        }
-                                    </dd>
-                                </dl>
-                            }
-                            @if(person.registerInformation.cprCitizen.personNationalityCode) {
-                                <dl class="dl-horizontal">
-                                    <dt>@Messages("person.registerInformation.cprCitizen.personNationalityCode")</dt>
-                                    <dd>@person.registerInformation.cprCitizen.personNationalityCode</dd>
-                                </dl>
-                            }
-                            @if(person.registerInformation.cprCitizen.isMemberOfTheChurch != null) {
-                                <dl class="dl-horizontal">
-                                    <dd>
-                                        @Messages("person.registerInformation.cprCitizen.isMemberOfTheChurch")
-                                        @glyphiconokban(person.registerInformation.cprCitizen.isMemberOfTheChurch)
-                                    </dd>
-                                </dl>
-                            }
-                            @if(person.registerInformation.cprCitizen.isResearcherProtected != null) {
-                                <dl class="dl-horizontal">
-                                    <dd>
-                                        @Messages("person.registerInformation.cprCitizen.isResearcherProtected")
-                                        @glyphiconokban(person.registerInformation.cprCitizen.isResearcherProtected)
-                                    </dd>
-                                </dl>
-                            }
-                            @if(person.registerInformation.cprCitizen.isNameAddressProtected != null) {
-                                <dl class="dl-horizontal">
-                                    <dd>
-                                        @Messages("person.registerInformation.cprCitizen.isNameAddressProtected")
-                                        @glyphiconokban(person.registerInformation.cprCitizen.isNameAddressProtected)
-                                    </dd>
-                                </dl>
-                            }
-                            @if(person.registerInformation.cprCitizen.isPhoneNumberProtected != null) {
-                                <dl class="dl-horizontal">
-                                    <dd>
-                                        @Messages("person.registerInformation.cprCitizen.isPhoneNumberProtected")
-                                        @glyphiconokban(person.registerInformation.cprCitizen.isPhoneNumberProtected)
-                                    </dd>
-                                </dl>
-                            }
+                            @booleanfield(true, "person.registerInformation.cprCitizen.isMemberOfTheChurch", person.registerInformation.cprCitizen.isMemberOfTheChurch)
+                            @booleanfield(true, "person.registerInformation.cprCitizen.isResearcherProtected", person.registerInformation.cprCitizen.isResearcherProtected)
+                            @booleanfield(true, "person.registerInformation.cprCitizen.isNameAddressProtected", person.registerInformation.cprCitizen.isNameAddressProtected)
+                            @booleanfield(true, "person.registerInformation.cprCitizen.isPhoneNumberProtected", person.registerInformation.cprCitizen.isPhoneNumberProtected)
                         }
                         </div>
                         <div class="panel-footer"><p class="text-right">@virkning(person.registerInformation.virkning, true)</p></div>
