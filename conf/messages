@@ -128,5 +128,5 @@ person.otherAddress.worldAddress.postalAddressSecondLineText =
 person.otherAddress.worldAddress.postalAddressThirdLineText =
 person.otherAddress.worldAddress.postalAddressFourthLineText =
 person.otherAddress.worldAddress.postalAddressFifthLineText =
-person.otherAddress.worldAddress.isUkendtAdresseIndikator =
+person.otherAddress.worldAddress.isUkendtAdresseIndikator = Ukendt adresse
 person.otherAddress.worldAddress.note = Note

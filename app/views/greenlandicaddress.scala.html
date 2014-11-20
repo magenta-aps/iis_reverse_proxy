@@ -1,183 +1,73 @@
 @(person: util.cprbroker.IPerson)
 
-		            <div class="row">
-		                <div class="col-md-6">
-		                    <br/>
-		                    <div class="panel panel-default">
-		                    
-		                        <div class="panel-heading">
-		                            <h3 class="panel-title">@Messages("resultat.postaddresse")</h3>
-		                        </div>
-		                    
-		                        <div class="panel-body">
-		                            @if(person.address.greenlandicAddress.streetName) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.streetName")</dt>
-		                                    <dd>@person.address.greenlandicAddress.streetName</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.streetNameForAddressing) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.streetNameForAddressing")</dt>
-		                                    <dd>@person.address.greenlandicAddress.streetNameForAddressing</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.streetBuilding) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.streetBuilding")</dt>
-		                                    <dd>@person.address.greenlandicAddress.streetBuilding</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.floor) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.floor")</dt>
-		                                    <dd>@person.address.greenlandicAddress.floor</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.suite) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.suite")</dt>
-		                                    <dd>@person.address.greenlandicAddress.suite</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.districtSubdivision) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.districtSubdivision")</dt>
-		                                    <dd>@person.address.greenlandicAddress.districtSubdivision</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.postCode) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.postCode")</dt>
-		                                    <dd>@person.address.greenlandicAddress.postCode</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.districtName) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.districtName")</dt>
-		                                    <dd>@person.address.greenlandicAddress.districtName</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.greenlandicAddress.countryIdentificationCode) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.countryIdentificationCode")</dt>
-		                                    <dd>@person.address.greenlandicAddress.countryIdentificationCode</dd>
-		                                </dl>
-		                            }
-		                            
-		                            @if(person.address.greenlandicAddress.municipalityCode) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.municipalityCode")</dt>
-		                                    <dd>@person.address.greenlandicAddress.municipalityCode</dd>
-		                                </dl>
-		                            }                                                                                  
-		                            @if(person.address.greenlandicAddress.streetCode) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.streetCode")</dt>
-		                                    <dd>@person.address.greenlandicAddress.streetCode</dd>
-		                                </dl>
-		                            }                                                                                  
-		
-		                            @if(person.address.greenlandicAddress.isSpecielVejkode) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.isSpecielVejkode")</dt>
-		                                    <dd>@person.address.greenlandicAddress.isSpecielVejkode</dd>
-		                                </dl>
-		                            }                           
-		                            @if(person.address.greenlandicAddress.isUkendtAdresse) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.isUkendtAdresse")</dt>
-		                                    <dd>@person.address.greenlandicAddress.isUkendtAdresse</dd>
-		                                </dl>
-		                            }                                                                                  
-		                                                       
-		                            @if(person.address.greenlandicAddress.note) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.greenlandicAddress.note")</dt>
-		                                    <dd>@person.address.greenlandicAddress.note</dd>
-		                                </dl>
-		                            }                           		                            
+<div class="row">
+    <div class="col-md-6">
+        <br/>
+        <div class="panel panel-default">
 
-								</div>
-		                        <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
-		                    </div>
-		                </div>
-		
-		                @* Have to do some silly check here, because a worldAddress ALWAYS has two fields..*@
-		                @if(person.otherAddress != null &&
-		                     person.otherAddress.worldAddress != null &&
-		                     (person.otherAddress.worldAddress.locationDescriptionText ||
-		                         person.otherAddress.worldAddress.postalAddressFirstLineText ||
-		                         person.otherAddress.worldAddress.postalAddressSecondLineText ||
-		                         person.otherAddress.worldAddress.postalAddressThirdLineText ||
-		                         person.otherAddress.worldAddress.postalAddressFourthLineText ||
-		                         person.otherAddress.worldAddress.postalAddressFifthLineText)
-		                         
-		                 ) {
-		                    
-		                    @if(person.otherAddress.addressType == util.cprbroker.EAddressType.World) {
-			                <div class="col-md-6">
-			                <br/>
-                            <div class="panel panel-default">
-                            
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">@Messages("resultat.andenaddresse")</h3>
-                                </div>
-                            
-                                <div class="panel-body">
-	                            
-				                    @if(person.otherAddress.worldAddress.locationDescriptionText) {
-		                                        <dl class="dl-horizontal">
-		                                            <dt>@Messages("person.otherAddress.worldAddress.locationDescriptionText")</dt>
-		                                            <dd>@person.otherAddress.worldAddress.locationDescriptionText</dd>
-		                                        </dl>
-		                            }
-	                                @if(person.otherAddress.worldAddress.postalAddressFirstLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFirstLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressFirstLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressSecondLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressSecondLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressSecondLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressThirdLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressThirdLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressThirdLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressFourthLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFourthLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressFourthLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressFifthLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFifthLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressFifthLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.isUkendtAdresseIndikator) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.isUkendtAdresseIndikator")</dt>
-	                                                <dd><span class="glyphicon glyphicon-ok-circle"></span></dd>
-	                                            </dl>
-	                                }
-                                    @if(person.otherAddress.worldAddress.note) {
-                                                <dl class="dl-horizontal">
-                                                    <dt>@Messages("person.otherAddress.worldAddress.note")</dt>
-                                                    <dd>@person.otherAddress.worldAddress.note</dd>
-                                                </dl>
-                                    }
-	                                
-                            </div>
-		                  </div>
-		                  </div>
-		                  }
-		                }      
-		        </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">@Messages("resultat.postaddresse")</h3>
+            </div>
+
+            <div class="panel-body">
+                @textfield("person.address.greenlandicAddress.streetName", person.address.greenlandicAddress.streetName)
+                @textfield("person.address.greenlandicAddress.streetNameForAddressing", person.address.greenlandicAddress.streetNameForAddressing)
+                @textfield("person.address.greenlandicAddress.streetBuilding", person.address.greenlandicAddress.streetBuilding)
+                @textfield("person.address.greenlandicAddress.floor", person.address.greenlandicAddress.floor)
+                @textfield("person.address.greenlandicAddress.suite", person.address.greenlandicAddress.suite)
+                @textfield("person.address.greenlandicAddress.districtSubdivision", person.address.greenlandicAddress.districtSubdivision)
+                @textfield("person.address.greenlandicAddress.postCode", person.address.greenlandicAddress.postCode)
+                @textfield("person.address.greenlandicAddress.districtName", person.address.greenlandicAddress.districtName)
+                @textfield("person.address.greenlandicAddress.countryIdentificationCode", person.address.greenlandicAddress.countryIdentificationCode)
+
+                @textfield("person.address.greenlandicAddress.municipalityCode", person.address.greenlandicAddress.municipalityCode)
+                @textfield("person.address.greenlandicAddress.streetCode", person.address.greenlandicAddress.streetCode)
+
+                @booleanfield(true, "person.address.greenlandicAddress.isSpecielVejkode", person.address.greenlandicAddress.isSpecielVejkode)
+                @booleanfield(true, "person.address.greenlandicAddress.isUkendtAdresse", person.address.greenlandicAddress.isUkendtAdresse)
+
+                @textfield("person.address.greenlandicAddress.note", person.address.greenlandicAddress.note)
+
+            </div>
+            <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
+        </div>
+    </div>
+
+    @* Have to do some silly check here, because a worldAddress ALWAYS has two fields..*@
+    @if(person.otherAddress != null &&
+            person.otherAddress.worldAddress != null &&
+            (person.otherAddress.worldAddress.locationDescriptionText ||
+                    person.otherAddress.worldAddress.postalAddressFirstLineText ||
+                    person.otherAddress.worldAddress.postalAddressSecondLineText ||
+                    person.otherAddress.worldAddress.postalAddressThirdLineText ||
+                    person.otherAddress.worldAddress.postalAddressFourthLineText ||
+                    person.otherAddress.worldAddress.postalAddressFifthLineText)
+
+    ) {
+
+        @if(person.otherAddress.addressType == util.cprbroker.EAddressType.World) {
+            <div class="col-md-6">
+                <br/>
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@Messages("resultat.andenaddresse")</h3>
+                    </div>
+
+                    <div class="panel-body">
+
+                        @textfield("person.otherAddress.worldAddress.locationDescriptionText", person.otherAddress.worldAddress.locationDescriptionText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressFirstLineText", person.otherAddress.worldAddress.postalAddressFirstLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressSecondLineText", person.otherAddress.worldAddress.postalAddressSecondLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressThirdLineText", person.otherAddress.worldAddress.postalAddressThirdLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressFourthLineText", person.otherAddress.worldAddress.postalAddressFourthLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressFifthLineText", person.otherAddress.worldAddress.postalAddressFifthLineText)
+                        @booleanfield(true, "person.otherAddress.worldAddress.isUkendtAdresseIndikator", person.otherAddress.worldAddress.isUkendtAdresseIndikator)
+                        @textfield("person.otherAddress.worldAddress.note", person.otherAddress.worldAddress.note)
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

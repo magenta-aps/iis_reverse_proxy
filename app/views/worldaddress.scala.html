@@ -1,146 +1,64 @@
 @(person: util.cprbroker.IPerson)
 
-		            <div class="row">
-		                <div class="col-md-6">
-		                    <br/>
-		                    <div class="panel panel-default">
-		                    
-		                        <div class="panel-heading">
-		                            <h3 class="panel-title">@Messages("resultat.postaddresse")</h3>
-		                        </div>
-		                    
-		                        <div class="panel-body">
-		                            @if(person.address.worldAddress.postalAddressFirstLineText) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.postalAddressFirstLineText")</dt>
-		                                    <dd>@person.address.worldAddress.postalAddressFirstLineText</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.worldAddress.postalAddressSecondLineText) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.postalAddressSecondLineText")</dt>
-		                                    <dd>@person.address.worldAddress.postalAddressSecondLineText</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.worldAddress.postalAddressThirdLineText) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.postalAddressThirdLineText")</dt>
-		                                    <dd>@person.address.worldAddress.postalAddressThirdLineText</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.worldAddress.postalAddressFourthLineText) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.postalAddressFourthLineText")</dt>
-		                                    <dd>@person.address.worldAddress.postalAddressFourthLineText</dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.worldAddress.postalAddressFifthLineText) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.postalAddressFifthLineText")</dt>
-		                                    <dd>@person.address.worldAddress.postalAddressFifthLineText</dd>
-		                                </dl>
-		                            }
-									@if(person.address.worldAddress.isUkendtAdresseIndikator) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.postalAddressFifthLineText")</dt>
-		                                    <dd><span class="glyphicon glyphicon-ok-circle"></span></dd>
-		                                </dl>
-		                            }
-		                            @if(person.address.worldAddress.locationDescriptionText) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.locationDescriptionText")</dt>
-		                                    <dd>@person.address.worldAddress.locationDescriptionText</dd>
-		                                </dl>
-		                            }
-		                            
-		                            @if(person.address.worldAddress.note) {
-		                                <dl class="dl-horizontal">
-		                                    <dt>@Messages("person.address.worldAddress.note")</dt>
-		                                    <dd>@person.address.worldAddress.note</dd>
-		                                </dl>
-		                            }
-		                            
+<div class="row">
+    <div class="col-md-6">
+        <br/>
+        <div class="panel panel-default">
 
-								</div>
-		                        <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
-		                    </div>
-		                </div>
-		
-		                @* Have to do some silly check here, because a worldAddress ALWAYS has two fields..*@
-		                @if(person.otherAddress != null &&
-		                     person.otherAddress.worldAddress != null &&
-		                     (person.otherAddress.worldAddress.locationDescriptionText ||
-		                         person.otherAddress.worldAddress.postalAddressFirstLineText ||
-		                         person.otherAddress.worldAddress.postalAddressSecondLineText ||
-		                         person.otherAddress.worldAddress.postalAddressThirdLineText ||
-		                         person.otherAddress.worldAddress.postalAddressFourthLineText ||
-		                         person.otherAddress.worldAddress.postalAddressFifthLineText)
-		                         
-		                 ) {
-		                    
-		                    @if(person.otherAddress.addressType == util.cprbroker.EAddressType.World) {
-			                <div class="col-md-6">
-			                <br/>
-                            <div class="panel panel-default">
-                            
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">@Messages("resultat.andenaddresse")</h3>
-                                </div>
-                            
-                                <div class="panel-body">
-	                            
-				                    @if(person.otherAddress.worldAddress.locationDescriptionText) {
-		                                        <dl class="dl-horizontal">
-		                                            <dt>@Messages("person.otherAddress.worldAddress.locationDescriptionText")</dt>
-		                                            <dd>@person.otherAddress.worldAddress.locationDescriptionText</dd>
-		                                        </dl>
-		                            }
-	                                @if(person.otherAddress.worldAddress.postalAddressFirstLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFirstLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressFirstLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressSecondLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressSecondLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressSecondLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressThirdLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressThirdLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressThirdLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressFourthLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFourthLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressFourthLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.postalAddressFifthLineText) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.postalAddressFifthLineText")</dt>
-	                                                <dd>@person.otherAddress.worldAddress.postalAddressFifthLineText</dd>
-	                                            </dl>
-	                                }
-	                                @if(person.otherAddress.worldAddress.isUkendtAdresseIndikator) {
-	                                            <dl class="dl-horizontal">
-	                                                <dt>@Messages("person.otherAddress.worldAddress.isUkendtAdresseIndikator")</dt>
-	                                                <dd><span class="glyphicon glyphicon-ok-circle"></span></dd>
-	                                            </dl>
-	                                }
-                                    @if(person.otherAddress.worldAddress.note) {
-                                                <dl class="dl-horizontal">
-                                                    <dt>@Messages("person.otherAddress.worldAddress.note")</dt>
-                                                    <dd>@person.otherAddress.worldAddress.note</dd>
-                                                </dl>
-                                    }
-	                                
-                            </div>
-		                  </div>
-		                  </div>
-		                  }
-		                }      
-		        </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">@Messages("resultat.postaddresse")</h3>
+            </div>
+
+            <div class="panel-body">
+                @textfield("person.address.worldAddress.postalAddressFirstLineText", person.address.worldAddress.postalAddressFirstLineText)
+                @textfield("person.address.worldAddress.postalAddressSecondLineText", person.address.worldAddress.postalAddressSecondLineText)
+                @textfield("person.address.worldAddress.postalAddressThirdLineText", person.address.worldAddress.postalAddressThirdLineText)
+                @textfield("person.address.worldAddress.postalAddressFourthLineText", person.address.worldAddress.postalAddressFourthLineText)
+                @textfield("person.address.worldAddress.postalAddressFifthLineText", person.address.worldAddress.postalAddressFifthLineText)
+                @booleanfield(true, "person.address.worldAddress.isUkendtAdresseIndikator", person.address.worldAddress.isUkendtAdresseIndikator)
+                @textfield("person.address.worldAddress.locationDescriptionText", person.address.worldAddress.locationDescriptionText)
+
+                @textfield("person.address.worldAddress.note", person.address.worldAddress.note)
+
+            </div>
+            <div class="panel-footer"><p class="text-right">@virkning(person.effect, true)</p></div>
+        </div>
+    </div>
+    @* Have to do some silly check here, because a worldAddress ALWAYS has two fields..*@
+    @if(person.otherAddress != null &&
+            person.otherAddress.worldAddress != null &&
+            (person.otherAddress.worldAddress.locationDescriptionText ||
+                    person.otherAddress.worldAddress.postalAddressFirstLineText ||
+                    person.otherAddress.worldAddress.postalAddressSecondLineText ||
+                    person.otherAddress.worldAddress.postalAddressThirdLineText ||
+                    person.otherAddress.worldAddress.postalAddressFourthLineText ||
+                    person.otherAddress.worldAddress.postalAddressFifthLineText)
+
+    ) {
+
+        @if(person.otherAddress.addressType == util.cprbroker.EAddressType.World) {
+            <div class="col-md-6">
+                <br/>
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@Messages("resultat.andenaddresse")</h3>
+                    </div>
+
+                    <div class="panel-body">
+
+                        @textfield("person.otherAddress.worldAddress.locationDescriptionText", person.otherAddress.worldAddress.locationDescriptionText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressFirstLineText", person.otherAddress.worldAddress.postalAddressFirstLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressSecondLineText", person.otherAddress.worldAddress.postalAddressSecondLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressThirdLineText", person.otherAddress.worldAddress.postalAddressThirdLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressFourthLineText", person.otherAddress.worldAddress.postalAddressFourthLineText)
+                        @textfield("person.otherAddress.worldAddress.postalAddressFifthLineText", person.otherAddress.worldAddress.postalAddressFifthLineText)
+                        @booleanfield(true, "person.otherAddress.worldAddress.isUkendtAdresseIndikator", person.otherAddress.worldAddress.isUkendtAdresseIndikator)
+                        @textfield("person.otherAddress.worldAddress.note", person.otherAddress.worldAddress.note)
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
