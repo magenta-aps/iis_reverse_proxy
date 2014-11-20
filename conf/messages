@@ -41,6 +41,7 @@ resultat.andenaddresse = Anden adresse
 #------ GENERAL
 person.true = Ja
 person.false = Nej
+person.registrationdate = Senest opdateret
 
 #------ EGENSKABER
 person.firstname = Fornavn
@@ -60,6 +61,7 @@ person.tilstand.livStatusKode = Livsstatus
 
 #------ REGISTER OPLYSNINGER
 person.registerInformation.cprCitizen.socialSecurityNumber = CPR-nummer
+person.registerInformation.cprCitizen.socialSecurityNumberActive = CPR-nummer aktiv
 person.registerInformation.cprCitizen.personNationalityCode = Nationalitetskode
 person.registerInformation.cprCitizen.isMemberOfTheChurch = Folkekirkemedlem
 person.registerInformation.cprCitizen.isResearcherProtected = Forskerbeskyttelse

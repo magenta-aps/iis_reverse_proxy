@@ -50,11 +50,11 @@
         </div>
         @if(person.tidspunkt != null) {
             <p class="text-right">
-                @if(person.tidspunkt.aktoerRefUuid) {
-                    @person.tidspunkt.sourceName
-                },
+                @if(person.tidspunkt.sourceName() != null) {
+                    @person.tidspunkt.sourceName,
+                }
                 @if(person.tidspunkt.tidspunkt != null) {
-                    <span class="glyphicon glyphicon-time"></span> @person.tidspunkt.tidspunkt.toString("dd.MM.yy HH:mm:ss")
+                    @Messages("person.registrationdate"): @person.tidspunkt.tidspunkt.toString("dd.MM.yy HH:mm:ss")
                 }
             </p>
         }
