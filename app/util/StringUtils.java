@@ -31,7 +31,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
- package util;
+package util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +52,16 @@ public class StringUtils {
             args2.add((args[i] == null) ? "" : args[i]);
         }
         return String.format(format, args2.toArray());
+    }
+
+    public static String join(CharSequence separator, Iterable<String> array) {
+        String ret = "";
+        if (array.iterator().hasNext()) {
+            ret = array.iterator().next();
+            while (array.iterator().hasNext()){
+                ret += separator + array.iterator().next();
+            }
+        }
+        return ret;
     }
 }
