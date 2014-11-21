@@ -1,7 +1,7 @@
 require.config({
     paths: {
-        'jquery': '//code.jquery.com/jquery-1.9.1.min',
-        'bootstrap': '//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min',
+        'jquery': 'jquery-1.11.1/jquery-1.11.1.min',
+        'bootstrap': 'bootstrap-3.3.1-dist/dist/js/bootstrap.min',
         'jqueryui': 'jquery-ui-1.11.2.custom/jquery-ui'
     },
     shim: {
