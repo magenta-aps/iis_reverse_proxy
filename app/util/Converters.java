@@ -119,7 +119,7 @@ public class Converters {
             for (int i = 1; i < arr.length - 1; i++) {
                 middleNames.add(arr[i]);
             }
-            middleName = String.join(" ", middleNames);
+            middleName = StringUtils.join(" ", middleNames);
         }
         return ToNavnStrukturType(firstName, middleName, lastName);
     }
