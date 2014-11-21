@@ -69,7 +69,7 @@ require(["jquery", "bootstrap", "processQuery", "validate", "modolus11", "jquery
 
             source: function (request, response) {
                 $.ajax({
-                    url: 'http://dawa.aws.dk/adresser/autocomplete',
+                    url: document.location.protocol + '//dawa.aws.dk/adresser/autocomplete',
                     type: "GET",
                     dataType: "jsonp",
                     data: {q: request.term, maxantal: 11},
