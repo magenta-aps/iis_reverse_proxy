@@ -9,6 +9,7 @@ define(function () {
             var firstmiddlelastname = /.*,\s*.*,\s.*$/; // two commas
 
             var redirectLocation = null;
+            var queryExists = false;
 
             if (cpr.test(query) || cprpattern.test(query)) {
                 $.post('/search/cpr/', {"query": query.replace("-", "")}, function (data) {
@@ -18,10 +19,14 @@ define(function () {
 
             else if (firstmiddlelastname.test(query) || firstlastname.test(query) || lastname.test(query)) {
                 redirectLocation = '/search'
-                if (query.length > 0)
+                if (query.length > 0) {
+                    queryExists = true;
                     redirectLocation += '/name/' + query;
-                if (query2.length > 0)
+                }
+                if (query2.length > 0) {
+                    queryExists = true;
                     redirectLocation += '/address/' + query2;
+                }
                 if (online)
                     redirectLocation += '/online'
                 redirectLocation += '/page/1';
@@ -31,7 +36,7 @@ define(function () {
                 alert('error');
             }
 
-            if (redirectLocation != null) {
+            if (queryExists) {
                 window.location = redirectLocation;
             }
 
