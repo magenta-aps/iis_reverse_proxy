@@ -4,7 +4,7 @@ login.title = Indtast venligst dine oplysninger
 login.submit = Log på
 
 #error
-error.503 = Der findes ingen informationer om den pågældende person lokalt i CPR Brokeren.
+error.503 = Der findes ingen informationer om den pågældende person i CPR Brokeren.
 
 
 # /login feedback messages
