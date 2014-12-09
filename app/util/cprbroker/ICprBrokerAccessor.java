@@ -55,7 +55,7 @@ public interface ICprBrokerAccessor {
 	 * @param uuid
 	 * @return An implementation of the IPersonReturnType
 	 */
-	IPerson read(final String uuid, boolean isGettingRelations);
+	IPerson read(final String uuid);
 	
 	//TODO Add methods for SEARCH
 	IUuids search(final String firstname, final String middlename, final String lastname, int maxResults, int startIndex);

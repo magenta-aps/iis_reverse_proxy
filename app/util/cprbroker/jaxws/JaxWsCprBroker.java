@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
@@ -75,6 +76,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
     private final String applicationToken;
     private final String userToken;
     private final int allowedSourceUsageOrderHeader;
+    private final boolean fetchRelations;
 
     private final String keystore;
     private final String keystorePassword;
@@ -94,6 +96,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         applicationToken = config.getString("cprbroker.applicationtoken");
         userToken = config.getString("cprbroker.usertoken");
         allowedSourceUsageOrderHeader = config.getInt("cprbroker.accesslevel");
+        fetchRelations = config.getBoolean("cprbroker.fetchrelations");
         keystore = config.getString("keystorefile");
         keystorePassword = config.getString("keystorepassword");
 
@@ -124,6 +127,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 			cprbroker.applicationtoken = "4b8a21cb-3aab-451c-93c8-963142e7db05"
 			cprbroker.usertoken = "CPReader"
 			cprbroker.accesslevel = 0
+			cprbroker.fetchrelations = false
 		 */
 
         String[] stringValues = {"cprbroker.endpoint",
@@ -158,6 +162,13 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
             play.Logger.info("cprbroker.accesslevel configured with " + accesslevel
                     + " [" + ESourceUsageOrder.values()[accesslevel] + "]");
+        }
+
+        if (config.getBoolean("cprbroker.fetchrelations") == null) {
+            play.Logger.error("JaxWsCprBroker lacking configuration string: cprbroker.fetchrelations");
+            throw new IllegalStateException("JaxWsCprBroker lacking configuration string: cprbroker.fetchrelations");
+        } else {
+            play.Logger.info("cprbroker.fetchrelations configured with " + config.getString("cprbroker.fetchrelations"));
         }
     }
 
@@ -442,7 +453,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
     }
 
     @Override
-    public IPerson read(final String uuid, boolean isGettingRelations) {
+    public IPerson read(final String uuid) {
         //start the performance logging
         StopWatch stopWatch = new Slf4JStopWatch("JaxWsCprBroker.read");
 
@@ -472,7 +483,7 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         //// Getting the standardReturType
         StandardReturType standardReturType = laesOutput.getStandardRetur();
 
-        IPerson person = getPerson(uuid, laesOutput.getLaesResultat(), standardReturType, isGettingRelations);
+        IPerson person = getPerson(uuid, laesOutput.getLaesResultat(), standardReturType, this.fetchRelations);
 
         // stop performance logging
         stopWatch.stop();
@@ -810,7 +821,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         return null;
     }
 
-
     /**
      * Helper method to figure out what kind of address is attached,
      * call the appropriate helper method to extract that data
@@ -844,7 +854,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         }
         return null;
     }
-
 
     /**
      * Helper method for getAddress used to extract a WorldAddressType
@@ -889,7 +898,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
         return null;
     }
-
 
     /**
      * Helper method for getAddress used to extract a GreenlandicAddressType
@@ -1042,7 +1050,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         return null;
     }
 
-
     private RelationListeType getRelationListeType(LaesResultatType laesResultatType) {
         if (laesResultatType.getRegistrering() != null)
             return laesResultatType.getRegistrering().getRelationListe();
@@ -1144,7 +1151,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
         return null;
     }
 
-
     private List<IRelationship> getPersonRelation(List<PersonRelationType> relations, ERelationshipType type) {
 
         if (!relations.isEmpty()) {
@@ -1180,7 +1186,6 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
         return null;
     }
-
 
     private IVirkning getTilstandVirkning(TilstandVirkningType virkningType) {
 
@@ -1283,5 +1288,4 @@ public class JaxWsCprBroker implements ICprBrokerAccessor {
 
         return null;
     }
-
 }
