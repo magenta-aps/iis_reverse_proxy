@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
@@ -37,7 +38,8 @@ import java.util.List;
 
 /**
  * Interface for accessing the CPR Broker
- * 
+ *
+ * @author Beemen Beshara
  * @author Søren Kirkegård
  *
  */
@@ -55,7 +57,7 @@ public interface ICprBrokerAccessor {
 	 * @param uuid
 	 * @return An implementation of the IPersonReturnType
 	 */
-	IPerson read(final String uuid, boolean isGettingRelations);
+	IPerson read(final String uuid);
 	
 	//TODO Add methods for SEARCH
 	IUuids search(final String firstname, final String middlename, final String lastname, int maxResults, int startIndex);

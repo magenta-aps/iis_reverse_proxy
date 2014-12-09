@@ -139,7 +139,7 @@ public class Search extends Controller {
 
         IPerson person = null;
         try {
-            person = cprBroker.read(uuid, true);
+            person = cprBroker.read(uuid);
 
             // Logging the show request
             play.Logger.info(session("username") + "'s request to CPRBroker responded, " + person.code() + " - " + person.message());
