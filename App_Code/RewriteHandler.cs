@@ -3,6 +3,7 @@ using System.Web;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 public class RewriteHandler : IHttpHandler
 {
@@ -74,6 +75,28 @@ public class RewriteHandler : IHttpHandler
             }
         }
 
+        // Copy user identity
+        if (context.User != null && context.User.Identity != null)
+        {
+            //"PLAY_SESSION=\"c2473fd670659d53d132999260be173a0f3cd99d-username=test\"; Path=/; HTTPOnly"
+            var ss = req.Headers[HttpRequestHeader.Cookie];
+            var cookies = CookieParser.Parse(ss).ToList();
+            /*var sessionCookie = cookies.Where(c => c is PlaySessionCookie).FirstOrDefault() as PlaySessionCookie;
+            if (sessionCookie == null)
+            {
+                sessionCookie = new PlaySessionCookie("");
+                cookies.Add(sessionCookie);
+            }
+            sessionCookie.Username = context.User.Identity.Name;
+            sessionCookie.Username = "test";
+            */
+            var cookie2 = new Cookie("") { Name = "username", Value = context.User.Identity.Name };
+            cookies.Add(cookie2);
+
+            var cookiesString = CookieParser.ToString(cookies.ToArray());
+            req.Headers[HttpRequestHeader.Cookie] = cookiesString;
+        }
+
         // Copy request content
         if (req.ContentLength > 0)
         {
@@ -84,7 +107,6 @@ public class RewriteHandler : IHttpHandler
                 reqStream.Write(reqBytes, 0, reqBytes.Length);
             }
         }
-
 
         // Get response
         var res = req.GetResponse() as HttpWebResponse;
