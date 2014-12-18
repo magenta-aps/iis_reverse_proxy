@@ -75,23 +75,14 @@ public class RewriteHandler : IHttpHandler
             }
         }
 
-        // Copy user identity
+        // Copy user identity to new cookie
         if (context.User != null && context.User.Identity != null)
         {
-            //"PLAY_SESSION=\"c2473fd670659d53d132999260be173a0f3cd99d-username=test\"; Path=/; HTTPOnly"
-            var ss = req.Headers[HttpRequestHeader.Cookie];
-            var cookies = CookieParser.Parse(ss).ToList();
-            /*var sessionCookie = cookies.Where(c => c is PlaySessionCookie).FirstOrDefault() as PlaySessionCookie;
-            if (sessionCookie == null)
-            {
-                sessionCookie = new PlaySessionCookie("");
-                cookies.Add(sessionCookie);
-            }
-            sessionCookie.Username = context.User.Identity.Name;
-            sessionCookie.Username = "test";
-            */
-            var cookie2 = new Cookie("") { Name = "username", Value = context.User.Identity.Name };
-            cookies.Add(cookie2);
+            var cookiesString0 = req.Headers[HttpRequestHeader.Cookie];
+            var cookies = CookieParser.Parse(cookiesString0).ToList();
+            var userCookie = new Cookie("") { Name = "username", Value = context.User.Identity.Name };
+            
+            cookies.Add(userCookie);// Always add because this 
 
             var cookiesString = CookieParser.ToString(cookies.ToArray());
             req.Headers[HttpRequestHeader.Cookie] = cookiesString;
@@ -140,9 +131,8 @@ public class RewriteHandler : IHttpHandler
                 case "set-cookie":
                     foreach (var cookieString in val.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        var pat = @"\A(?<name>[^=]+)(=(?<val>.+))\Z";
-                        var m = Regex.Match(cookieString, pat);
-                        context.Response.Cookies.Add(new HttpCookie(m.Groups["name"].Value, m.Groups["val"].Value));
+                        var cookie = new Cookie(cookieString);
+                        context.Response.Cookies.Add(new HttpCookie(cookie.Name, cookie.Value));
                     }
                     break;
 
