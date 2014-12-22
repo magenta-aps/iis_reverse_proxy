@@ -111,14 +111,6 @@ public class Global extends GlobalSettings {
 	        }
         });
 
-		// Manual injection for Secured.Class.authenticationStrategy
-		try {
-			Secured.authenticationStrategy = injector.getInstance(IAuthentication.class);
-		}
-		catch (Exception ex)
-		{
-			// DO nothing
-		}
 	}
 	
 	@Override
@@ -127,6 +119,9 @@ public class Global extends GlobalSettings {
 		// validate needed components
 		// UnboundidLdapAuthentication.validate();
 		JaxWsCprBroker.validate(app.configuration());
+
+		// Manual injection for Secured.Class.authenticationStrategy
+        Secured.authenticationStrategy = injector.getInstance(IAuthentication.class);
 	}
 	
 	@Override

@@ -61,18 +61,6 @@ import controllers.Search.SearchInput;
 @Singleton
 public class Signon extends Controller {
 
-    private static IAuthentication authenticationStrategy;
-
-    /**
-     * Apparently only used for testing
-     *
-     * @param newAuthenticationStrategy
-     */
-    @Inject
-    public Signon(IAuthentication newAuthenticationStrategy) {
-        authenticationStrategy = newAuthenticationStrategy;
-    }
-
     public static class Login {
 
         @Required
@@ -114,7 +102,7 @@ public class Signon extends Controller {
             return badRequest(login.render(loginForm));
         }
 
-        IAuthenticationResponse authResponse = authenticationStrategy.authentication(
+        IAuthenticationResponse authResponse = Secured.authenticationStrategy.authentication(
                 loginForm.get().username,
                 loginForm.get().password);
 
