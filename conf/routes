@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET         /                                                            @controllers.Application.index()
+GET         /                                                            @controllers.Home.index()
 
 # Enable webjar based resources to be returned - used in development
 #GET 	/webjars/*file  			controllers.WebJarAssets.at(file)

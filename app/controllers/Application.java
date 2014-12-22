@@ -73,13 +73,6 @@ public class Application extends Controller {
         authenticationStrategy = newAuthenticationStrategy;
     }
 
-    @Security.Authenticated(Secured.class)
-    public Result index() {
-        SearchInput searchInput = new SearchInput();
-        searchInput.fillFromSession(this);
-        return ok(index.render(Form.form(SearchInput.class), request().username(), searchInput));
-    }
-
     public static class Login {
 
         @Required
@@ -135,7 +128,7 @@ public class Application extends Controller {
 
 
             return redirect(
-                    routes.Application.index()
+                    routes.Home.index()
             );
         } else {
             List<ValidationError> errors =
