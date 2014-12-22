@@ -12,6 +12,7 @@
  * License.
  *
  * Contributor(s):
+ * Beemen Beshara
  * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
@@ -37,7 +38,9 @@ import play.Application;
 import play.GlobalSettings;
 import play.Play;
 import util.auth.IAuthentication;
+import util.auth.Secured;
 import util.auth.TestAuthenticationStrategy;
+import util.auth.WindowsAuthenticationStrategy;
 import util.auth.unboundid.IUnboundidAuthentication;
 import util.auth.unboundid.IUnboundidConnection;
 import util.auth.unboundid.implementations.ProxyUserUnboundidAuthentication;
@@ -65,16 +68,18 @@ import dk.magenta.cprbrokersoapfactory.CPRBrokerSOAPFactory;
  * Routes can be tagged as managed by placing a @ infront of the controller,
  * which they should manage. A such method can not be static, so remember to
  * make it non-static.
- * 
+ *
+ * @author Beemen Beshara
  * @author Søren Kirkegård
  *
  */
 public class Global extends GlobalSettings {
-	private final Injector injector;
+	public final Injector injector;
 
 	public Global() {
 		super();
-		
+
+		// Initialization of dependency injection
 		injector = Guice.createInjector(new AbstractModule() {
 	        @Override
 	        protected void configure() {      	
@@ -87,7 +92,10 @@ public class Global extends GlobalSettings {
 		        //bind(IUnboundidConnection.class).to(UnboundidConnection.class);
 	        	
 	        	// Use this for test/test authentication
-	        	bind(IAuthentication.class).to(TestAuthenticationStrategy.class);
+	        	bind(IAuthentication.class).to(WindowsAuthenticationStrategy.class);
+
+				// Use this for Windows authentication
+				//bind(IAuthentication.class).to(WindowsAuthenticationStrategy.class);
 	        	
 	        	bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
 		        		        
@@ -102,6 +110,9 @@ public class Global extends GlobalSettings {
             	});	            	            
 	        }
         });
+
+		// Manual injection for Secured.Class.authenticationStrategy
+		Secured.authenticationStrategy = injector.getInstance(IAuthentication.class);
 	}
 	
 	@Override

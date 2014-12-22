@@ -13,7 +13,6 @@
  *
  * Contributor(s):
  * Beemen Beshara
- * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
  * fællesskab / http://www.os2web.dk .
@@ -34,35 +33,29 @@
 
 package util.auth;
 
-import controllers.routes;
-import play.mvc.Result;
-import play.mvc.Security;
-import play.mvc.Http.Context;
+import play.mvc.Http;
 
-public class Secured extends Security.Authenticator {
+/**
+ * Created by Beemen on 17/12/2014.
+ */
+public class WindowsAuthenticationStrategy implements IAuthentication ,IIntegratedAuthenticaton{
+    @Override
+    public IAuthenticationResponse authentication(String username, String password) {
+        return new AuthenticationResponse(AuthResponseType.SUCCESS, "OK");
+    }
 
-	public static  IAuthentication authenticationStrategy;
+    @Override
+    public String getUsername(){
+        String ret = null;
 
-	@Override
-	public final String getUsername(final Context ctx) {
-		if(IAuthentication.class.isInstance(authenticationStrategy)){
-			IIntegratedAuthenticaton integratedAuthenticaton= (IIntegratedAuthenticaton) authenticationStrategy;
-			return integratedAuthenticaton.getUsername();
-		}
-		else {
-			return ctx.session().get("username");
-		}
-	}
+        Http.Context ctx = Http.Context.current();
+        Http.Cookie cookie = ctx.request().cookie("username");
 
-	@Override
-	public final Result onUnauthorized(final Context ctx) {
-		if(IAuthentication.class.isInstance(authenticationStrategy)) {
-			// Do nothing special - no access
-			return super.onUnauthorized(ctx);
-		}
-		else {
-			return redirect(routes.Application.login());
-		}
-	}
+        if(cookie != null) {
+            ret = cookie.value();
+            ctx.session().put("username", ret);
+        }
+        return ret;
+    }
 
 }

@@ -13,7 +13,6 @@
  *
  * Contributor(s):
  * Beemen Beshara
- * Søren Kirkegård
  *
  * The code is currently governed by OS2 - Offentligt digitaliserings-
  * fællesskab / http://www.os2web.dk .
@@ -34,35 +33,9 @@
 
 package util.auth;
 
-import controllers.routes;
-import play.mvc.Result;
-import play.mvc.Security;
-import play.mvc.Http.Context;
-
-public class Secured extends Security.Authenticator {
-
-	public static  IAuthentication authenticationStrategy;
-
-	@Override
-	public final String getUsername(final Context ctx) {
-		if(IAuthentication.class.isInstance(authenticationStrategy)){
-			IIntegratedAuthenticaton integratedAuthenticaton= (IIntegratedAuthenticaton) authenticationStrategy;
-			return integratedAuthenticaton.getUsername();
-		}
-		else {
-			return ctx.session().get("username");
-		}
-	}
-
-	@Override
-	public final Result onUnauthorized(final Context ctx) {
-		if(IAuthentication.class.isInstance(authenticationStrategy)) {
-			// Do nothing special - no access
-			return super.onUnauthorized(ctx);
-		}
-		else {
-			return redirect(routes.Application.login());
-		}
-	}
-
+/**
+ * Created by Beemen on 22/12/2014.
+ */
+public interface IIntegratedAuthenticaton extends IAuthentication{
+    String getUsername();
 }
