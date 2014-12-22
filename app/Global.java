@@ -92,7 +92,7 @@ public class Global extends GlobalSettings {
 		        //bind(IUnboundidConnection.class).to(UnboundidConnection.class);
 	        	
 	        	// Use this for test/test authentication
-	        	bind(IAuthentication.class).to(WindowsAuthenticationStrategy.class);
+	        	bind(IAuthentication.class).to(TestAuthenticationStrategy.class);
 
 				// Use this for Windows authentication
 				//bind(IAuthentication.class).to(WindowsAuthenticationStrategy.class);
@@ -112,7 +112,13 @@ public class Global extends GlobalSettings {
         });
 
 		// Manual injection for Secured.Class.authenticationStrategy
-		Secured.authenticationStrategy = injector.getInstance(IAuthentication.class);
+		try {
+			Secured.authenticationStrategy = injector.getInstance(IAuthentication.class);
+		}
+		catch (Exception ex)
+		{
+			// DO nothing
+		}
 	}
 	
 	@Override
