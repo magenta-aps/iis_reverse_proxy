@@ -9,6 +9,7 @@ public class CookieParser
 {
     public static Cookie[] Parse(string val)
     {
+        val = string.Format("{0}", val);
         return val
             .Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries)
             .Select(cookieString => new Cookie(cookieString))
