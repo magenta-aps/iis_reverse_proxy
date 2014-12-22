@@ -61,7 +61,7 @@ public class Secured extends Security.Authenticator {
 			return super.onUnauthorized(ctx);
 		}
 		else {
-			return redirect(routes.Application.login());
+			return redirect(routes.Signon.login());
 		}
 	}
 

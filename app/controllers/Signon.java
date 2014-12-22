@@ -59,7 +59,7 @@ import controllers.Search.SearchInput;
  * @author Søren Kirkegård
  */
 @Singleton
-public class Application extends Controller {
+public class Signon extends Controller {
 
     private static IAuthentication authenticationStrategy;
 
@@ -69,7 +69,7 @@ public class Application extends Controller {
      * @param newAuthenticationStrategy
      */
     @Inject
-    public Application(IAuthentication newAuthenticationStrategy) {
+    public Signon(IAuthentication newAuthenticationStrategy) {
         authenticationStrategy = newAuthenticationStrategy;
     }
 
@@ -157,7 +157,7 @@ public class Application extends Controller {
         session().clear();
         //flash("success", play.i18n.Messages.get("logout.succesful"));
         return redirect(
-                routes.Application.login()
+                routes.Signon.login()
         );
     }
 }

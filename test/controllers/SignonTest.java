@@ -57,7 +57,7 @@ import util.auth.AuthResponseType;
 import util.auth.IAuthenticationResponse;
 import util.auth.IAuthentication;
 
-public class ApplicationTest extends WithApplication {
+public class SignonTest extends WithApplication {
 
 	/**
 	 * Http Ok response code.
@@ -102,7 +102,7 @@ public class ApplicationTest extends WithApplication {
 			when(mockedErrorResponse.message()).thenReturn("Test error");
 
 
-			return (A) new Application(mockedStrategy);
+			return (A) new Signon(mockedStrategy);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class ApplicationTest extends WithApplication {
 
 	@Test
 	public void testStaticLoginClass() {
-		Application.Login login = new Application.Login();
+		Signon.Login login = new Signon.Login();
 		login.setUsername("Dummy");
 		login.setPassword("secret");
 		assertEquals("Dummy", login.getUsername());
@@ -154,7 +154,7 @@ public class ApplicationTest extends WithApplication {
 		Result result = callAction(
 				controllers.routes.ref.Application.authenticate(),
 				fakeRequest().withFormUrlEncodedBody(
-						Form.form(Application.Login.class).bind(data).data()));
+						Form.form(Signon.Login.class).bind(data).data()));
 		assertEquals(HTTP_REDIRECT, status(result));
 		// TODO Test returned errors
 	}
@@ -169,7 +169,7 @@ public class ApplicationTest extends WithApplication {
 		Result result = callAction(
 				controllers.routes.ref.Application.authenticate(),
 				fakeRequest().withFormUrlEncodedBody(
-						Form.form(Application.Login.class).bind(data).data()));
+						Form.form(Signon.Login.class).bind(data).data()));
 		assertEquals(HTTP_BAD_REQUEST, status(result));
 		// TODO Test returned errors
 	}
@@ -182,7 +182,7 @@ public class ApplicationTest extends WithApplication {
 		Result result = callAction(
 				controllers.routes.ref.Application.authenticate(),
 				fakeRequest().withFormUrlEncodedBody(
-						Form.form(Application.Login.class).bind(data).data()));
+						Form.form(Signon.Login.class).bind(data).data()));
 		assertEquals(HTTP_BAD_REQUEST, status(result));
 		// TODO Test returned errors
 	}

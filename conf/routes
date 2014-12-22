@@ -9,9 +9,9 @@ GET         /                                                            @contro
 #GET 	/webjars/*file  			controllers.WebJarAssets.at(file)
 
 # Login
-GET         /login                                                       controllers.Application.login()
-POST        /login                                                       @controllers.Application.authenticate()
-GET         /logout                                                      controllers.Application.logout()
+GET         /login                                                       controllers.Signon.login()
+POST        /login                                                       @controllers.Signon.authenticate()
+GET         /logout                                                      controllers.Signon.logout()
 
 # Search
 POST        /search/cpr/                                                 @controllers.Search.getUuidFromCpr()

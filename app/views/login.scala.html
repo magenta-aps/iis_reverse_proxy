@@ -32,7 +32,7 @@
  *
  * ***** END LICENSE BLOCK ***** *@
  
-@(form: play.data.Form[Application.Login])
+@(form: play.data.Form[Signon.Login])
 @import scala.collection.JavaConversions._
 
 <html>
@@ -51,7 +51,7 @@
 
         <div class="container">
 
-            @helper.form(routes.Application.authenticate, 'class -> "form-signin") {
+            @helper.form(routes.Signon.authenticate, 'class -> "form-signin") {
 
                 <h2 class="form-signin-heading">@Messages("login.title")</h2>
 
