@@ -65,6 +65,10 @@ public class Secured extends Security.Authenticator {
 		}
 	}
 
+	public static String getCurrntUsername() {
+		return new Secured().getUsername(Context.current());
+	}
+
 	public static Boolean getIsIntegratedAuthenticaton(){
 		if(IIntegratedAuthenticaton.class.isInstance(authenticationStrategy))
 			return true;

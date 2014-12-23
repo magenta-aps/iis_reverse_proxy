@@ -34,6 +34,7 @@
 
 package controllers;
 
+import org.joda.time.DateTime;
 import play.cache.Cache;
 import play.data.Form;
 import play.data.validation.Constraints.Required;
@@ -51,6 +52,7 @@ import views.html.show_error;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -78,6 +80,17 @@ public class Search extends Controller {
 
         List<IPerson> persons = null;
         try {
+
+            // log what page the user requested
+            play.Logger.info(String.format("At <%s> user <%s> searched for name<%s>, address<%s>; online <%b>, page <%d>",
+                    DateTime.now(),
+                    Secured.getCurrntUsername(),
+                    name,
+                    address,
+                    online,
+                    page
+            ));
+
             String key = String.format("session=%s;name=%s;address=%s", getSessionId(), name, address);
             if (online) {
                 Object o = Cache.get(key);
@@ -110,9 +123,6 @@ public class Search extends Controller {
             int fromIndex = ((page - 1) * 10);
             int toIndex = ((page) * 10);
 
-            // log what page the user requested
-            play.Logger.info(session("username") + " requested page " + page + ", showing " + fromIndex + "-" + toIndex);
-
             if (persons.size() < fromIndex)
                 return badRequest();
 
@@ -133,9 +143,11 @@ public class Search extends Controller {
     @Security.Authenticated(Secured.class)
     public Result showPerson(String uuid) {
         // Logging the show request
-        play.Logger.info(session("username") +
-                " requested to see uuid " +
-                uuid);
+        play.Logger.info(String.format( "At <%s> user <%s> requested to see uuid <%s>",
+                DateTime.now(),
+                Secured.getCurrntUsername(),
+                uuid
+        ));
 
         IPerson person = null;
         try {
