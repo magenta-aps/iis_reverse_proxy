@@ -90,15 +90,14 @@ public class Global extends GlobalSettings {
 	        	// Use these for LDAP authentication
 	        	//bind(IAuthentication.class).to(ProxyUserUnboundidAuthentication.class);
 		        //bind(IUnboundidConnection.class).to(UnboundidConnection.class);
-	        	
-	        	// Use this for test/test authentication
+	        	//bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
+
+				// Use this for test/test authentication
 	        	bind(IAuthentication.class).to(TestAuthenticationStrategy.class);
 
 				// Use this for Windows authentication
 				//bind(IAuthentication.class).to(WindowsAuthenticationStrategy.class);
-	        	
-	        	bind(IUnboundidAuthentication.class).to(UnboundidLdapAuthentication.class).in(Singleton.class);
-		        		        
+
 	            bind(ICprBrokerAccessor.class)
             	.toProvider(new Provider<ICprBrokerAccessor>() {
 					@Override
