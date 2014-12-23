@@ -64,7 +64,9 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/">@Messages("nav.help")</a> </li>
-            <li><a href="@routes.Signon.logout()">@Messages("nav.logout_button")</a></li>
+            @if(!util.auth.Secured.getIsIntegratedAuthenticaton){
+                <li><a href="@routes.Signon.logout()">@Messages("nav.logout_button")</a></li>
+            }
         </ul>
     </div> <!--/.nav-collapse -->
 </div>
