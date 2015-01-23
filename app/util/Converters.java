@@ -54,7 +54,7 @@ public class Converters {
             String comma = "((\\s+)|(\\s*[,;\\.]{1}\\s*))";
             String pat = "(?<streetName>[^0-9]+)" + comma
                     + "(?<houseNumber>[0-9]+[a-zA-Z]*)" + comma
-                    + "(" + "(?<floor>[0-9]{1,2})?(\\.)?(sal)?" + comma + ")?"
+                    + "(" + "(?<floor>([0-9]{1,2})|st)?(\\.)?(sal)?" + comma + ")?"
                     + "(" + "(?<door>[a-zA-Z]+)" + comma + ")?"
                     + "(?<postCode>[0-9]{4})" + comma
                     + "(?<postDistrict>\\p{L}+(\\s+\\p{L}+)*)\\Z";
