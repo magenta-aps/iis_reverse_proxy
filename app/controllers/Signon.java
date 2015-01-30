@@ -37,22 +37,18 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import play.data.Form;
 import play.data.validation.Constraints.Required;
 import play.data.validation.ValidationError;
+import play.mvc.*;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
 import util.auth.AuthResponseType;
 import util.auth.IAuthenticationResponse;
-import util.auth.IAuthentication;
 import util.auth.Secured;
-import views.html.index;
 import views.html.login;
-import controllers.Search.SearchInput;
 
 /**
  * @author Beemen Beshara
