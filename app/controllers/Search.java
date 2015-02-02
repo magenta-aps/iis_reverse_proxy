@@ -34,6 +34,7 @@
 
 package controllers;
 
+import conf.IConfiguration;
 import org.joda.time.DateTime;
 import play.cache.Cache;
 import play.data.Form;
@@ -59,10 +60,13 @@ import java.util.List;
 public class Search extends Controller {
 
     private static ICprBrokerAccessor cprBroker;
+    private static int onlineCacheTimeout;
 
     @Inject
-    public Search(ICprBrokerAccessor newCprBroker) {
+    public Search(ICprBrokerAccessor newCprBroker, IConfiguration conf)
+    {
         cprBroker = newCprBroker;
+        onlineCacheTimeout = conf.getConfiguration().getInt("cprbroker.onlinecacheseconds");
     }
 
     String getSessionId() {
@@ -105,7 +109,8 @@ public class Search extends Controller {
                         -1, -1);
             }
             if (online) {
-                Cache.set(key, persons);
+                // Temporarily store the results for a while
+                Cache.set(key, persons, onlineCacheTimeout);
             }
         } catch (Exception ex) {
             play.Logger.error(ex.toString());
