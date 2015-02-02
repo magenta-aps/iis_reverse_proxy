@@ -12,6 +12,11 @@ libraryDependencies ++= Seq(
   "pl.pragmatists" % "JUnitParams" % "1.0.3"
 )
 
+libraryDependencies += "org.json" % "json" % "20090211"
+
+libraryDependencies += "commons-io" % "commons-io" % "2.4"
+
+
 play.Project.playJavaSettings
 
 jacoco.settings

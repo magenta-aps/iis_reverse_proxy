@@ -37,6 +37,9 @@ import javax.inject.Singleton;
 import play.Application;
 import play.GlobalSettings;
 import play.Play;
+import util.Converters;
+import util.addresses.DawaAddressParser;
+import util.addresses.IAddressParser;
 import util.auth.IAuthentication;
 import util.auth.Secured;
 import util.auth.TestAuthenticationStrategy;
@@ -98,15 +101,17 @@ public class Global extends GlobalSettings {
 				// Use this for Windows authentication
 				//bind(IAuthentication.class).to(WindowsAuthenticationStrategy.class);
 
+                bind(IAddressParser.class).to(DawaAddressParser.class);
+
 	            bind(ICprBrokerAccessor.class)
             	.toProvider(new Provider<ICprBrokerAccessor>() {
-					@Override
-					public ICprBrokerAccessor get() {		            
-			        	play.Configuration config = Play.application().configuration();
-			            
-	            		return new JaxWsCprBroker(config, new CPRBrokerSOAPFactory());
-					}	
-            	});	            	            
+                    @Override
+                    public ICprBrokerAccessor get() {
+                        play.Configuration config = Play.application().configuration();
+
+                        return new JaxWsCprBroker(config, new CPRBrokerSOAPFactory());
+                    }
+                });
 	        }
         });
 
@@ -121,6 +126,7 @@ public class Global extends GlobalSettings {
 
 		// Manual injection for Secured.Class.authenticationStrategy
         Secured.authenticationStrategy = injector.getInstance(IAuthentication.class);
+        Converters.AddressParser = injector.getInstance(IAddressParser.class);
 	}
 	
 	@Override

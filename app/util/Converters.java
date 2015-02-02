@@ -34,65 +34,22 @@
  package util;
 
 import dk.oio.rep.itst_dk.xml.schemas._2006._01._17.PersonNameStructureType;
-import dk.oio.rep.xkom_dk.xml.schemas._2005._03._15.AddressAccessType;
-import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressCompleteType;
-import dk.oio.rep.xkom_dk.xml.schemas._2006._01._06.AddressPostalType;
 import oio.sagdok.person._1_0.*;
+import util.addresses.IAddressParser;
 import util.cprbroker.*;
-
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Beemen on 11/11/2014.
  */
 public class Converters {
+
+
+    public static IAddressParser AddressParser;
+
     public AdresseType ToAddressType(String addressString) {
         if (addressString != null && !addressString.trim().isEmpty()) {
-
-            String comma = "((\\s+)|(\\s*[,;\\.]{1}\\s*))";
-            String pat = "(?<streetName>[^0-9]+)" + comma
-                    + "(?<houseNumber>[0-9]+[a-zA-Z]*)" + comma
-                    + "(" + "(?<floor>([0-9]{1,2})|st)?(\\.)?(sal)?" + comma + ")?"
-                    + "(" + "(?<door>[a-zA-Z]+)" + comma + ")?"
-                    + "(?<postCode>[0-9]{4})" + comma
-                    + "(?<postDistrict>\\p{L}+(\\s+\\p{L}+)*)\\Z";
-
-
-            Pattern p = Pattern.compile(pat);
-            Matcher m = p.matcher(addressString);
-            if (m.matches()) {
-
-                String streetName = null, houseNumber = null, floor = null, door = null, postCode = null, postDistrict = null;
-
-                streetName = m.group("streetName");
-                houseNumber = m.group("houseNumber");
-                floor = m.group("floor");
-                door = m.group("door");
-                postCode = m.group("postCode");
-                postDistrict = m.group("postDistrict");
-
-                AdresseType ret = new AdresseType();
-                DanskAdresseType danskAdresse = new DanskAdresseType();
-                ret.setDanskAdresse(danskAdresse);
-
-                AddressCompleteType addressComplete = new AddressCompleteType();
-                danskAdresse.setAddressComplete(addressComplete);
-
-                AddressAccessType addressAccess = new AddressAccessType();
-                addressAccess.setStreetBuildingIdentifier(houseNumber);
-                addressComplete.setAddressAccess(addressAccess);
-
-                AddressPostalType addressPostal = new AddressPostalType();
-                addressPostal.setStreetName(streetName);
-                addressPostal.setFloorIdentifier(floor);
-                addressPostal.setSuiteIdentifier(door);
-                addressPostal.setPostCodeIdentifier(postCode);
-                addressComplete.setAddressPostal(addressPostal);
-
-                return ret;
-            }
+            return this.AddressParser.ToAddressType(addressString);
         }
         return null;
     }
