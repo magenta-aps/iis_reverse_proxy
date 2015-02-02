@@ -44,6 +44,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 /**
  * Created by Beemen on 02/02/2015.
@@ -52,10 +54,14 @@ public class DawaAddressParser implements IAddressParser {
 
     public AdresseType ToAddressType(String addressString) {
         try {
+
+            addressString = URLEncoder.encode(addressString,"UTF-8");
             String urlString = "http://dawa.aws.dk/adresser?q="+ addressString;
-            urlString = urlString.replaceAll(" ","%20");
             URL url = new URL(urlString);
-            String response = IOUtils.toString(url);
+
+            Charset charset = Charset.forName("UTF-8");
+            String response = IOUtils.toString(url, charset);
+
             JSONArray adresses = new JSONArray(response);
 
             if(adresses.length()>0){
