@@ -23,10 +23,12 @@ public class RewriteHandler : IHttpHandler
 
     public void ProcessRequest(HttpContext context)
     {
+        var useRawUrlS = System.Configuration.ConfigurationManager.AppSettings["TicketVariableName"];
+        var useRawUrl = false;
+        bool.TryParse(useRawUrlS, out useRawUrl);
+
         var url = System.Configuration.ConfigurationManager.AppSettings["RewriteUrl"]
-            + context.Request.Path;
-            //+ context.Request.ServerVariables["HTTP_URL"]
-        ;
+            + (useRawUrl ? context.Request.ServerVariables["HTTP_URL"] : context.Request.Path);
 
         //var uri = HackedUri.Create(url);
         var uri = new Uri(url);
