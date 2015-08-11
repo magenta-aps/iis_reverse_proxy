@@ -23,7 +23,7 @@ public class RewriteHandler : IHttpHandler
 
     public void ProcessRequest(HttpContext context)
     {
-        var useRawUrlS = System.Configuration.ConfigurationManager.AppSettings["TicketVariableName"];
+        var useRawUrlS = System.Configuration.ConfigurationManager.AppSettings["UseRawUrl"];
         var useRawUrl = false;
         bool.TryParse(useRawUrlS, out useRawUrl);
 
